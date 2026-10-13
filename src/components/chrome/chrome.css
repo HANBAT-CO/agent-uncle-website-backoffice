@@ -1,0 +1,704 @@
+/*
+ * Record chrome (spec 4.1, 4.4, 5). Plain CSS on top of the tokens in
+ * src/app/globals.css.
+ *
+ * Phase: PhaseSync flips html[data-phase]; globals.css sets the chrome
+ * colours per phase. Those variables are registered here as <color>, so each
+ * chrome root (.au-scope: the nav, the record column, the mobile pill) can
+ * transition them over 700ms on the snap curve. Only chrome subtrees
+ * interpolate; the page itself flips once, with no per-frame :root writes.
+ * Record surfaces (cards, plate, pill, sheet) are paper in both phases: only
+ * their outer ring or shadow follows the phase, outside their box.
+ */
+
+@property --chrome-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --chrome-fg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2ffe8;
+}
+
+@property --chrome-line {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --accent-live {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2ffe8;
+}
+
+@property --dot-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2ffe8;
+}
+
+@property --chrome-focus {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f2ffe8;
+}
+
+@property --au-logo-plate {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #f5f4ee;
+}
+
+@property --au-paper-ring {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --au-paper-float {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --au-paper-card {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+@property --au-lift {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+/* Registered so scripts read it in px (chrome/hooks.ts navClearance). Declared in globals.css. */
+@property --nav-clear {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 88px;
+}
+
+/*
+ * Registered for the same reason: the film reads the pill's top edge from it
+ * (FilmMotion navBand). Unregistered it computed to "1rem", which parses as
+ * 1px, so the pill kept the film's green for 15px of scroll after the card
+ * had left it. Declared in globals.css.
+ */
+@property --nav-top {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 16px;
+}
+
+/*
+ * Contrast through the phase switch. A fill gliding from night green to paper
+ * passes a band (relative luminance about 0.16 to 0.23) where neither the
+ * mint nor the ink text reaches 4.5:1, and text gliding along with it fades
+ * through the fill's own grey: the nav read at about 2:1 for a quarter of a
+ * second. So the text (--chrome-fg, --chrome-focus, the phase CTA) does not
+ * glide: it flips at --au-ink-flip, and the fill (--chrome-bg) follows the
+ * snap curve except that it steps over that band at the same moment
+ * (--au-fill-ease, the snap curve sampled, with one jump and a short hold).
+ * Simulated over night, dawn and paper grounds, every frame then holds at
+ * least 4.6:1 in both directions; the fill lands where the plain snap curve
+ * would by 100ms (to day) and 166ms (to night).
+ * Values per destination: transitions take the new state's delay and curve.
+ */
+html[data-phase="night"],
+html[data-phase]:has([data-film-under-nav]) {
+  --au-ink-flip: 124ms;
+  --au-fill-ease: linear(
+    0,
+    0.0464 2%,
+    0.0958 4%,
+    0.149 6%,
+    0.2067 8%,
+    0.2698 10%,
+    0.3395 12%,
+    0.4165 14%,
+    0.4994 16%,
+    0.5707 17.71%,
+    0.7545 17.71%,
+    0.7545 23.71%,
+    0.7958 26%,
+    0.8472 30%,
+    0.8895 35%,
+    0.9184 40%,
+    0.9427 46%,
+    0.9623 53%,
+    0.9758 60%,
+    0.9882 70%,
+    0.9954 80%,
+    0.999 90%,
+    1
+  );
+}
+
+html[data-phase="day"]:not(:has([data-film-under-nav])) {
+  --au-ink-flip: 64ms;
+  --au-fill-ease: linear(
+    0,
+    0.0464 2%,
+    0.0958 4%,
+    0.149 6%,
+    0.2067 8%,
+    0.242 9.14%,
+    0.428 9.14%,
+    0.428 14.29%,
+    0.4994 16%,
+    0.5822 18%,
+    0.6557 20%,
+    0.7389 23%,
+    0.7958 26%,
+    0.8472 30%,
+    0.8895 35%,
+    0.9184 40%,
+    0.9427 46%,
+    0.9623 53%,
+    0.9758 60%,
+    0.9882 70%,
+    0.9954 80%,
+    0.999 90%,
+    1
+  );
+}
+
+/* Chrome-only phase values (the shared ones live in globals.css). */
+html[data-phase="night"] {
+  /* Native scrollbars and the like follow the night ground (sections set their own). */
+  color-scheme: dark;
+  --au-logo-plate: #f5f4ee;
+  /* At night paper objects get a faint mint ring instead of a shadow (spec 4.4). */
+  --au-paper-ring: rgb(242 255 232 / 0.08);
+  --au-paper-float: rgb(7 35 28 / 0);
+  --au-paper-card: rgb(16 16 16 / 0);
+  /* Floating chrome (mobile pill, compact plate) over paper content: a deep shade that vanishes on night ground. */
+  --au-lift: rgb(3 18 14 / 0.6);
+}
+
+html[data-phase="day"] {
+  --au-logo-plate: rgb(245 244 238 / 0);
+  --au-paper-ring: rgb(242 255 232 / 0);
+  --au-paper-float: rgb(7 35 28 / 0.22);
+  --au-paper-card: rgb(16 16 16 / 0.08);
+  --au-lift: rgb(7 35 28 / 0.22);
+}
+
+/*
+ * Each chrome root interpolates the phase colours for its own subtree; the
+ * text colours flip instead, at --au-ink-flip (see above). Full lists: a
+ * shorter list would repeat over the properties.
+ */
+.au-scope {
+  --focus: var(--chrome-focus);
+  transition-property:
+    --chrome-bg, --chrome-fg, --chrome-focus, --chrome-line, --accent-live, --dot-ink, --au-logo-plate, --au-paper-ring,
+    --au-paper-float, --au-paper-card, --au-lift;
+  transition-duration:
+    var(--duration-record), 0s, 0s, var(--duration-record), var(--duration-record), var(--duration-record),
+    var(--duration-record), var(--duration-record), var(--duration-record), var(--duration-record), var(--duration-record);
+  transition-delay: 0s, var(--au-ink-flip, 0s), var(--au-ink-flip, 0s), 0s, 0s, 0s, 0s, 0s, 0s, 0s, 0s;
+  transition-timing-function:
+    var(--au-fill-ease, var(--ease-snap)), linear, linear, var(--ease-snap), var(--ease-snap), var(--ease-snap),
+    var(--ease-snap), var(--ease-snap), var(--ease-snap), var(--ease-snap), var(--ease-snap);
+}
+
+/* ---------- Paper elevation (outside the box only) ---------- */
+
+.au-paper {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 8px 24px var(--au-paper-card);
+}
+
+.au-paper.au-plate {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 18px 48px -12px var(--au-paper-float);
+}
+
+/*
+ * The record column sits on the page ground, which the dawn sky turns near
+ * white while the phase is still night: a faint ink hairline keeps every card
+ * and the plate edged on a light sky (invisible on night ground).
+ */
+.au-column .au-paper {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 0 0 1px rgb(16 16 16 / 0.06),
+    0 8px 24px var(--au-paper-card);
+}
+
+.au-column .au-paper.au-plate {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 0 0 1px rgb(16 16 16 / 0.06),
+    0 18px 48px -12px var(--au-paper-float);
+}
+
+/* The message time chip: an edge only, no card shadow under a 20px pill. */
+.au-column time.au-paper {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 0 0 1px rgb(16 16 16 / 0.06);
+}
+
+/* Floating over section content (1024-1279px, phones): an edge and a lift in both phases. */
+.au-column .au-plate-compact .au-paper.au-plate,
+.au-mpill .au-paper {
+  box-shadow:
+    0 0 0 1px var(--au-paper-ring),
+    0 0 0 1px rgb(16 16 16 / 0.08),
+    0 12px 32px -10px var(--au-lift);
+}
+
+/* ---------- Nav (spec 5.1) ---------- */
+
+/*
+ * A floating island: the hairline plus a soft lift, so the pill keeps an edge
+ * where its night fill matches the ground (the cart's #093A32) and content
+ * passing under it reads as passing under an object, not as being sliced.
+ */
+.au-nav-pill {
+  background-color: var(--chrome-bg);
+  box-shadow:
+    inset 0 0 0 1px var(--chrome-line),
+    0 12px 32px -14px var(--au-lift);
+  /* With the 95% day fill (globals.css), device islands and app text passing under it stay a soft wash, never legible shapes. */
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  backdrop-filter: blur(20px) saturate(1.4);
+}
+
+.au-logo-plate {
+  background-color: var(--au-logo-plate);
+}
+
+.au-nav-link {
+  color: var(--chrome-fg);
+  transition: background-color 300ms var(--ease-snap);
+}
+
+.au-nav-link:hover {
+  background-color: color-mix(in srgb, var(--chrome-fg) 9%, transparent);
+}
+
+/*
+ * 사전 신청 while signup is the active section: "you are here", not a button.
+ * Its label is the nav links' own ink on the pill's own fill, so it gets their
+ * contrast in every frame of the phase switch (--au-ink-flip and
+ * --au-fill-ease above). A tint of the ink under the label or any opacity
+ * would pull it toward the fill: at 12% and 0.85 it fell to 3.3:1 for a few
+ * frames as film green handed the nav to day. The state reads from the hairline
+ * ring (an edge only, never under the text) and the missing trailing circle.
+ */
+.au-nav-cta-disabled {
+  display: inline-flex;
+  align-items: center;
+  height: 2.5rem;
+  padding-inline: 1.125rem;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--chrome-fg) 32%, transparent);
+  color: var(--chrome-fg);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/*
+ * Film green under the nav: the night nav in either phase. At night the ㅅㅊ
+ * symbol always sits on its paper plate (spec 4.1), so the plate and the
+ * night ring come along; the day phase would leave the #111111 symbol on dark
+ * green (about 1.5:1). html[data-phase] puts this above both phase blocks in
+ * specificity, so stylesheet order never matters.
+ */
+html[data-phase]:has([data-film-under-nav]) {
+  --au-logo-plate: #f5f4ee;
+  --au-paper-ring: rgb(242 255 232 / 0.08);
+  --chrome-bg: rgb(9 58 50 / 0.88);
+  --chrome-fg: #f2ffe8;
+  --chrome-line: rgb(242 255 232 / 0.12);
+  --chrome-focus: #f2ffe8;
+  --cta-phase-bg: #f2ffe8;
+  --cta-phase-fg: #07231c;
+  --cta-phase-circle: #0c483e;
+  --cta-phase-icon: #f2ffe8;
+}
+
+@media (max-height: 500px) {
+  :root {
+    --nav-top: 0.5rem;
+    --nav-h: 3rem;
+  }
+
+  .au-nav {
+    padding-inline: 0.5rem;
+  }
+
+  .au-nav-pill {
+    gap: 0.5rem;
+  }
+
+  .au-logo-plate {
+    width: 2.75rem;
+    height: 1.75rem;
+  }
+
+  .au-logo-plate img {
+    width: 2rem;
+  }
+
+  .au-nav-link {
+    height: 2rem;
+    padding-inline: 0.625rem;
+    font-size: 0.875rem;
+  }
+
+  .au-nav-cta-disabled {
+    height: 2rem;
+    padding-inline: 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .au-nav-pill > a:last-child {
+    height: 2rem;
+    padding-right: 0.25rem;
+    padding-left: 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .au-nav-pill > a:last-child [data-cta-circle] {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .au-nav-pill {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  html[data-phase]:has([data-film-under-nav]) {
+    --chrome-bg: var(--night-1);
+  }
+}
+
+/* ---------- Record column modes (spec 5.2, 3.4): 700ms translateX, never layout ---------- */
+
+.au-column {
+  --au-off: translateX(calc(100% + var(--spacing-gutter) + 24px));
+}
+
+.au-rail-panel,
+.au-spine,
+.au-plate-full,
+.au-plate-compact,
+.au-rail-pill {
+  transform: var(--au-off);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear var(--duration-record);
+}
+
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  /* The rail never opens here; the compact plate sits bottom-right unless the section hides it. */
+  .au-column:not([data-plate-mode="hidden"]) .au-plate-compact {
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      transform var(--duration-record) var(--ease-snap),
+      visibility 0s linear 0s;
+  }
+}
+
+@media (min-width: 1280px) {
+  .au-column[data-rail-mode="open"] .au-rail-panel,
+  .au-column[data-rail-mode="spine"][data-peek] .au-rail-panel,
+  .au-column[data-rail-mode="spine"]:not([data-peek]) .au-spine,
+  .au-column[data-rail-mode="pill"] .au-rail-pill,
+  .au-column[data-plate-mode="full"] .au-plate-full,
+  .au-column[data-plate-mode="compact"] .au-plate-compact {
+    transform: none;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      transform var(--duration-record) var(--ease-snap),
+      visibility 0s linear 0s;
+  }
+}
+
+.au-column[data-signup-rail-pending] .au-rail-panel,
+.au-column[data-signup-rail-pending] .au-spine,
+.au-column[data-signup-rail-pending] .au-plate-full,
+.au-column[data-signup-rail-pending] .au-plate-compact {
+  transform: var(--au-off);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear var(--duration-record);
+}
+
+/*
+ * Newest at the bottom; older entries clip under a 48px top fade. The list
+ * reaches 24px past the cards on each side and 28px below them, so the day
+ * card shadow (8px down, 24px blur) is not cut into a hard rectangle; the
+ * negative bottom margin keeps the cards where they were. Only the cards take
+ * pointer input, never that margin.
+ */
+.au-rail-list {
+  margin-inline: -24px;
+  margin-bottom: -22px;
+  padding: 6px 24px 28px;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 48px);
+  mask-image: linear-gradient(to bottom, transparent 0, #000 48px);
+}
+
+.au-rail-list > li {
+  pointer-events: auto;
+}
+
+/*
+ * An entering entry's text waits until its paper is all but opaque
+ * (RecordColumn fadeIn), so no frame shows the meta line or a bubble at half
+ * contrast. Transparent, not hidden: the card button keeps its name in the
+ * accessibility tree meanwhile. Failsafe: shown after 1.2s even if the tween
+ * never reports back.
+ */
+.au-rail-list > li[data-entry-veiled] [data-entry-ink] {
+  opacity: 0;
+  animation: au-ink-failsafe 0s linear 1.2s forwards;
+}
+
+@keyframes au-ink-failsafe {
+  to {
+    opacity: 1;
+  }
+}
+
+/*
+ * On the dark grounds (the night, and the dawn sky that is still green after
+ * the phase turns: [data-rail-ground="dark"], RecordColumn) the mask would
+ * leave the top card's paper half faded into the ground, a smudge rather than
+ * a fade. There the list clips hard instead, and a card the edge cuts
+ * ([data-rail-clipped]) fades out whole over 240ms, then back in once it fits.
+ * The entry flash keeps its own GSAP fade. The hard clip is still a (solid)
+ * mask: the list then composites the same way on both grounds, and the plate
+ * it brushes keeps identical pixels across the phase flip.
+ */
+.au-rail-list > li > :not([data-flash]) {
+  transition: opacity var(--duration-base) var(--ease-snap);
+}
+
+.au-column[data-rail-ground="dark"] .au-rail-list {
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+}
+
+.au-column[data-rail-ground="dark"] .au-rail-list > li[data-rail-clipped] > :not([data-flash]) {
+  opacity: 0;
+}
+
+.au-column[data-rail-ground="dark"] .au-rail-list > li [data-entry-ink] {
+  transition: opacity 0s linear var(--duration-base);
+}
+
+.au-column[data-rail-ground="dark"] .au-rail-list > li[data-rail-clipped] [data-entry-ink] {
+  opacity: 0;
+  transition-delay: 0s;
+}
+
+/* Hero hand-off: the hero's proxies stand in for these two until data-proxy-done. */
+.au-column[data-hero-handoff] [data-rail-slot="r2005"],
+.au-column[data-hero-handoff] [data-rail-slot="r2031"] {
+  visibility: hidden;
+}
+
+/* Spine: a vertical hairline and one dot per entry. */
+.au-spine-line {
+  background-color: color-mix(in srgb, var(--chrome-fg) 26%, transparent);
+}
+
+.au-spine-dot {
+  background-color: var(--dot-ink);
+}
+
+.au-spine:focus-visible {
+  outline-offset: -2px;
+}
+
+/* ---------- Mobile pill (spec 5.4) ---------- */
+
+.au-mpill {
+  transform: translate(-50%, calc(100% + 40px));
+  visibility: hidden;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear var(--duration-record);
+}
+
+.au-mpill[data-visible] {
+  transform: translate(-50%, 0);
+  visibility: visible;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear 0s;
+}
+
+/*
+ * Each ledger change (확보, then 전달, then 수령) marks the pill's line green
+ * for a moment and settles back to grey, as the plate's ≥ glyphs flash. Colour
+ * only: the line never moves or reflows.
+ */
+.au-pill-summary {
+  animation: au-pill-mark 900ms var(--ease-snap) both;
+}
+
+@keyframes au-pill-mark {
+  0%,
+  45% {
+    color: var(--color-green-800);
+  }
+}
+
+/* Keyboard focus scrolls controls clear of the pill too (WCAG 2.2 SC 2.4.11): 48px pill + 16px + 16px. */
+@media (max-width: 1023.98px) {
+  html:has([data-record-pill][data-visible]) {
+    scroll-padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* ---------- Record sheet: a native dialog sliding up from the bottom ---------- */
+
+.au-sheet {
+  /* Inset-sized, no percentage height: WebKit resolved 100% against a short box while opening. */
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: hidden;
+  color: var(--color-ink);
+  /* A paper sheet: light scrollbars even at night. */
+  color-scheme: light;
+}
+
+.au-sheet[open] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.au-sheet::backdrop {
+  background-color: rgb(7 35 28 / 0.55);
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+.au-sheet-panel {
+  box-shadow: 0 -18px 48px -12px rgb(7 35 28 / 0.22);
+  transition: transform var(--duration-record) var(--ease-snap);
+}
+
+@starting-style {
+  .au-sheet[open]::backdrop {
+    opacity: 0;
+  }
+
+  .au-sheet[open] .au-sheet-panel {
+    transform: translateY(100%);
+  }
+}
+
+.au-sheet[data-closing]::backdrop {
+  opacity: 0;
+}
+
+.au-sheet[data-closing] .au-sheet-panel {
+  transform: translateY(100%);
+}
+
+/* Inside the sheet the cards sit on canvas paper: one card shadow in both phases. */
+.au-sheet .au-paper {
+  box-shadow: var(--shadow-card);
+}
+
+html:has(.au-sheet[open]) {
+  overflow: hidden;
+}
+
+/* ---------- Grain (spec 4.4): day only, static, fixed, never on scrolling content ---------- */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 240px 240px;
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+html[data-phase="day"] body::after {
+  opacity: 0.035;
+}
+
+/* ---------- Preferences ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  /* globals.css shortens durations; drop the visibility delays too so modes swap at once. */
+  .au-rail-panel,
+  .au-spine,
+  .au-plate-full,
+  .au-plate-compact,
+  .au-rail-pill,
+  .au-mpill,
+  .au-scope {
+    transition-delay: 0s !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  body::after {
+    display: none;
+  }
+
+  html[data-phase="night"] .au-nav-pill {
+    background-color: var(--night-1);
+  }
+
+  html[data-phase="day"] .au-nav-pill {
+    background-color: var(--color-surface);
+  }
+
+  /* Film green under the nav keeps the night pill (mint text) in either phase. */
+  html[data-phase]:has([data-film-under-nav]) .au-nav-pill {
+    background-color: var(--night-1);
+  }
+
+  .au-nav-pill {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: inset 0 0 0 1px currentColor;
+  }
+}
