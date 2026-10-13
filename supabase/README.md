@@ -12,8 +12,8 @@ changes, run `supabase-local/scripts/sync-migrations.sh --copy`.
 
 | File | Live project `auicerytbhnqeakmkscs` (Agent-Uncle) |
 |---|---|
-| `migrations/20261011230000_landing_leads.sql` | **Applied 2026-10-12** in one transaction via the Management API SQL endpoint, **not** through `db push`, so `supabase_migrations.schema_migrations` was left untouched. |
-| `backoffice/20261013090000_backoffice_admin_layer.sql` | **Not applied (proposed).** Applied and tested on the local stack only. See "Backoffice layer (proposed)" below. |
+| `migrations/20261011230000_landing_leads.sql` | **Applied 2026-10-12** via the Management API SQL endpoint. Recorded in `supabase_migrations.schema_migrations` on 2026-10-14 (version 20261011230000). |
+| `backoffice/20261013090000_backoffice_admin_layer.sql` | **Applied 2026-10-14** (sha256 d26b300e…) in one transaction via the Management API, together with its `schema_migrations` row (version 20261013090000). Verified after apply: live and local fingerprints identical (tables 12/12, functions 72/72, policies 7/7); the publishable key is refused on backoffice tables and RPCs; `app_bootstrap_config` answers for anon. The same file is committed to the app repo on branch `rhtmdgks/backoffice-admin-layer`. No staff row exists yet. |
 
 Verified after applying: RLS on; anon has column-level `INSERT` only and no table grants; one
 `INSERT` policy for anon/authenticated; with the publishable key an insert returns 201, while
@@ -52,9 +52,12 @@ the live project. Until then it exists only on the local stack, as a byte-for-by
 
 Evidence to hand over with it:
 
-- `backoffice/run-checks.sh --app <dir>`: 131 behaviour checks plus the app's own pgTAP files
-  (`workspace_test.sql` 65 ok, `signup_validation_test.sql` 32 ok) with the layer applied.
-- `../supabase-local/supabase/tests/backoffice_test.sql`: a self-contained pgTAP port (158 tests)
+- `backoffice/run-checks.sh --app <dir>`: 153 behaviour checks plus the app's own pgTAP files with
+  the layer applied. On the live schema (9 app migrations, 2026-10-14): `chat_message_actions_test`
+  44, `phone_availability_test` 13, `workspace_test` 65 and `signup_validation_test` 32 ok (the last
+  two from app commit `e9b2e77`; their develop versions need `202610130001`). With the develop-only
+  `202610130001`..`202610130003` applied after the layer, all six develop test files pass (363 ok).
+- `../supabase-local/supabase/tests/backoffice_test.sql`: a self-contained pgTAP port (185 tests)
   that the app team can copy into its `supabase/tests/` next to its own tests.
 
 Rollout:
@@ -63,8 +66,15 @@ Rollout:
    [`../supabase-local/README.md`](../supabase-local/README.md#backoffice-layer-proposed-local-only)).
 2. The app team adds `20261011230000_landing_leads.sql` and then this migration to the app repo's
    migration history. They run `supabase test db`, `supabase db lint` (`SECURITY DEFINER`
-   warnings are expected, as for `saip_*`), `smoke.py`, `supabase db push --dry-run`, then
-   `supabase db push`.
+   warnings are expected, as for `saip_*`), `smoke.py` and `supabase db push --dry-run`.
+   Live (2026-10-14) records `202610110001`..`202610110006`, `202610120001`, `202610130000` and
+   `202610130004`, but not the develop-only `202610130001`..`202610130003`, so those are already
+   "older than the last remote migration": plain `db push` refuses, and `db push --include-all`
+   would ship them too. To ship only this layer: record `landing_leads` (already live) with
+   `supabase migration repair --status applied 20261011230000`, then push from a checkout whose
+   `supabase/migrations/` holds only the live files plus this one (or apply this file in one
+   transaction and `supabase migration repair --status applied 20261013090000`). The app team can
+   ship `202610130001`..`202610130003` later with `--include-all`; they apply cleanly after the layer.
 3. Seed the first owner once in the SQL editor (the owner has signed in once with a separate
    Google account, so the `auth.users` row exists and the email is confirmed; the account has no
    app account):
@@ -88,10 +98,10 @@ Rollout:
 
 1. Copy the file into the app repo:
    `cp supabase/migrations/20261011230000_landing_leads.sql <agent-uncle>/supabase/migrations/`
-   The app uses 12-digit versions (`202610110006_...`). Renaming the copy to the
-   next free one, e.g. `202610110007_landing_leads.sql` (`202610110006` is taken by
-   `signup_role_profile_validation`), keeps its style; either name sorts after the existing
-   migrations and before the backoffice layer (`20261013090000`).
+   Keep the name `20261011230000_landing_leads.sql`: it is already live (outside the history), so
+   record it with `supabase migration repair --status applied 20261011230000` instead of running
+   it again (re-running is harmless: the SQL is idempotent). It sorts before the backoffice layer
+   (`20261013090000`) both as text and as a number.
 2. Review it with the app team, test locally (`supabase db reset` in the app
    repo), then ship it with the app's normal `supabase db push` / CI flow.
 

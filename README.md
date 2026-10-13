@@ -122,7 +122,7 @@ e2e가 남긴 메모, 감사 로그, 설정 버전은 `reset.sh`로 지울 수 �
 | 로컬 스택 시작, 정지 | `supabase-local/scripts/start.sh`, `supabase-local/scripts/stop.sh` |
 | DB 초기화와 데모·운영 계정 seed | `supabase-local/scripts/reset.sh` (`--empty`는 데이터 없이) |
 | API 확인 (로그인, RLS, 운영 계층) | `node supabase-local/scripts/check-api.mjs` |
-| 운영 계층 동작 확인 (131개, 롤백) | `supabase/backoffice/run-checks.sh` |
+| 운영 계층 동작 확인 (153개, 롤백) | `supabase/backoffice/run-checks.sh` |
 | 운영 계층 pgTAP | `supabase-local/scripts/sb.sh test db` |
 | 라이브 스키마와 비교 (읽기 전용) | `node supabase-local/scripts/verify-schema.mjs` |
 | 마이그레이션 사본 비교 | `supabase-local/scripts/sync-migrations.sh` |
