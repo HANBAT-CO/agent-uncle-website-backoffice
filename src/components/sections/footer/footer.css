@@ -1,0 +1,243 @@
+/*
+ * S11 footer. Unlayered on purpose: these rules beat the Tailwind utilities on
+ * the same elements (the short-screen rhythm below overrides their margins).
+ *
+ * The wordmark's period slot. Values are in em of the wordmark, measured from
+ * src/app/fonts/paperlogy-900-display.woff2 (unitsPerEm 900, hhea ascent 880,
+ * descent 180, no USE_TYPO_METRICS):
+ *
+ * - period "." advance 274, ink box x 30..244, y -8..206 (font units)
+ * - at line-height 1 the baseline sits 0.8889em below the line top
+ *   ((1 - 1060/900) / 2 + 880/900)
+ * - so the ink box is left 30/900 = 0.0333em, width and height
+ *   214/900 = 0.2378em
+ * - the Hangul syllables descend about 0.032em below the period's ink bottom,
+ *   so the dot's top is 0.66em + 0.032em = 0.692em: it lands on the same floor
+ *   as 입, 삼 and 춘, not in mid-air on the Latin baseline
+ *
+ * The quantity dot (ink) is sized and placed on that box, so it is the full
+ * stop of 사입삼춘. The period glyph stays in the text (transparent) for its
+ * advance, selection and the accessible name.
+ */
+
+/*
+ * Size. From 768px wide and above 500px tall, one line at min(22vw, 320px)
+ * (the display-2xl token), capped by the viewport height: at the end of the
+ * page the h2 top sits at 100svh - size - (the footer below the wordmark +
+ * --nav-clear), so it always clears the nav (bottom 72px) instead of sliding
+ * under it on 1280x800, 1366x768, 1280x720, or 1023x768 and 1000x700 (split
+ * windows, tablets in landscape). From 1024px that is 33rem (440px below the
+ * wordmark with the short-screen rhythm below); from 768 to 1023px 35.5rem
+ * (the cards and links stack about 480px), or 33rem again where the md short
+ * rhythm trims it to about 440px. Tall screens keep min(22vw, 320px); the
+ * floors keep very short windows from shrinking it to a caption. Stacked
+ * (below 768px, or 500px tall or less) it is two lines, sized at the end of
+ * this file.
+ */
+.footer-wordmark {
+  font-size: min(40vw, 32svh);
+  /* Each line stays whole: 3.82em of glyphs at these sizes always fits inside the gutters. */
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  .footer-wordmark {
+    font-size: min(var(--text-display-2xl), max(9rem, calc(100svh - 35.5rem)));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023.98px) and (max-height: 800px) {
+  .footer-wordmark {
+    font-size: min(var(--text-display-2xl), max(9rem, calc(100svh - 33rem)));
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-wordmark {
+    font-size: min(var(--text-display-2xl), max(10rem, calc(100svh - 33rem)));
+  }
+}
+
+/*
+ * Short tablet-width screens (768 to 1023px, 800px tall or less): the grid
+ * and the legal line move up (480px of footer below the wordmark becomes
+ * about 440px), so the one-line wordmark keeps more of its size under the cap.
+ */
+@media (min-width: 768px) and (max-width: 1023.98px) and (max-height: 800px) {
+  .footer-grid {
+    margin-top: 24px;
+  }
+
+  .footer-legal {
+    margin-top: 40px;
+  }
+}
+
+/*
+ * Short desktop screens (1024px and up, 900px tall or less): a tighter stack
+ * so the whole footer fits one screen under the nav with the wordmark as large
+ * as the height allows (the 440px the size cap above assumes).
+ */
+@media (min-width: 1024px) and (max-height: 900px) {
+  .footer-shell {
+    padding-top: var(--nav-clear);
+  }
+
+  .footer-rule {
+    margin-top: 24px;
+  }
+
+  .footer-grid {
+    margin-top: 32px;
+  }
+
+  .footer-legal {
+    margin-top: 40px;
+  }
+}
+
+/*
+ * Stacked: below 768px, and on any screen 500px tall or less (landscape
+ * phones, short tablets and windows). There the footer is taller than the
+ * screen, so with the wordmark on top the end of the page left it sliced
+ * under the nav pill or scrolled off above it (the one-line floors keep 9rem
+ * plus about 480px of footer below it). Stacked last instead, the wordmark is
+ * the page's closing frame on every height: the line, card and links come
+ * first, then the hairline, then 사입 / 삼춘. with its full stop, then the
+ * legal line. DOM order is unchanged (the h2 still opens the landmark for
+ * assistive tech; nothing here is focusable). After the rhythms above, so its
+ * margins win on short desktops too.
+ *
+ * Two lines at 40vw, capped at 32svh for landscape phones and by the height
+ * left under the nav once the legal line (up to about 12rem with its gap and
+ * the footer's bottom padding, two rows on narrow screens) has its room.
+ */
+@media (max-width: 767.98px), (max-height: 500px) {
+  .footer-inner {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .footer-grid {
+    order: 1;
+    margin-top: 0;
+  }
+
+  .footer-rule {
+    order: 2;
+    margin-top: 64px;
+  }
+
+  .footer-wordmark {
+    order: 3;
+    margin-top: 40px;
+    font-size: min(40vw, 32svh, calc((100svh - var(--nav-clear) - 12rem) / 2));
+  }
+
+  .footer-legal {
+    order: 4;
+    margin-top: 40px;
+  }
+}
+
+/*
+ * Landscape phones and short windows (500px tall or less, 480px wide or
+ * more): the legal line stands beside the wordmark, on its last line, instead
+ * of under it, so the closing frame keeps the wordmark large (125px at
+ * 844x390, not 63px). The size leaves the nav its band and the footer's
+ * bottom padding (3rem of the height), and the legal line at least 13rem of
+ * the width (the symbol, or the © line wrapped under it).
+ */
+@media (max-height: 500px) and (min-width: 480px) {
+  .footer-wordmark {
+    font-size: min(
+      40vw,
+      32svh,
+      calc((100svh - var(--nav-clear) - 3rem) / 2),
+      calc((100vw - 2 * var(--spacing-gutter) - 13rem) / 2.3)
+    );
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 2rem;
+  }
+
+  .footer-grid,
+  .footer-rule {
+    grid-column: 1 / -1;
+  }
+
+  .footer-wordmark {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .footer-legal {
+    grid-column: 2;
+    grid-row: 3;
+    align-self: end;
+    margin-top: 0;
+  }
+}
+
+/*
+ * No visit log yet (most visitors): the links move into the middle columns as
+ * two columns, the same layout as mobile, instead of a narrow list at the far
+ * right with an empty band in between. That also keeps them out of the record
+ * pill's bottom-right lane (min 1280px).
+ */
+@media (min-width: 1024px) {
+  .footer-grid:has(> [data-visit-slot]:empty) > .footer-links {
+    grid-column: 6 / span 4;
+  }
+
+  .footer-grid:has(> [data-visit-slot]:empty) > .footer-links > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.footer-period-slot {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+}
+
+.footer-period-dot {
+  position: absolute;
+  left: 0.0333em;
+  top: 0.692em;
+  width: 0.2378em;
+  height: 0.2378em;
+  transform-origin: 50% 100%;
+}
+
+/* The wordmark's lines: stacked when the wordmark is, side by side (one line) otherwise. */
+.footer-wordmark-chars {
+  display: inline-block;
+}
+
+/* Line mask for the rising syllables: clip vertically only, never the side bearings. */
+.footer-wordmark-line {
+  display: block;
+  overflow-y: clip;
+  overflow-x: visible;
+  overflow-clip-margin: 0;
+}
+
+@media (min-width: 768px) and (min-height: 500.02px) {
+  .footer-wordmark-line {
+    display: inline-block;
+  }
+}
+
+/*
+ * Split syllables (SplitText with span tags sets no display): inline-block so
+ * yPercent moves them. The one-liner's spans stay inline, so it reads and
+ * wraps as plain text while typing on.
+ */
+.footer-char {
+  display: inline-block;
+  position: relative;
+}
