@@ -1,0 +1,143 @@
+@import "tailwindcss" source(none);
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/*
+ * 사입삼춘 운영 console tokens (backoffice spec 9; screens appendix 9).
+ * - Own Tailwind entry: source(none) plus explicit @source paths, so landing
+ *   utilities and tokens never reach the console and console utilities never
+ *   reach the landing CSS (the landing scan excludes these folders in
+ *   next.config.ts).
+ * - Surfaces mirror the app: canvas #EDECE3, cards and sheets #F5F4EE, ink
+ *   #101010, hairline #D7D7D7.
+ * - One key colour: deep green #0C483E. Attention is the app red #D22030 as a
+ *   12% tint with #B3192A text, always paired with an icon and a label.
+ * - Light theme only in v1 (spec D12). The dark variant below only exists so
+ *   the generated shadcn `dark:` classes never fire on a dark OS setting:
+ *   <html data-theme="light"> is fixed in the admin root layout.
+ */
+
+@source "../../components/admin";
+@source "../../lib/admin";
+@source "./";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  --radius: 1rem;
+
+  --background: #edece3;
+  --foreground: #101010;
+  --card: #f5f4ee;
+  --card-foreground: #101010;
+  --popover: #f5f4ee;
+  --popover-foreground: #101010;
+  --primary: #0c483e;
+  --primary-foreground: #f5f4ee;
+  --secondary: color-mix(in oklab, #0c483e 12%, #f5f4ee);
+  --secondary-foreground: #0c483e;
+  --muted: #e4e3da;
+  --muted-foreground: #636363;
+  --accent: color-mix(in oklab, #0c483e 7%, #f5f4ee);
+  --accent-foreground: #101010;
+  --destructive: #d22030;
+  --border: #d7d7d7;
+  /* Form control outlines: 3.1:1 on cards (WCAG 1.4.11). */
+  --input: #8a8a8a;
+  --ring: #0c483e;
+
+  /* Ordinal green ramp, light to dark, validated for the light surfaces. */
+  --chart-1: #86bc9e;
+  --chart-2: #549e7e;
+  --chart-3: #2e8c6b;
+  --chart-4: #1c6a55;
+  --chart-5: #0c483e;
+
+  --sidebar: #f5f4ee;
+  --sidebar-foreground: #2d2d2d;
+  --sidebar-primary: #0c483e;
+  --sidebar-primary-foreground: #f5f4ee;
+  --sidebar-accent: color-mix(in oklab, #0c483e 10%, #f5f4ee);
+  --sidebar-accent-foreground: #0c483e;
+  --sidebar-border: #d7d7d7;
+  --sidebar-ring: #0c483e;
+
+  /* Status chips: icon + label + tint, colour never alone. */
+  --status-normal-bg: color-mix(in oklab, #0c483e 12%, transparent);
+  --status-normal-fg: #0c483e;
+  --status-attention-bg: color-mix(in oklab, #d22030 12%, transparent);
+  --status-attention-fg: #b3192a;
+  --status-neutral-bg: #e4e3da;
+  --status-neutral-fg: #484848;
+}
+
+@theme inline {
+  /* next/font sets --font-paperlogy on <html>: Paperlogy, its metric-matched fallback, then the Korean system fonts (fonts.ts). */
+  --font-sans: var(--font-paperlogy);
+  --font-heading: var(--font-paperlogy);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-status-normal: var(--status-normal-fg);
+  --color-status-normal-bg: var(--status-normal-bg);
+  --color-status-attention: var(--status-attention-fg);
+  --color-status-attention-bg: var(--status-attention-bg);
+  --color-status-neutral: var(--status-neutral-fg);
+  --color-status-neutral-bg: var(--status-neutral-bg);
+
+  /* Radius: 1rem cards and sheets, 0.625rem controls, pills via rounded-full. */
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: calc(var(--radius) * 0.625);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.25);
+  --radius-2xl: calc(var(--radius) * 1.5);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    word-break: keep-all;
+    color-scheme: light;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-size: 14px;
+  }
+}
+
+/* Paperlogy digits are fixed-width already; this keeps fallback faces aligned too. */
+@utility num {
+  font-variant-numeric: tabular-nums;
+}
