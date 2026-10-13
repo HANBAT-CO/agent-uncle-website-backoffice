@@ -1,0 +1,34 @@
+/*
+ * TearTicket restyle hooks (see the header of TearTicket.tsx). Values come in
+ * through props as custom properties on the root, so a consumer restyles the
+ * ticket without touching the component's class lists.
+ */
+
+/* A drop shadow that follows the cut shape, perforation holes included. */
+.root {
+  filter: var(--tt-shadow, none);
+}
+
+/* Body ink. The source fades a used ticket to 55%; data-dim keeps that opt-in. */
+.ink {
+  transition: opacity 500ms var(--ease-snap, cubic-bezier(0.32, 0.72, 0, 1));
+}
+
+.root[data-used][data-dim] .ink {
+  opacity: 0.55;
+}
+
+.root[data-instant] .ink {
+  transition-duration: 0ms;
+}
+
+/* The stub's grab area: none in the source; pan-y keeps vertical page scroll on touch. */
+.grab {
+  touch-action: var(--tt-touch, none);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink {
+    transition: none;
+  }
+}

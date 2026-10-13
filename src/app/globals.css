@@ -1,0 +1,618 @@
+@import "tailwindcss";
+
+/*
+ * 사입삼춘 landing: design tokens and base layer.
+ *
+ * Sources: docs/superpowers/specs/2026-10-11-landing-design.md sections 4
+ * (palette, type, grid, shape) and 6.2 (motion), and the app theme in
+ * .context/brief/product.md section 9.
+ *
+ * Rules baked in here:
+ * - Green is the only key colour. The default Tailwind palette is removed, so
+ *   no off-palette hue can sneak in (spec 4.1 lists the banned ones). There
+ *   is no error colour token: the app's error red appears only inside real
+ *   app screenshots and footage; site-built errors and refusals are ink with
+ *   a 2px deep-green rule.
+ * - The page starts at night: html[data-phase] (night, then day from the
+ *   05:53 dawn on) drives the persistent chrome; each section paints its own
+ *   ground through [data-tone] (night, dawn, day).
+ * - Record surfaces (record cards, plate, slip, readouts) are always paper
+ *   #F5F4EE with ink #101010 in both phases (--record-*).
+ * - Hangul: word-break: keep-all globally, display line-height >= 1.14,
+ *   body >= 1.6, tracking never tighter than -0.02em.
+ * - Weight 800 only on DISPLAY_800 strings, 900 only on DISPLAY_900
+ *   (src/content/copy.ts): those faces are subsets.
+ */
+
+/* `dark:` follows data-theme scoping, not the OS setting. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant transparency-reduce (@media (prefers-reduced-transparency: reduce));
+
+/* `static`: emit every token so GSAP / canvas code can read them at runtime. */
+@theme static {
+  /* ---------- Colour: brand palette ---------- */
+  --color-*: initial;
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Greens. 800 is the app primary. 950 is the night ground. */
+  --color-green-950: #07231c;
+  --color-green-900: #093a32;
+  --color-green-800: #0c483e;
+  --color-green-600: #2e8c6b;
+  --color-green-500: #3e9a57;
+  --color-green-200: #b6d7c2;
+  --color-green-100: #d9e9dc;
+  --color-green-50: #f2ffe8;
+  --color-mint: #f2ffe8;
+
+  /* Neutrals. paper = day canvas, surface = record paper and sheets. */
+  --color-paper: #edece3;
+  --color-surface: #f5f4ee;
+  --color-ink: #101010;
+  --color-logo: #111111;
+
+  --color-grey-900: #101010;
+  --color-grey-800: #2d2d2d;
+  --color-grey-700: #484848;
+  --color-grey-600: #636363;
+  --color-grey-500: #808080;
+  --color-grey-400: #a3a3a3;
+  --color-grey-300: #bfbfbf;
+  --color-grey-200: #d7d7d7;
+  --color-grey-100: #e4e3da;
+  --color-grey-50: #f3f2eb;
+
+  /* ---------- Typography ---------- */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* Hangul-safe tracking. -0.02em is the floor for Korean display type. */
+  --tracking-hangul-display: -0.02em;
+  --tracking-hangul-heading: -0.01em;
+  --tracking-latin-tight: -0.04em;
+
+  /*
+   * Spec 4.2 scale. The display sizes carry their weight, so use them only on
+   * the strings their subset covers.
+   * - display-2xl: footer wordmark (900, DISPLAY_900)
+   * - display-xl: H1 (800, DISPLAY_800); 30px on 3 lines below 768px
+   * - display-lg: H2 (800, DISPLAY_800)
+   * - display-md: equation numerals (900, DISPLAY_900)
+   */
+  --text-display-2xl: min(22vw, 20rem);
+  --text-display-2xl--line-height: 1;
+  --text-display-2xl--letter-spacing: -0.02em;
+  --text-display-2xl--font-weight: 900;
+
+  --text-display-xl: clamp(2.5rem, 4.4vw, 4.25rem);
+  --text-display-xl--line-height: 1.14;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 800;
+
+  --text-display-lg: clamp(1.875rem, 3.4vw, 3.25rem);
+  --text-display-lg--line-height: 1.18;
+  --text-display-lg--letter-spacing: -0.02em;
+  --text-display-lg--font-weight: 800;
+
+  --text-display-md: clamp(6rem, 15vw, 15rem);
+  --text-display-md--line-height: 1;
+  --text-display-md--letter-spacing: -0.02em;
+  --text-display-md--font-weight: 900;
+
+  /* Headings. heading-md = H3 (app t3, 22). Numbers and read-outs use 700. */
+  --text-heading-lg: clamp(2rem, 4vw, 3.5rem);
+  --text-heading-lg--line-height: 1.2;
+  --text-heading-lg--letter-spacing: -0.01em;
+  --text-heading-lg--font-weight: 700;
+
+  --text-heading-md: 1.375rem;
+  --text-heading-md--line-height: 1.4;
+  --text-heading-md--letter-spacing: -0.01em;
+  --text-heading-md--font-weight: 700;
+
+  --text-heading-sm: 1.125rem;
+  --text-heading-sm--line-height: 1.45;
+  --text-heading-sm--font-weight: 700;
+
+  /* Body 17/1.65 desktop, 16/1.65 mobile; caption and meta 13/1.6 (app t7). */
+  --text-body-lg: 1.0625rem;
+  --text-body-lg--line-height: 1.65;
+  --text-body: 1rem;
+  --text-body--line-height: 1.65;
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.6;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.6;
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--font-weight: 700;
+
+  /* Make Tailwind's default sizes Hangul-safe too. */
+  --text-xs--line-height: 1.6;
+  --text-sm--line-height: 1.6;
+  --text-base--line-height: 1.65;
+  --text-lg--line-height: 1.65;
+  --text-xl--line-height: 1.6;
+  --text-2xl--line-height: 1.4;
+  --text-3xl--line-height: 1.3;
+  --text-4xl--line-height: 1.25;
+  --text-5xl--line-height: 1.2;
+  --text-6xl--line-height: 1.15;
+  --text-7xl--line-height: 1.15;
+  --text-8xl--line-height: 1.15;
+  --text-9xl--line-height: 1.15;
+
+  /* ---------- Shape (spec 4.4) ---------- */
+  --radius-card: 1.5rem; /* 24: cards, sheets, record cards, slips, readouts */
+  --radius-button: 0.75rem;
+  --radius-chip: 0.625rem;
+  --radius-input: 1rem; /* 16: inputs */
+  --radius-shell: 1.875rem; /* 30: double-bezel outer shell (6px padding, 24 inner) */
+  --radius-pill: 9999px; /* every button, chip, token and pill */
+
+  /* Tinted shadows only. */
+  --shadow-card: 0 8px 24px rgb(16 16 16 / 0.08);
+  --shadow-float: 0 18px 48px -12px rgb(7 35 28 / 0.22);
+
+  /* ---------- Spacing ---------- */
+  /* Page side padding: 24 on phones (app Inset) growing to 48. */
+  --spacing-gutter: clamp(1.5rem, 0.9rem + 2.6vw, 3rem);
+  --container-content: 90rem;
+  --container-prose: 34em;
+  /*
+   * max-w-prose reads --max-width-* before --container-*, and Tailwind's default
+   * theme sets --max-width-prose to 65ch (about 693px at 16px). Point it at the
+   * spec's 34em measure so max-w-prose and max-w-(--container-prose) agree.
+   */
+  --max-width-prose: var(--container-prose);
+
+  /* ---------- Motion ---------- */
+  /* Mirrored in src/lib/motion.ts for GSAP / motion. Keep in sync. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-snap: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-overshoot: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ---------- Font + semantic role tokens (resolve per element) ---------- */
+@theme inline {
+  /* --font-paperlogy comes from next/font on <html> (src/app/fonts/paperlogy.ts). */
+  --font-sans: var(--font-paperlogy, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif);
+  --font-display: var(--font-paperlogy, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", system-ui, sans-serif);
+
+  --color-canvas: var(--canvas);
+  --color-elevated: var(--elevated);
+  --color-sunken: var(--sunken);
+  --color-fg: var(--fg);
+  --color-fg-body: var(--fg-body);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-on-accent: var(--on-accent);
+  --color-accent-weak: var(--accent-weak);
+  --color-highlight: var(--highlight);
+  --color-on-highlight: var(--on-highlight);
+  --color-focus: var(--focus);
+
+  /* Night aliases: bg-night-0, text-night-ink, border-map-dim, ... */
+  --color-night-0: var(--night-0);
+  --color-night-1: var(--night-1);
+  --color-night-2: var(--night-2);
+  --color-night-ink: var(--night-ink);
+  --color-night-ink-2: var(--night-ink-2);
+  --color-map-dim: var(--map-dim);
+  --color-map-faint: var(--map-faint);
+
+  /* Record surfaces: bg-record, text-record-fg, text-record-meta, bg-bubble. */
+  --color-record: var(--record-bg);
+  --color-record-fg: var(--record-fg);
+  --color-record-meta: var(--record-meta);
+  --color-bubble: var(--bubble);
+
+  /* Phase-aware chrome (html[data-phase]). */
+  --color-chrome: var(--chrome-bg);
+  --color-chrome-fg: var(--chrome-fg);
+  --color-chrome-line: var(--chrome-line);
+  --color-accent-live: var(--accent-live);
+  --color-dot-ink: var(--dot-ink);
+}
+
+:root {
+  color-scheme: light;
+
+  /* Day roles (the morning sections and anything outside a [data-tone]). */
+  --canvas: var(--color-paper);
+  --elevated: var(--color-surface);
+  --sunken: var(--color-grey-100);
+  --fg: var(--color-ink);
+  --fg-body: var(--color-grey-800);
+  --fg-muted: var(--color-grey-600);
+  --fg-subtle: var(--color-grey-500);
+  --line: var(--color-grey-200);
+  --line-strong: var(--color-grey-300);
+  --accent: var(--color-green-800);
+  --accent-hover: var(--color-green-900);
+  --on-accent: var(--color-surface);
+  /* App "weak" buttons and badges: primary at 12%. */
+  --accent-weak: rgb(12 72 62 / 0.12);
+  --highlight: var(--color-mint);
+  --on-highlight: var(--color-green-800);
+  --focus: var(--color-green-800);
+
+  /* Record surfaces: never change colour with the phase. */
+  --record-bg: #f5f4ee;
+  --record-fg: #101010;
+  --record-meta: #636363;
+  --bubble: #d7d7d7;
+
+  /* Night palette (spec 4.1). */
+  --night-0: #07231c;
+  --night-1: #093a32;
+  --night-2: #0c483e;
+  --night-ink: #edece3;
+  --night-ink-2: #b6d7c2;
+  --map-dim: rgba(182, 215, 194, 0.3);
+  --map-faint: rgba(182, 215, 194, 0.16);
+
+  /* Record column (min 1280px): fixed right, top 96px, bottom 24px. */
+  --record-col: clamp(272px, 22vw, 336px);
+
+  /*
+   * Nav (spec 5.1): a 56px pill 16px from the top. --nav-clear is the band
+   * under it that headings, anchor targets and keyboard focus keep clear of
+   * (nav bottom + 16px = 88px). Registered as a <length> in chrome.css.
+   */
+  --nav-top: 1rem;
+  --nav-h: 3.5rem;
+  --nav-clear: calc(var(--nav-top) + var(--nav-h) + 1rem);
+
+  /* Glass surface (nav pill only). Collapses under reduced transparency. */
+  --glass-blur: 16px;
+  --glass-fill: linear-gradient(135deg, rgb(255 255 255 / 0.55), rgb(245 244 238 / 0.32));
+  --glass-border: rgb(255 255 255 / 0.95);
+  --glass-border-bottom: rgb(16 16 16 / 0.15);
+
+  /* Motion durations (not a Tailwind namespace; use duration-(--duration-record)). */
+  --duration-fast: 160ms;
+  --duration-base: 240ms;
+  --duration-slow: 480ms;
+  --duration-reveal: 900ms;
+  --duration-record: 700ms;
+  --duration-roll: 300ms;
+
+  /* z-index scale. Mirrored in src/lib/z.ts. Use z-(--z-header) in classes. */
+  --z-below: -1;
+  --z-base: 0;
+  --z-raised: 10;
+  --z-grain: 50;
+  --z-sticky: 100;
+  --z-header: 200;
+  --z-overlay: 300;
+  --z-modal: 400;
+  --z-toast: 500;
+  --z-skip-link: 1000;
+}
+
+/*
+ * Phase and tone grounds live in the base layer so section utilities
+ * (bg-night-1 on the cart, the dawn gradient) override them.
+ */
+@layer base {
+  /*
+   * Chrome by phase (spec 4.1, 5.5). PhaseSync (WP-02) flips html[data-phase];
+   * chrome.css adds the 700ms transitions. SSR starts at night.
+   */
+  html[data-phase="night"] {
+    /* Spec 4.1 says 88% / 82%; raised so headings scrolling under the pill do not ghost through it (chrome polish). */
+    --chrome-bg: rgb(9 58 50 / 0.92);
+    --chrome-fg: #f2ffe8;
+    --chrome-line: rgb(242 255 232 / 0.12);
+    --accent-live: #f2ffe8;
+    --dot-ink: #f2ffe8;
+    /* Phase-aware CTA (CtaButton tone "phase"). */
+    --cta-phase-bg: #f2ffe8;
+    --cta-phase-fg: #07231c;
+    --cta-phase-circle: #0c483e;
+    --cta-phase-icon: #f2ffe8;
+    --chrome-focus: #f2ffe8;
+    background-color: var(--night-0);
+  }
+
+  html[data-phase="day"] {
+    /* 95% (with blur 20 and saturate 1.4, chrome.css): device islands and app text no longer show through the pill. */
+    --chrome-bg: rgb(245 244 238 / 0.95);
+    --chrome-fg: #101010;
+    --chrome-line: rgb(16 16 16 / 0.08);
+    --accent-live: #0c483e;
+    --dot-ink: #0c483e;
+    --cta-phase-bg: #0c483e;
+    --cta-phase-fg: #f5f4ee;
+    --cta-phase-circle: #f2ffe8;
+    --cta-phase-icon: #0c483e;
+    --chrome-focus: #0c483e;
+    background-color: var(--color-paper);
+  }
+
+  /* Section grounds (SectionShell data-tone). Night text #EDECE3 is about 14:1 on #07231C. */
+  [data-tone="night"],
+  [data-tone="dawn"] {
+    color-scheme: dark;
+    --canvas: var(--night-0);
+    --elevated: var(--night-1);
+    --sunken: #051a15;
+    --fg: var(--night-ink);
+    --fg-body: var(--night-ink);
+    --fg-muted: var(--night-ink-2);
+    --fg-subtle: rgb(182 215 194 / 0.72);
+    --line: rgb(242 255 232 / 0.12);
+    --line-strong: rgb(242 255 232 / 0.24);
+    --accent: var(--color-mint);
+    --accent-hover: var(--color-white);
+    --on-accent: var(--night-0);
+    --accent-weak: rgb(242 255 232 / 0.12);
+    --highlight: rgb(242 255 232 / 0.1);
+    --on-highlight: var(--color-mint);
+    --focus: var(--color-mint);
+    background-color: var(--canvas);
+    color: var(--fg);
+  }
+
+  [data-tone="day"] {
+    color-scheme: light;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --canvas: var(--color-green-950);
+  --elevated: var(--color-green-900);
+  --sunken: #051a15;
+  --fg: var(--color-surface);
+  --fg-body: rgb(245 244 238 / 0.86);
+  --fg-muted: rgb(245 244 238 / 0.66);
+  --fg-subtle: rgb(245 244 238 / 0.5);
+  --line: rgb(245 244 238 / 0.14);
+  --line-strong: rgb(245 244 238 / 0.24);
+  --accent: var(--color-mint);
+  --accent-hover: var(--color-white);
+  --on-accent: var(--color-green-800);
+  --accent-weak: rgb(242 255 232 / 0.12);
+  --highlight: rgb(242 255 232 / 0.1);
+  --on-highlight: var(--color-mint);
+  --focus: var(--color-mint);
+
+  --glass-fill: linear-gradient(135deg, rgb(245 244 238 / 0.12), rgb(245 244 238 / 0.04));
+  --glass-border: rgb(245 244 238 / 0.18);
+  --glass-border-bottom: rgb(0 0 0 / 0.3);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :root,
+  [data-theme="dark"] {
+    --glass-blur: 0px;
+    --glass-fill: linear-gradient(var(--elevated), var(--elevated));
+  }
+
+  html[data-phase="night"] {
+    --chrome-bg: var(--night-1);
+  }
+
+  html[data-phase="day"] {
+    --chrome-bg: var(--color-surface);
+  }
+}
+
+/* Spec 14: dim map strokes raised to 60% for prefers-contrast: more, and no paper grain. */
+@media (prefers-contrast: more) {
+  :root {
+    --map-dim: rgba(182, 215, 194, 0.6);
+    --map-faint: rgba(182, 215, 194, 0.42);
+  }
+
+  body::after {
+    display: none;
+  }
+}
+
+/* ---------- Utilities ---------- */
+
+/*
+ * Section content in the night chapters and signup leaves the record column
+ * free at min 1280px (spec 4.3): S1-S6 and S10.
+ */
+@utility stage-night {
+  @media (min-width: 1280px) {
+    max-width: calc(100vw - var(--record-col) - 3 * var(--spacing-gutter));
+  }
+}
+
+/* Fixed-width digit cell: changing numbers never jitter (spec 4.2). */
+@utility digit-cell {
+  display: inline-block;
+  width: 0.62em;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Korean display headings: balanced lines, tracking at the -0.02em floor. */
+@utility hangul-display {
+  text-wrap: balance;
+  letter-spacing: -0.02em;
+}
+
+/* App glass card: blur 16, white 55% -> surface 32%, white 95% border, charcoal 15% bottom. */
+@utility glass {
+  background-image: var(--glass-fill);
+  border: 1px solid var(--glass-border);
+  border-bottom-color: var(--glass-border-bottom);
+  box-shadow: var(--shadow-card);
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  backdrop-filter: blur(var(--glass-blur));
+
+  @media (prefers-contrast: more) {
+    background-image: none;
+    background-color: var(--elevated);
+    border-color: var(--fg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Visually hidden until focused (skip link). */
+@utility skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: var(--z-skip-link);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-green-800);
+  color: var(--color-surface);
+  font-weight: 700;
+  transform: translateY(calc(-100% - 1.5rem));
+  transition: transform var(--duration-base) var(--ease-out-expo);
+
+  &:focus-visible {
+    transform: translateY(0);
+    outline-color: var(--color-mint);
+  }
+}
+
+/* Numbers next to labels ("2장", "1건") line up. */
+@utility numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Base ---------- */
+@layer base {
+  html {
+    background-color: var(--canvas);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    min-height: 100dvh;
+    line-height: 1.65;
+    /* Korean: break between words, not inside them. */
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p,
+  li,
+  figcaption {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: var(--color-mint);
+    color: var(--color-green-800);
+  }
+
+  /* 2px ring, mint at night, #0C483E by day (follows --focus per tone), 3px offset. */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  /*
+   * Anchor jumps clear the fixed nav. A section lands on its own top from
+   * 1024px (its 117-128px top padding already clears the nav) and 2rem above
+   * it below (80px padding there), so a jump never opens on the tail of the
+   * previous section and a pinned section opens on its pin start; route and
+   * film reach into their pins with an inline margin. The nav and the record
+   * chrome land on the same place (chrome/hooks.ts jumpTarget reads it).
+   */
+  [id] {
+    scroll-margin-top: var(--nav-clear);
+  }
+
+  [data-section] {
+    scroll-margin-top: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    [data-section] {
+      scroll-margin-top: 0;
+    }
+  }
+
+  /* Keyboard focus is never scrolled under the nav (WCAG 2.2 SC 2.4.11). */
+  html:has(:focus-visible) {
+    scroll-padding-top: var(--nav-clear);
+  }
+
+  /* Lenis (mirrors lenis/dist/lenis.css). Inert when Lenis is not mounted. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: clip;
+  }
+
+  .lenis [data-lenis-prevent],
+  .lenis [data-lenis-prevent-wheel],
+  .lenis [data-lenis-prevent-touch],
+  .lenis [data-lenis-prevent-vertical],
+  .lenis [data-lenis-prevent-horizontal] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
+
+  .lenis.lenis-autoToggle {
+    transition-property: overflow;
+    transition-duration: 1ms;
+    transition-behavior: allow-discrete;
+  }
+}
+
+/*
+ * Reduced motion: no transitions at all. A 0.01ms duration would keep
+ * transitionend firing, but transition-property defaults to all, so every
+ * element would then "transition" every changed property and paint one frame
+ * at the old value (a slip swapped in at full height showed its previous
+ * height for a frame). Nothing on the page listens for transitionend.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+}
