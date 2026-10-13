@@ -1,0 +1,724 @@
+/*
+ * S3 route (spec S3). One DOM, three layouts:
+ *
+ * - phones (below 1024px): the heading, stop A, then one block per timed stop
+ *   (a framed crop of the round, time, place, caption, record card or bubble).
+ * - static desktop (1024px and up, no JS or reduced motion): the heading over
+ *   two columns, the four captions stacked on the left, the map in its end
+ *   state on the right (route drawn, dot at 청평화, both ticks lit, tags shown).
+ * - pinned desktop ([data-route-mode="pinned"], set by RouteMotion in desktop
+ *   motion only): one 100dvh scene. The map box is the S2 background's box
+ *   (it covers the stage with 청평화's roof at 44% / 46% of it; the stage is
+ *   the scene minus the record column and one gutter from 1280px), so the
+ *   film opens on exactly the frame S2 ends on. The heading sits top-left,
+ *   the captions share one slot bottom-left.
+ *
+ * Every colour comes from the night palette (spec 4.1): the dashed route,
+ * the lamp dot and the tag counts are the mint light; places and labels are
+ * #B6D7C2; tags sit on the #093A32 plate with a faint mint ring.
+ */
+
+.route {
+  --route-ring: rgb(242 255 232 / 0.12);
+  --route-tag-ring: rgb(242 255 232 / 0.16);
+  /* Caption swap timing: RouteMotion's CAPTION_OUT, and CAPTION_IN + CAPTION_LINES_IN. */
+  --route-swap-out: 180ms;
+  --route-lines-in: 300ms;
+}
+
+/* ---------- Phones first ---------- */
+
+.route-frame {
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding: 80px var(--spacing-gutter);
+}
+
+.route-stage {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.route-head h2 {
+  max-width: 16em;
+}
+
+.route-figure {
+  display: none;
+  margin: 0;
+}
+
+.route-stops {
+  display: flex;
+  flex-direction: column;
+  gap: 72px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.route-stop {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.route-stop-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 30em;
+}
+
+.route-quote {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--night-ink);
+  text-wrap: balance;
+}
+
+.route-attribution {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+.route-sub {
+  margin-top: 10px;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--night-ink-2);
+  text-wrap: balance;
+}
+
+.route-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 12px;
+  row-gap: 2px;
+}
+
+.route-time {
+  font-size: 28px;
+  line-height: 1.2;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--night-ink);
+}
+
+.route-place {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+.route-caption {
+  margin-top: 2px;
+  font-size: 20px;
+  line-height: 1.5;
+  font-weight: 700;
+  color: var(--night-ink);
+  text-wrap: balance;
+}
+
+/* The request a record belongs to (app list format), so the cardigan's numbers never read as the denim's. */
+.route-item {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+.route-record {
+  width: 100%;
+  max-width: 380px;
+}
+
+/* A phone block's crop of the round: framed like the hero map (12px inset family, radius 20). */
+.route-crop {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  overflow: hidden;
+  border: 1px solid var(--route-ring);
+  border-radius: 20px;
+  background-color: var(--night-0);
+}
+
+/* Drawn up to the block's stop (the mask path is in user units, so --len is its length). */
+.route-crop .map-route-mask {
+  stroke-width: 5;
+  stroke-linecap: butt;
+  stroke-dasharray: calc(var(--len) * var(--route-drawn, 1)) calc(var(--len) * 2);
+}
+
+.route-camera .map-route-mask {
+  stroke-width: 5;
+}
+
+.route-crop [data-building="diot"],
+.route-crop [data-building="nampyeonghwa"] {
+  opacity: 0.35;
+}
+
+/*
+ * The walked trail (RouteTrail): a faint solid mint line under the 2/6
+ * dashes, revealed through the same mask, so the walked round reads as one
+ * continuous line. Under the map's SVG, so the plates occlude it too.
+ */
+.route-trail {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Positioned, so the map paints over the (absolute) trail in DOM order. */
+.route-camera > .market-map,
+.route-crop > .market-map {
+  position: relative;
+}
+
+.route-trail path {
+  fill: none;
+  stroke: rgb(242 255 232 / 0.35);
+  stroke-width: calc(1.5px / var(--map-scale, 1));
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+
+.route-crop-dot {
+  position: absolute;
+  display: grid;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+}
+
+/* ---------- The desktop map (static and pinned) ---------- */
+
+.route-camera {
+  position: relative;
+  width: 100%;
+}
+
+/* Off the round: 디오트 and 남평화 (buildings and labels) stay at 35%, as at the end of the hero's dive. */
+.route-camera [data-building="diot"],
+.route-camera [data-building="nampyeonghwa"] {
+  opacity: 0.35;
+}
+
+.route-label {
+  font-size: 13px;
+  line-height: 1;
+  color: var(--night-ink-2);
+  pointer-events: none;
+}
+
+.route-labels [data-building="nampyeonghwa"] {
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+.route-tag-slot {
+  pointer-events: none;
+}
+
+/*
+ * Labels and tags are DOM text over the drawing (spec 4.8): they keep their
+ * size while the camera scales the map (--map-scale mirrors the camera's
+ * scale; 1 outside the pinned film). A tag slot is a point, so it scales
+ * about its door.
+ */
+.route-camera .route-label,
+.route-camera .route-tag-slot {
+  scale: calc(1 / var(--map-scale, 1));
+}
+
+/* A map tag at a door: place, then the shared result (app format). */
+.route-tag {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 9px 16px 10px;
+  border-radius: var(--radius-card);
+  background-color: var(--night-1);
+  box-shadow: inset 0 0 0 1px var(--route-tag-ring);
+  white-space: nowrap;
+}
+
+.route-tag-place {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--night-ink-2);
+}
+
+.route-tag-count {
+  font-size: 15px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--color-mint);
+}
+
+/*
+ * Both tags hang below-right of their door, under the route, so they read as
+ * one row of results: APM's door faces east at the foot of the tower,
+ * 청평화's door is on its south face.
+ */
+.route-tags .route-tag {
+  left: 16px;
+  top: 24px;
+  transform-origin: 0 0;
+}
+
+/* The lamp: centred on its point (청평화's door in the end state). */
+.route-dot {
+  position: absolute;
+  left: var(--dot-to-x);
+  top: var(--dot-to-y);
+  display: grid;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+}
+
+/* ---------- Static desktop (no JS, reduced motion) ---------- */
+
+@media (min-width: 1024px) {
+  .route-frame {
+    padding-block: 128px;
+  }
+
+  .route-stage {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    align-items: start;
+    column-gap: 56px;
+    row-gap: 64px;
+  }
+
+  .route-head {
+    grid-column: 1 / -1;
+  }
+
+  .route-stops {
+    grid-row: 2;
+    grid-column: 1;
+    gap: 120px;
+    padding-block: 24px 30vh;
+  }
+
+  /* A framed crop of the round (the hero's frame family): index.tsx sizes the map box in cqw. */
+  .route-figure {
+    position: sticky;
+    top: 120px;
+    display: block;
+    grid-row: 2;
+    grid-column: 2;
+    overflow: hidden;
+    aspect-ratio: var(--route-static-ratio);
+    border: 1px solid var(--route-ring);
+    border-radius: var(--radius-card);
+    container-type: inline-size;
+  }
+
+  .route-figure .route-camera {
+    position: absolute;
+    top: calc(var(--route-static-y) * 100cqw);
+    left: calc(var(--route-static-x) * 100cqw);
+    width: calc(var(--route-static-w) * 100cqw);
+  }
+
+  /*
+   * The crop cuts through the buildings off the round: their names would be
+   * clipped at the frame edge, and only a sliver of 디오트 reaches into it.
+   */
+  .route-figure .route-labels [data-building="diot"],
+  .route-figure .route-labels [data-building="nampyeonghwa"],
+  .route-figure svg [data-building="diot"] {
+    visibility: hidden;
+  }
+
+  .route-crop {
+    display: none;
+  }
+
+  .route-quote,
+  .route-caption {
+    font-size: 22px;
+    line-height: 1.45;
+  }
+
+  .route-sub {
+    font-size: 17px;
+  }
+
+  .route-attribution {
+    font-size: 14px;
+  }
+
+  .route-tag-place {
+    font-size: 13px;
+  }
+}
+
+/* The record column (from 1280px) carries the records; the stage leaves it free (spec 4.3). */
+@media (min-width: 1280px) {
+  .route-stage {
+    max-width: calc(100vw - var(--record-col) - 3 * var(--spacing-gutter));
+  }
+
+  .route-record {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  html.js-motion .route-pin-spacer:not(.pin-spacer) {
+    display: block;
+  }
+
+  html.js-motion .route-pin-spacer:not(.pin-spacer) > .route-scene {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    background-color: var(--night-0);
+  }
+
+  html.js-motion .route-pin-spacer:not(.pin-spacer)::after {
+    content: "";
+    display: block;
+    height: 180vh;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-frame {
+    height: 100%;
+    max-width: none;
+    padding: 0;
+    overflow: clip;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-stage {
+    position: relative;
+    display: block;
+    height: 100%;
+    max-width: none;
+    isolation: isolate;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-head {
+    position: absolute;
+    z-index: 2;
+    top: clamp(104px, 14vh, 144px);
+    left: var(--spacing-gutter);
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-figure {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    overflow: visible;
+    aspect-ratio: auto;
+    border: 0;
+    border-radius: 0;
+    container-type: size;
+    mask-image: linear-gradient(to bottom, transparent, #000 18vh, #000 calc(100% - 22vh), transparent);
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-camera {
+    --route-stage-w: 100cqw;
+    --route-box-w: max(var(--route-stage-w), 100cqh / var(--route-ratio));
+
+    position: absolute;
+    top: calc(var(--route-fy) * (100cqh - var(--route-box-w) * var(--route-ratio)));
+    left: calc(var(--route-fx) * (var(--route-stage-w) - var(--route-box-w)));
+    width: var(--route-box-w);
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-dot {
+    left: var(--dot-from-x);
+    top: var(--dot-from-y);
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-camera .map-route-mask {
+    stroke-linecap: butt;
+    stroke-dasharray: 0 999999;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-stops {
+    position: absolute;
+    z-index: 1;
+    bottom: clamp(40px, 6.5vh, 72px);
+    left: var(--spacing-gutter);
+    display: grid;
+    gap: 0;
+    width: min(30em, 40%);
+    padding: 0;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-stop {
+    grid-area: 1 / 1;
+    align-self: end;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-stop:not(:first-child) {
+    visibility: hidden;
+  }
+
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) :is(.route-place, .route-attribution, .route-sub, .route-item) {
+    opacity: 0;
+  }
+}
+
+@media (min-width: 1280px) {
+  html.js-motion .route-root:has(.route-pin-spacer:not(.pin-spacer)) .route-camera {
+    --route-stage-w: calc(100cqw - var(--record-col) - var(--spacing-gutter));
+  }
+}
+
+/* ---------- Pinned desktop (RouteMotion, desktop motion only) ---------- */
+
+/*
+ * The scene is the pin target: it never carries overflow itself (a clipped
+ * pinned element reports a full-viewport layout shift each time the pin turns
+ * on or off). Its full-size child, the frame, does the clipping.
+ */
+[data-route-mode="pinned"] .route-scene {
+  position: relative;
+  height: 100vh;
+  height: 100dvh;
+  background-color: var(--night-0);
+}
+
+[data-route-mode="pinned"] .route-frame {
+  height: 100%;
+  max-width: none;
+  padding: 0;
+  overflow: clip;
+}
+
+[data-route-mode="pinned"] .route-stage {
+  position: relative;
+  display: block;
+  height: 100%;
+  max-width: none;
+  isolation: isolate;
+}
+
+[data-route-mode="pinned"] .route-head {
+  position: absolute;
+  z-index: 2;
+  top: clamp(104px, 14vh, 144px);
+  left: var(--spacing-gutter);
+}
+
+[data-route-mode="pinned"] .route-figure {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: visible;
+  aspect-ratio: auto;
+  border: 0;
+  border-radius: 0;
+  container-type: size;
+}
+
+[data-route-mode="pinned"] .route-figure .route-labels [data-building],
+[data-route-mode="pinned"] .route-figure svg [data-building="diot"] {
+  visibility: visible;
+}
+
+/* 남평화's name gives way to 청평화's tag: gone before the tag unfolds over it (RouteMotion's TAG_DELAY). */
+[data-route-mode="pinned"] [data-route-camera][data-cp-arrived] .route-labels [data-building="nampyeonghwa"] {
+  opacity: 0;
+  transition-duration: var(--duration-fast);
+}
+
+/*
+ * The film dissolves the drawing into the ground at both edges of the scene:
+ * at the top, so the map lit while the section enters never meets S2 along a
+ * hard line (it rises out of the night, under the nav and heading); at the
+ * bottom, so the exit into S4's plate is a fade, not a crop. The round itself
+ * sits clear of both bands; the captions are outside the figure and stay solid.
+ */
+[data-route-mode="pinned"] .route-figure {
+  mask-image: linear-gradient(to bottom, transparent, #000 18vh, #000 calc(100% - 22vh), transparent);
+}
+
+/*
+ * In the film the tags hang away from each other: APM's below-left of its
+ * door (free ground under the tower), 청평화's below-right and a little lower,
+ * clear of its south face. RouteMotion budgets them in pixels when framing.
+ */
+[data-route-mode="pinned"] .route-tags [data-building="apm"] .route-tag {
+  right: 16px;
+  left: auto;
+  transform-origin: 100% 0;
+}
+
+[data-route-mode="pinned"] .route-tags [data-building="cheongpyeonghwa"] .route-tag {
+  top: 44px;
+}
+
+/*
+ * The S2 end state's map box (the words section's background, itself the
+ * hero's end state): it covers the stage (the scene minus the record column
+ * and one gutter from 1280px), with the focus (청평화's roof, --route-fx /
+ * --route-fy of the box) at the same fraction of the stage. The camera
+ * starts from this box at scale 1.6 and then shifts and scales it.
+ */
+[data-route-mode="pinned"] .route-camera {
+  --route-stage-w: 100cqw;
+  --route-box-w: max(var(--route-stage-w), 100cqh / var(--route-ratio));
+
+  position: absolute;
+  top: calc(var(--route-fy) * (100cqh - var(--route-box-w) * var(--route-ratio)));
+  left: calc(var(--route-fx) * (var(--route-stage-w) - var(--route-box-w)));
+  width: var(--route-box-w);
+}
+
+@media (min-width: 1280px) {
+  [data-route-mode="pinned"] .route-camera {
+    --route-stage-w: calc(100cqw - var(--record-col) - var(--spacing-gutter));
+  }
+}
+
+/* The lamp starts at the avenue junction; MotionPath moves it from there. */
+[data-route-mode="pinned"] .route-dot {
+  left: var(--dot-from-x);
+  top: var(--dot-from-y);
+}
+
+/*
+ * The round starts undrawn (DrawSVG's own inline dash wins once it renders,
+ * so the route stays hidden while the plugin chunk loads). Butt caps: the
+ * reveal ends exactly under the lamp.
+ */
+[data-route-mode="pinned"] .route-camera .map-route-mask {
+  stroke-linecap: butt;
+  stroke-dasharray: 0 999999;
+}
+
+/* If DrawSVG or MotionPath cannot load, the film keeps the recorded end state of the round. */
+[data-route-mode="pinned"][data-route-static] .route-camera .map-route-mask {
+  stroke-dasharray: none;
+}
+
+[data-route-mode="pinned"][data-route-static] .route-dot {
+  left: var(--dot-to-x);
+  top: var(--dot-to-y);
+}
+
+/* Captions share one slot bottom-left; RouteMotion stacks the previous one above the current. */
+[data-route-mode="pinned"] .route-stops {
+  position: absolute;
+  z-index: 1;
+  bottom: clamp(40px, 6.5vh, 72px);
+  left: var(--spacing-gutter);
+  display: grid;
+  gap: 0;
+  width: min(30em, 40%);
+  padding: 0;
+}
+
+[data-route-mode="pinned"] .route-stop {
+  grid-area: 1 / 1;
+  align-self: end;
+}
+
+/*
+ * Each caption block is clipped (RouteMotion sets the two insets on its stop):
+ * open on the current caption, cut under its last meaningful line on the
+ * ghost, shut on the hidden ones. Captions come and go by this clip, not by
+ * fading, so no line is ever on screen at a fraction of its contrast.
+ */
+[data-route-mode="pinned"] .route-stop-text {
+  clip-path: inset(var(--route-clip-top, -32px) -32px var(--route-clip-bottom, -32px) -32px);
+}
+
+/*
+ * A previous caption keeps only the line that carries meaning (the quote, or
+ * the time and caption) at RouteMotion's ghost opacity. Its small lines go
+ * with the clip (the place, beside the time, has its own and wipes back
+ * toward the time), then turn transparent. They turn opaque again only once
+ * their caption is bright, still clipped, and are drawn open from there: a
+ * contrast checker reads clipped text too, so it must never sit at the
+ * ghost's opacity.
+ */
+[data-route-mode="pinned"] :is(.route-place, .route-attribution, .route-sub, .route-item) {
+  transition: opacity 0s linear var(--route-lines-in);
+}
+
+[data-route-mode="pinned"] .route-stop:not([data-current]) :is(.route-place, .route-attribution, .route-sub, .route-item) {
+  opacity: 0;
+  transition: opacity 0s linear var(--route-swap-out);
+}
+
+[data-route-mode="pinned"] .route-place {
+  clip-path: inset(-8px -8px -8px -8px);
+  transition:
+    clip-path var(--duration-slow) var(--ease-snap) var(--route-lines-in),
+    opacity 0s linear var(--route-lines-in);
+}
+
+[data-route-mode="pinned"] .route-stop:not([data-current]) .route-place {
+  clip-path: inset(-8px calc(100% + 8px) -8px -8px);
+  transition:
+    clip-path var(--route-swap-out) cubic-bezier(0.55, 0, 1, 0.45),
+    opacity 0s linear var(--route-swap-out);
+}
+
+/* More contrast: no ghosts at all, only the current caption (over RouteMotion's inline visibility). */
+@media (prefers-contrast: more) {
+  [data-route-mode="pinned"] .route-stop:not([data-current]) {
+    visibility: hidden !important;
+  }
+}
+
+/*
+ * From 1024 to 1279px there is no record column: the current stop's record
+ * card or bubble stands beside its caption, bottom-aligned, left of the
+ * compact plate. Records of other stops keep their room but stay hidden, so
+ * every stop's height is the same whichever is current (RouteMotion measures
+ * once per refresh). From 1280px the records belong to the column.
+ */
+@media (max-width: 1279px) {
+  [data-route-mode="pinned"] .route-stops {
+    width: min(760px, calc(100% - 2 * var(--spacing-gutter) - 304px));
+  }
+
+  [data-route-mode="pinned"] .route-stop {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+    align-items: end;
+    column-gap: 24px;
+  }
+
+  /*
+   * Like the captions, a record is wiped, never faded: the leaving one is gone
+   * before the arriving one is drawn open, top first, once its stop is bright.
+   */
+  [data-route-mode="pinned"] .route-record {
+    clip-path: inset(-24px -24px -24px -24px);
+    transition:
+      clip-path var(--duration-record) var(--ease-snap) var(--route-lines-in),
+      visibility 0s linear var(--route-lines-in);
+  }
+
+  [data-route-mode="pinned"] .route-stop:not([data-current]) .route-record {
+    visibility: hidden;
+    clip-path: inset(-24px -24px calc(100% + 24px) -24px);
+    transition:
+      clip-path var(--route-swap-out) cubic-bezier(0.55, 0, 1, 0.45),
+      visibility 0s linear var(--route-swap-out);
+  }
+}
