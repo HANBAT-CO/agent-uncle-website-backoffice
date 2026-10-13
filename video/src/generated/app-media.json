@@ -1,0 +1,58 @@
+{
+  "02-retailer-home": {
+    "src": "app/rec/02-retailer-home.mp4",
+    "seconds": 14.77
+  },
+  "04-new-request": {
+    "src": "app/rec/04-new-request.mp4",
+    "seconds": 44.77
+  },
+  "05-uncle-home": {
+    "src": "app/rec/05-uncle-home.mp4",
+    "seconds": 16.73
+  },
+  "06-acquisition": {
+    "src": "app/rec/06-acquisition.mp4",
+    "seconds": 29.2
+  },
+  "06a-retailer-accepted": {
+    "src": "app/rec/06a-retailer-accepted.mp4",
+    "seconds": 8.5
+  },
+  "06r-acquisition-reply-on": {
+    "src": "app/rec/06r-acquisition-reply-on.mp4",
+    "seconds": 24.57
+  },
+  "06b-retailer-backorder-reply": {
+    "src": "app/rec/06b-retailer-backorder-reply.mp4",
+    "seconds": 15.07
+  },
+  "07-delivery": {
+    "src": "app/rec/07-delivery.mp4",
+    "seconds": 17.53
+  },
+  "08-receipt": {
+    "src": "app/rec/08-receipt.mp4",
+    "seconds": 17.43
+  },
+  "08b-uncle-delivery-history": {
+    "src": "app/rec/08b-uncle-delivery-history.mp4",
+    "seconds": 8.23
+  },
+  "09-chat": {
+    "src": "app/rec/09-chat.mp4",
+    "seconds": 27.47
+  },
+  "09r-chat": {
+    "src": "app/rec/09r-chat.mp4",
+    "seconds": 23.93
+  },
+  "09u-uncle-chat-reply": {
+    "src": "app/rec/09u-uncle-chat-reply.mp4",
+    "seconds": 21.53
+  },
+  "10-partners": {
+    "src": "app/rec/10-partners.mp4",
+    "seconds": 15.43
+  }
+}
