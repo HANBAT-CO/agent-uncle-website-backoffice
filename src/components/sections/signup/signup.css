@@ -1,0 +1,115 @@
+/*
+ * S10 signup: the few rules utilities cannot express. Motion tokens come from
+ * globals.css (--ease-snap, --duration-record); under prefers-reduced-motion
+ * the global rule there collapses every transition and animation.
+ */
+
+/* Mobile submit bar: slides up from below the viewport while the form is in view (record token). */
+.lead-sticky {
+  transform: translateY(calc(100% + 1px));
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear var(--duration-record);
+}
+
+.lead-sticky[data-visible] {
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear 0s;
+}
+
+.lead-sticky-inner {
+  padding-inline: var(--spacing-gutter);
+}
+
+/* Handing over to (or back from) the form's own button in the same place: no slide. */
+.lead-sticky[data-snap] {
+  transition: none;
+}
+
+/* Field errors and the form banner settle in instead of popping (feedback, 240ms). */
+@media (prefers-reduced-motion: no-preference) {
+  .lead-error {
+    animation: lead-error-in var(--duration-base) var(--ease-snap) both;
+  }
+}
+
+@keyframes lead-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Consent disclosure: native details/summary without the default marker. */
+.lead-disclosure > summary {
+  list-style: none;
+}
+
+.lead-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+/*
+ * Keyboard focus never lands under the fixed chrome (WCAG 2.2 2.4.11). Focus
+ * scrolling treats a field under the 72px nav pill or the 77px mobile submit
+ * bar as "in view", so while the form holds focus the page's scroll padding
+ * reserves both: 6rem at the top (nav plus a gap), and at the bottom the bar's
+ * height plus a gap while the bar shows. Each control's scroll margin then
+ * keeps its label (about 29px above it) clear of the nav and leaves room for
+ * the helper below (radios and buttons have no id, so the global [id] margin
+ * does not reach them). Scoped to focus and to the visible bar, so anchor
+ * jumps and Lenis elsewhere keep their offsets.
+ */
+html:has(#lead-form:focus-within) {
+  scroll-padding-top: 6rem;
+}
+
+#lead-form :is(input, textarea, button, [role="radio"], summary) {
+  scroll-margin-top: 2.5rem;
+  scroll-margin-bottom: 2rem;
+}
+
+@media (max-width: 767px) and (min-height: 501px) {
+  html:has(#lead-form:focus-within),
+  html:has([data-lead-sticky][data-visible]) {
+    scroll-padding-bottom: calc(6.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/*
+ * Below 768px the section's 사전 신청 is the fixed bar or the form's own
+ * button, so the nav's 사전 신청 steps aside: the grey "you are here" pill
+ * (rendered only while signup is the active section) always, and the jump
+ * link (back once the footer is the active section) while the form's own
+ * button is on screen (StickySubmit sets data-dock-shown). Never two
+ * same-label pills that do different things. visibility keeps the box, so
+ * the nav does not reflow.
+ */
+@media (max-width: 767px) {
+  [data-nav-cta-disabled],
+  html:has([data-lead-sticky][data-dock-shown]) .au-nav a[href="#signup"] {
+    visibility: hidden;
+  }
+}
+
+/*
+ * Short screens below 768px (a landscape phone, 400% zoom): no fixed bar. It
+ * would cover a third of the view; the form's own button under the consent
+ * row is the only 사전 신청 there.
+ */
+@media (max-width: 767px) and (max-height: 500px) {
+  .lead-sticky {
+    display: none;
+  }
+}
