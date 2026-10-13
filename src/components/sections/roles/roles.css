@@ -1,0 +1,639 @@
+/*
+ * S7 roles (WP-16): two real 09:41 home screens split by a draggable seam
+ * (desktop) or a two-way toggle (below 1024px). Morning tokens only: canvas
+ * #EDECE3, sheet #F5F4EE, ink #101010, body #2D2D2D, captions #636363 and the
+ * deep green #0C483E for the outlines (with a 6% tint of it as their fill),
+ * the connector and the dot. No red outside the real app pixels inside the
+ * frames.
+ *
+ * The seam is one variable, --seam (the retailer side's share as a 0.25-0.75
+ * fraction), written by RolesSeam on .roles-seam. Everything else is derived
+ * here with the formulas of seamLayout() in seam-math.ts; change both together:
+ *   seam-x = seam * stage width
+ *   r-x    = max(0, seam-x / 2 - device / 2)                  retailer left edge
+ *   u-x    = min(stage - device, (seam-x + stage) / 2 - device / 2)   uncle left edge
+ * Each column is clipped exactly at the seam on its inner side. .roles-seam is
+ * an inline-size container, so 100cqw is the stage width for its children.
+ *
+ * Device geometry follows Device (src/components/device/device.css): outer
+ * width = screen * 1.075 (bezel 0.0375 each side), frame height = screen *
+ * (2868 / 1320 + 0.075) = screen * 2.24773.
+ */
+
+/* ---------- Section layout ---------- */
+
+.roles {
+  /* Below 1024px the device is min(86vw, 360px) wide, bezels included. */
+  --roles-screen: calc(min(86vw, 22.5rem) / 1.075);
+  --dev-w: calc(var(--roles-screen) * 1.075);
+  --frame-h: calc(var(--roles-screen) * 2.24773);
+  margin-top: 3.5rem;
+}
+
+.roles-copy {
+  max-width: 49rem;
+}
+
+.roles-notes {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 3.5rem;
+  max-width: var(--container-prose);
+}
+
+.roles-footnote {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-grey-800);
+}
+
+.roles-media-caption {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-grey-600);
+}
+
+/* ---------- The stage (shared) ---------- */
+
+.roles-seam {
+  container-type: inline-size;
+  --seam: 0.5;
+  --seam-x: calc(var(--seam) * 100cqw);
+  --r-x: max(0px, calc(var(--seam-x) / 2 - var(--dev-w) / 2));
+  --u-x: min(calc(100cqw - var(--dev-w)), calc((var(--seam-x) + 100cqw) / 2 - var(--dev-w) / 2));
+}
+
+.roles-label {
+  display: grid;
+  gap: 0.25rem;
+}
+
+/* The role (H3) with whose home it is beside it: the app's bold word next to a small grey label. */
+.roles-label-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 0.625rem;
+}
+
+.roles-label-home {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--color-grey-600);
+}
+
+.roles-label-role {
+  font-size: 1.375rem;
+  line-height: 1.4;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.roles-label-line {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-grey-800);
+}
+
+/* The card outline over each still (the screen is the 1320x2868 capture). */
+.roles-outline {
+  pointer-events: none;
+  transition: opacity 300ms var(--ease-snap);
+}
+
+/* A 2px line and a weak-green tint, so the two cards read at a glance even where their small lines cannot. */
+.roles-outline path {
+  fill: rgb(12 72 62 / 0.06);
+  stroke: var(--color-green-800);
+  stroke-width: 2;
+  stroke-linecap: butt;
+  stroke-linejoin: round;
+}
+
+/* While footage shows (playing, or paused by the reader), the box no longer sits on a card: hide it (and the connector). */
+.device-screen:has(.device-media:is([data-state="playing"], [data-state="paused"])) .roles-outline {
+  opacity: 0;
+}
+
+/* ---------- Desktop: the seam (1024px and up) ---------- */
+
+@media (min-width: 1024px) {
+  .roles {
+    /*
+     * The phones follow the width and the viewport height: the role labels
+     * (about 3.7rem), a 1.25rem gap and the whole frame (screen * 2.24773)
+     * fit under the 72px nav, so both labels and both phones are on screen
+     * together. 10.5rem = nav + labels + gap + air. Up to 18.75rem (300px)
+     * below 1280, 20rem (320px, the spec 4.7 base device) from 1280.
+     */
+    --roles-screen: clamp(13.5rem, min(23.5vw, (100svh - 10.5rem) / 2.24773), 18.75rem);
+    --stage-max: 50rem;
+    margin-top: 4.5rem;
+  }
+
+  /*
+   * The stage, and the notes under it: centred, but never under the compact
+   * record plate (fixed bottom-right at the gutter, 280px wide, plus a 24px
+   * gap). --plate-clear is how far the plate reaches into the content box
+   * from its right edge: all 19rem up to the 90rem container, less beyond it
+   * (the container centres and the plate stays at the viewport edge). Where
+   * the content is too narrow for both, the stage narrows to stay clear of
+   * the plate and slides toward the heading's edge.
+   */
+  .roles-seam,
+  .roles-notes {
+    --plate-clear: max(0px, 19rem - max(0px, (100vw - var(--container-content)) / 2));
+    --stage-w: min(100% - var(--plate-clear), var(--stage-max));
+    width: var(--stage-w);
+    margin-inline-start: max(0px, min((100% - var(--stage-w)) / 2, 100% - var(--stage-w) - var(--plate-clear)));
+  }
+
+  .roles-seam {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    row-gap: 1.25rem;
+  }
+
+  /* The media caption and the footnote start where the retailer device does. */
+  .roles-notes {
+    container-type: inline-size;
+    max-width: none;
+    margin-top: 2.5rem;
+  }
+
+  .roles-notes > p {
+    max-width: var(--container-prose);
+    margin-inline-start: max(0px, calc((50cqw - var(--dev-w)) / 2));
+  }
+
+  /* Labels and columns become items of the stage grid. */
+  .roles-side {
+    display: contents;
+  }
+
+  /* Labels stay where the devices rest at 50/50: flush with each device's outer edge. */
+  .roles-label {
+    --rest-inset: max(0px, calc((50cqw - var(--dev-w)) / 2));
+    grid-row: 1;
+    grid-column: 1;
+    align-self: end;
+    /* As wide as the device, so each role line stays on one line. */
+    max-width: calc(var(--dev-w) + var(--rest-inset));
+  }
+
+  .roles-side[data-side="uncle"] .roles-label-head {
+    flex-direction: row-reverse;
+  }
+
+  /*
+   * Label opacity follows the side's share (labelOpacity() in seam-math.ts)
+   * on the role and its line, which keep AA at 0.7 (ink 6.6:1, grey-800
+   * 4.8:1 on #EDECE3). The small grey-600 home caption would drop to 2.8:1,
+   * so it stays at full strength.
+   */
+  .roles-side[data-side="retailer"] .roles-label {
+    --label-fade: calc(0.7 + 0.3 * clamp(0, (var(--seam) - 0.25) * 4, 1));
+    justify-self: start;
+    padding-inline-start: var(--rest-inset);
+  }
+
+  .roles-side[data-side="uncle"] .roles-label {
+    --label-fade: calc(0.7 + 0.3 * clamp(0, (0.75 - var(--seam)) * 4, 1));
+    justify-self: end;
+    padding-inline-end: var(--rest-inset);
+    text-align: right;
+  }
+
+  .roles-label-role,
+  .roles-label-line {
+    opacity: var(--label-fade);
+  }
+
+  .roles-col {
+    grid-row: 2;
+    grid-column: 1;
+    justify-self: start;
+    width: var(--dev-w);
+  }
+
+  .roles-side[data-side="retailer"] .roles-col {
+    translate: var(--r-x) 0;
+    clip-path: inset(-4rem calc(var(--r-x) + var(--dev-w) - var(--seam-x)) -8rem -4rem);
+  }
+
+  .roles-side[data-side="uncle"] .roles-col {
+    translate: var(--u-x) 0;
+    clip-path: inset(-4rem -4rem -8rem calc(var(--seam-x) - var(--u-x)));
+  }
+
+  /*
+   * Dragging toward a side puts that person's home in focus: the narrower
+   * side's screen dims like an idle phone, down to 70% at the bound. The play
+   * buttons stay at full strength.
+   */
+  .roles-side[data-side="retailer"] .device-media {
+    filter: brightness(calc(1 - 0.3 * clamp(0, (0.5 - var(--seam)) * 4, 1)));
+  }
+
+  .roles-side[data-side="uncle"] .device-media {
+    filter: brightness(calc(1 - 0.3 * clamp(0, (var(--seam) - 0.5) * 4, 1)));
+  }
+
+  /* Play buttons and captions sit on the outer side, away from the seam. */
+  .roles-side[data-side="retailer"] .device-controls {
+    left: 0;
+    translate: none;
+  }
+
+  .roles-side[data-side="uncle"] .device-controls {
+    left: auto;
+    right: 0;
+    translate: none;
+  }
+
+  /* Seam line, handle and connector: one layer over both columns. */
+  .roles-track {
+    position: relative;
+    z-index: var(--z-raised);
+    grid-row: 2;
+    grid-column: 1;
+    pointer-events: none;
+  }
+
+  /* A 24px grab strip with a 1px line down the middle, the height of the frames. */
+  .roles-seam-line {
+    position: absolute;
+    top: 0;
+    left: calc(var(--seam) * 100%);
+    width: 1.5rem;
+    height: var(--frame-h);
+    margin-left: -0.75rem;
+    pointer-events: auto;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /*
+   * The line runs 4rem past the frame and fades out, over the band where the
+   * seam cuts the clipped device's shadow, so that cut reads as the seam.
+   */
+  .roles-seam-line::before {
+    content: "";
+    position: absolute;
+    inset-block: 0 -4rem;
+    left: 50%;
+    width: 1px;
+    margin-left: -0.5px;
+    background: rgb(12 72 62 / 0.22);
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 4rem), transparent);
+    transition: background-color var(--duration-base) var(--ease-snap);
+  }
+
+  .roles-track:has(.roles-seam-line:hover, .roles-handle:hover, .roles-handle:focus-visible) .roles-seam-line::before {
+    background: rgb(12 72 62 / 0.6);
+  }
+
+  .roles-connector {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transition: opacity 300ms var(--ease-snap);
+  }
+
+  /* Paper under the dashes: without it the line vanishes over the #101010 bezels. */
+  .roles-connector-halo {
+    fill: none;
+    stroke: var(--color-surface);
+    stroke-width: 3.5;
+    stroke-linecap: butt;
+  }
+
+  .roles-connector-line {
+    fill: none;
+    stroke: var(--color-green-800);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 4;
+    stroke-linecap: butt;
+  }
+
+  .roles-connector-mask {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 8;
+    stroke-linecap: round;
+  }
+
+  .roles-seam:has(.device-media:is([data-state="playing"], [data-state="paused"])) .roles-connector {
+    opacity: 0;
+  }
+
+  .roles-proxy {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    visibility: hidden;
+  }
+
+  /*
+   * The ink dot on a 64x44 paper pill, where the connector crosses the seam
+   * (spec 4.6), with a chevron either side so it reads as a horizontal
+   * slider. A click on a chevron steps the seam toward that side; a click on
+   * the dot goes back to 50/50 (RolesSeam).
+   */
+  .roles-handle {
+    position: absolute;
+    /* bezel + DOT_Y (62.0032%) of the screen height: 0.0375 + 0.620032 * 2868 / 1320 */
+    top: calc(var(--roles-screen) * 1.38466);
+    left: calc(var(--seam) * 100%);
+    display: grid;
+    grid-template-columns: 0.875rem 1rem 0.875rem;
+    place-content: center;
+    place-items: center;
+    column-gap: 0.25rem;
+    width: 4rem;
+    height: 2.75rem;
+    margin: -1.375rem 0 0 -2rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    color: var(--color-grey-600);
+    box-shadow:
+      0 0 0 1px rgb(16 16 16 / 0.06),
+      var(--shadow-card);
+    pointer-events: auto;
+    cursor: ew-resize;
+    touch-action: pan-y;
+    -webkit-user-select: none;
+    user-select: none;
+    transition:
+      scale var(--duration-fast) var(--ease-snap),
+      color var(--duration-base) var(--ease-snap),
+      box-shadow var(--duration-base) var(--ease-snap);
+  }
+
+  .roles-handle-chevron:first-child {
+    rotate: 180deg;
+  }
+
+  .roles-handle:hover {
+    color: var(--color-ink);
+    box-shadow:
+      0 0 0 1px rgb(12 72 62 / 0.28),
+      var(--shadow-card);
+  }
+
+  .roles-handle:active {
+    scale: 0.98;
+  }
+
+  /* Arrow keys after a drag: the ring shows even when focus came from the pointer. */
+  .roles-handle[data-keyed]:focus {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .roles-toggle {
+    display: none;
+  }
+}
+
+/* The wider stage from 1280px: 320px screens at 1440 and a gap between the phones the connector can be read in. */
+@media (min-width: 1280px) {
+  .roles {
+    --roles-screen: clamp(14rem, min(22.2vw, (100svh - 10.5rem) / 2.24773), 20rem);
+    --stage-max: 60rem;
+  }
+}
+
+/* Reduced motion (spec 6.5): no seam drag, so the line is no grab strip; the knob still takes clicks and keys. */
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .roles-seam-line {
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .roles-handle {
+    cursor: pointer;
+  }
+}
+
+/* ---------- Below 1024px: one device at a time ---------- */
+
+@media (max-width: 1023px) {
+  .roles-seam {
+    display: grid;
+    justify-items: center;
+    margin-top: 2rem;
+  }
+
+  /*
+   * The incoming device fades in a beat after the outgoing one has left, so
+   * the two role lines and the two app headers never sit on top of each
+   * other mid-switch.
+   */
+  .roles-side {
+    grid-area: 1 / 1;
+    display: grid;
+    justify-items: start;
+    gap: 1.25rem;
+    width: var(--dev-w);
+    transition:
+      opacity var(--duration-record) var(--ease-snap) 150ms,
+      visibility 0s linear 0s;
+  }
+
+  /* The toggle already names the role and the app header whose home it is; keep the role line. */
+  .roles-label-head {
+    display: contents;
+  }
+
+  .roles-label-home {
+    display: none;
+  }
+
+  .roles-label-role {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .roles-label {
+    max-width: none;
+  }
+
+  .roles:has([data-roles-view="retailer"]:checked) .roles-side[data-side="uncle"],
+  .roles:has([data-roles-view="uncle"]:checked) .roles-side[data-side="retailer"] {
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 250ms var(--ease-snap),
+      visibility 0s linear 250ms;
+  }
+
+  .roles-track {
+    display: none;
+  }
+
+  /*
+   * The stage is clipped at its own top edge only (a little air for the focus
+   * ring; the sides and the bottom stay open). That edge is what lets the
+   * toggle's header band (below) cover only what scrolls up out of this stage.
+   */
+  .roles-stage {
+    clip-path: inset(-0.5rem -100vw -100vh);
+  }
+
+  /*
+   * Segmented control (radiogroup); the dot rides the sliding thumb. It sticks
+   * under the nav until the device's play row leaves (.roles-stage), so the
+   * switch and the outlined card are on screen together.
+   */
+  .roles-toggle {
+    position: sticky;
+    top: var(--nav-clear);
+    z-index: var(--z-raised);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: min(100%, 22.5rem);
+    margin-inline: auto;
+    padding: 0.25rem;
+    border-radius: var(--radius-pill);
+  }
+
+  /*
+   * Stuck, the toggle is a header: a ground-coloured band, the full width of
+   * the viewport, from the top of the screen (under the nav) to just below
+   * the toggle. The device, its role line and the play row pass under the
+   * band instead of showing, cut, in the strip between the nav and the
+   * toggle or around the toggle's ends. The band hangs above the toggle, so
+   * at rest it sits outside the stage and the stage's clip hides it; it
+   * slides in exactly as far as the stage has scrolled up under the nav.
+   */
+  .roles-toggle::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: calc(-1 * var(--nav-clear));
+    bottom: -0.75rem;
+    left: calc(50% - 50vw);
+    width: 100vw;
+    background: var(--color-canvas);
+    pointer-events: none;
+  }
+
+  /* The track (painted over the band: same layer, later in the tree). */
+  .roles-toggle::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--color-grey-100);
+    box-shadow:
+      inset 0 0 0 1px rgb(16 16 16 / 0.04),
+      0 8px 24px -10px rgb(7 35 28 / 0.18);
+    pointer-events: none;
+  }
+
+  .roles-toggle-thumb {
+    position: absolute;
+    top: 0.25rem;
+    bottom: 0.25rem;
+    left: 0.25rem;
+    display: flex;
+    align-items: center;
+    width: calc(50% - 0.25rem);
+    padding-inline-start: 1.125rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    box-shadow:
+      0 0 0 1px rgb(16 16 16 / 0.06),
+      0 4px 12px rgb(16 16 16 / 0.06);
+    pointer-events: none;
+    transition: translate var(--duration-record) var(--ease-snap);
+  }
+
+  .roles-toggle:has([data-roles-view="uncle"]:checked) .roles-toggle-thumb {
+    translate: 100% 0;
+  }
+
+  .roles-toggle-option {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-height: 2.75rem;
+    padding-inline: 2.75rem 1rem;
+    border-radius: var(--radius-pill);
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    color: var(--color-grey-600);
+    transition: color var(--duration-record) var(--ease-snap);
+  }
+
+  .roles-toggle-option:has(:checked) {
+    font-weight: 700;
+    color: var(--color-ink);
+  }
+
+  .roles-toggle-option:has(:focus-visible) {
+    outline: 2px solid var(--color-green-800);
+    outline-offset: 3px;
+  }
+
+  .roles-toggle-option input {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+/* Reduced motion below 1024px: both devices, stacked, no toggle (spec S7). */
+@media (max-width: 1023px) and (prefers-reduced-motion: reduce) {
+  .roles-toggle {
+    display: none;
+  }
+
+  .roles-seam {
+    row-gap: 4rem;
+    margin-top: 0;
+  }
+
+  .roles-side,
+  .roles:has([data-roles-view="retailer"]:checked) .roles-side[data-side="uncle"],
+  .roles:has([data-roles-view="uncle"]:checked) .roles-side[data-side="retailer"] {
+    grid-area: auto;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .roles-label-head {
+    display: flex;
+  }
+
+  .roles-label-home {
+    display: block;
+  }
+
+  .roles-label-role {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+  }
+}
