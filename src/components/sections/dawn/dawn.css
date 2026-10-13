@@ -1,0 +1,1295 @@
+/*
+ * S5 dawn (spec S5, 4.1, 4.4, 6.5). One DOM, three layouts:
+ *
+ * - desktop motion (min 1024px, motion allowed): a 100dvh scene the pin
+ *   holds; both bands overlay it as two identical absolute stages; the sky
+ *   (WebGL canvas over a tall CSS gradient) fills it. The copy and the
+ *   confirm card stack in flow at the top of the night stage, so the card can
+ *   never cover the copy; the route, the destination and the ruler are
+ *   anchored to the frame.
+ * - mobile motion (below 1024px): no pin, no WebGL; the scene is a 160vh
+ *   static gradient band (taller when its content needs it), the route runs
+ *   down the left edge and the dot descends on a CSS view() timeline
+ *   (stepped by JS where unsupported).
+ * - reduced motion: two static bands (night with the card, day with the
+ *   destination) split by a 1px horizon rule.
+ *
+ * Things drawn on the sky read their colours from --dawn-* variables: night
+ * values by default, then per element the light state DawnMotion sets on
+ * desktop ([data-dawn-lit]: night, night-strong, day-strong, day; see
+ * sky-ramp.ts TEXT_RAMP), or the day band (mobile and reduced). Record
+ * surfaces (the confirm card, the destination card, the 1차 slot) are always
+ * paper #F5F4EE with ink #101010.
+ */
+
+.dawn {
+  /* From the viewport's left edge to the stage's left edge (the route's lead-in). */
+  --dawn-stage-left: calc(max(0px, (100vw - var(--container-content)) / 2) + var(--spacing-gutter));
+  /* The landed 1차 slot's scale (DawnMotion reads it on every refresh). */
+  --dawn-slot-scale: 1.25;
+
+  --dawn-fg: var(--night-ink);
+  --dawn-body: var(--night-ink-2);
+  --dawn-fg-2: var(--night-ink-2);
+  --dawn-stroke: var(--color-mint);
+  --dawn-tick: var(--map-dim);
+  --dawn-faint: var(--map-faint);
+  --dawn-outline: rgb(242 255 232 / 0.4);
+  --dawn-paper-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+  --dawn-slot-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+}
+
+/*
+ * Light states for things on the sky on desktop (DawnMotion sets
+ * data-dawn-lit per element from the ramp behind its edges). Every state
+ * sets every variable, so a nested element never inherits its parent's state.
+ * The strong states put all text in the primary ink of their side while the
+ * sky is mid-tone, where no secondary ink reaches 4.5:1.
+ */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .dawn [data-dawn-lit="night"],
+  .dawn [data-dawn-lit="night-strong"] {
+    --dawn-fg: var(--night-ink);
+    --dawn-body: var(--night-ink-2);
+    --dawn-fg-2: var(--night-ink-2);
+    --dawn-stroke: var(--color-mint);
+    --dawn-tick: var(--map-dim);
+    --dawn-faint: var(--map-faint);
+    --dawn-outline: rgb(242 255 232 / 0.4);
+    --dawn-paper-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+    --dawn-slot-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+  }
+
+  .dawn [data-dawn-lit="night-strong"] {
+    --dawn-body: var(--night-ink);
+    --dawn-fg-2: var(--night-ink);
+    --dawn-tick: rgb(242 255 232 / 0.6);
+    --dawn-outline: rgb(242 255 232 / 0.72);
+  }
+
+  .dawn [data-dawn-lit="day-strong"],
+  .dawn [data-dawn-lit="day"] {
+    --dawn-fg: var(--color-ink);
+    --dawn-body: var(--color-grey-800);
+    --dawn-fg-2: var(--color-grey-600);
+    --dawn-stroke: var(--color-green-800);
+    --dawn-tick: var(--color-grey-200);
+    --dawn-faint: rgb(16 16 16 / 0.14);
+    --dawn-outline: var(--color-grey-500);
+    --dawn-paper-shadow: var(--shadow-float);
+    --dawn-slot-shadow: var(--shadow-card);
+  }
+
+  .dawn [data-dawn-lit="day-strong"] {
+    --dawn-body: var(--color-ink);
+    --dawn-fg-2: var(--color-ink);
+    --dawn-tick: rgb(16 16 16 / 0.36);
+    --dawn-outline: var(--color-grey-700);
+  }
+
+  /* The body's first line takes the light on its own (the --dawn-body ink of each state). */
+  .dawn [data-dawn-lit-first="night"]::first-line {
+    color: var(--night-ink-2);
+  }
+
+  .dawn [data-dawn-lit-first="night-strong"]::first-line {
+    color: var(--night-ink);
+  }
+
+  .dawn [data-dawn-lit-first="day-strong"]::first-line {
+    color: var(--color-ink);
+  }
+
+  .dawn [data-dawn-lit-first="day"]::first-line {
+    color: var(--color-grey-800);
+  }
+}
+
+@media (max-width: 1023.98px), (prefers-reduced-motion: reduce) {
+  .dawn .dawn-band-day {
+    --dawn-fg: var(--color-ink);
+    --dawn-body: var(--color-grey-800);
+    --dawn-fg-2: var(--color-grey-600);
+    --dawn-stroke: var(--color-green-800);
+    --dawn-tick: var(--color-grey-200);
+    --dawn-faint: rgb(16 16 16 / 0.14);
+    --dawn-outline: var(--color-grey-500);
+    --dawn-paper-shadow: var(--shadow-float);
+    --dawn-slot-shadow: var(--shadow-card);
+    /* Spec 14: the focus ring is #0C483E by day. */
+    --focus: var(--color-green-800);
+  }
+}
+
+.dawn-scene {
+  position: relative;
+  isolation: isolate;
+}
+
+/*
+ * No overflow clip here: a clipping element inside the pinned scene is
+ * reported as a full-viewport layout shift when the pin toggles. The desktop
+ * ramp (three frames tall) is clipped by the section while unpinned; pinned,
+ * its overflow lies outside the viewport.
+ */
+.dawn-sky {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/*
+ * In flow inside the absolute sky layer (which it fills): an absolutely
+ * positioned canvas inside the pinned scene is reported as a layout shift
+ * when the pin releases.
+ */
+.dawn-sky-canvas {
+  position: static;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/*
+ * One continuous night: the cart's plate (#093A32) feathers into the dawn's
+ * night ground instead of meeting it in a hard edge. Above the canvas; on
+ * desktop DawnMotion fades it out over the first tenth of the pin (--dawn-seam),
+ * so it never tints the morning.
+ */
+.dawn-sky::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: clamp(96px, 14dvh, 160px);
+  background: linear-gradient(180deg, var(--night-1), rgb(9 58 50 / 0));
+  opacity: var(--dawn-seam, 1);
+  pointer-events: none;
+}
+
+.dawn-horizon {
+  display: none;
+}
+
+/* ---------- Copy ---------- */
+
+.dawn-title {
+  color: var(--dawn-fg);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-body {
+  margin-top: 1.25rem;
+  max-width: var(--container-prose);
+  font-size: var(--text-body);
+  line-height: var(--text-body--line-height);
+  color: var(--dawn-body);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+@media (min-width: 1024px) {
+  .dawn-body {
+    margin-top: 1.5rem;
+    font-size: var(--text-body-lg);
+    line-height: var(--text-body-lg--line-height);
+  }
+}
+
+/* The honesty line for the seeded batch and shop (spec 0.6). */
+.dawn-demo {
+  margin-top: 0.75rem;
+  font-size: var(--text-caption);
+  line-height: var(--text-caption--line-height);
+  color: var(--dawn-fg-2);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+/* ---------- The confirm card (app dialog format, inert) ---------- */
+
+.dawn-confirm {
+  border-radius: var(--radius-card);
+  background: var(--record-bg);
+  color: var(--record-fg);
+  box-shadow: var(--dawn-paper-shadow);
+  transform-origin: 50% 50%;
+}
+
+.dawn-confirm-content {
+  padding: 1.5rem 1.25rem 1.25rem;
+}
+
+.dawn-confirm-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.dawn-confirm-body {
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  color: var(--color-grey-700);
+}
+
+.dawn-confirm-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+}
+
+.dawn-dialog-button {
+  display: grid;
+  place-items: center;
+  height: 3rem;
+  border-radius: var(--radius-button);
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  user-select: none;
+}
+
+.dawn-dialog-button[data-variant="weak"] {
+  background: var(--color-grey-100);
+  color: var(--color-ink);
+}
+
+.dawn-dialog-button[data-variant="primary"] {
+  background: var(--color-green-800);
+  color: var(--color-surface);
+  transform-origin: 50% 50%;
+}
+
+/* ---------- Route, origin, node and the dot ---------- */
+
+.dawn-route {
+  position: relative;
+  height: 2px;
+}
+
+.dawn-route::before {
+  content: "";
+  position: absolute;
+  top: 0.5px;
+  right: 100%;
+  width: var(--dawn-stage-left);
+  height: 1px;
+  background: var(--dawn-faint);
+  transition: background-color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-route-svg {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 2px;
+  overflow: visible;
+}
+
+.dawn-route-base {
+  stroke: var(--dawn-tick);
+  stroke-width: 1;
+  transition: stroke var(--duration-base) var(--ease-snap);
+}
+
+.dawn-route-lit {
+  stroke: var(--dawn-stroke);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transition: stroke var(--duration-base) var(--ease-snap);
+}
+
+.dawn-route-origin {
+  position: absolute;
+  top: 1rem;
+  left: 0;
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--dawn-fg-2);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-route-node {
+  position: absolute;
+  top: -9px;
+  right: -10px;
+  width: 20px;
+  height: 20px;
+  border: 1.5px solid var(--dawn-stroke);
+  border-radius: var(--radius-pill);
+  transition: border-color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-route-steps,
+.dawn-route-stamp {
+  display: none;
+}
+
+.dawn-route .dawn-dot {
+  position: absolute;
+  top: -7px;
+  left: -8px;
+}
+
+/* The lamp's halo ring fades as the dot inks (GSAP and the mobile timeline drive --dawn-ring). */
+.dawn-dot::after {
+  opacity: var(--dawn-ring, 1);
+}
+
+/* ---------- Destination node ---------- */
+
+.dawn-dest {
+  position: relative;
+}
+
+.dawn-dest-card {
+  padding: 1rem 1.25rem 1.125rem;
+  border-radius: var(--radius-card);
+  background: var(--record-bg);
+  color: var(--record-fg);
+  box-shadow: var(--dawn-paper-shadow);
+  transition: box-shadow var(--duration-base) var(--ease-snap);
+}
+
+.dawn-dest-name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.dawn-dest-icon {
+  color: var(--color-green-800);
+}
+
+.dawn-dest-address {
+  margin-top: 0.25rem;
+  padding-left: 1.75rem;
+  font-size: var(--text-caption);
+  line-height: var(--text-caption--line-height);
+  color: var(--record-meta);
+}
+
+.dawn-dest-note {
+  margin-top: 0.75rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid var(--color-grey-200);
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: var(--color-grey-800);
+}
+
+.dawn-dest-connector {
+  display: none;
+}
+
+/* ---------- Record ruler ---------- */
+
+/* The item the ruler belongs to (the plate's product line). */
+.dawn-ruler-item {
+  margin-bottom: 0.75rem;
+  font-size: var(--text-caption);
+  line-height: 1.4;
+  white-space: nowrap;
+  color: var(--dawn-fg-2);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-slots {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dawn-slot {
+  height: 60px;
+  white-space: nowrap;
+}
+
+.dawn-slot-active {
+  position: relative;
+  transform-origin: 50% 100%;
+}
+
+.dawn-slot-outline {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed var(--dawn-outline);
+  border-radius: var(--radius-card);
+}
+
+.dawn-slot-fill {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  padding: 0 1.125rem;
+  border-radius: var(--radius-card);
+  background: var(--record-bg);
+  box-shadow: var(--dawn-slot-shadow);
+  transition: box-shadow var(--duration-base) var(--ease-snap);
+}
+
+.dawn-slot-meta {
+  display: block;
+  font-size: var(--text-caption);
+  line-height: 1.4;
+}
+
+.dawn-slot-value {
+  display: block;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.dawn-slot-active .dawn-slot-meta {
+  color: var(--record-meta);
+}
+
+.dawn-slot-active .dawn-slot-value {
+  color: var(--record-fg);
+}
+
+.dawn-slot-next {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+  border: 1px dashed var(--dawn-outline);
+  border-radius: var(--radius-card);
+  transition:
+    border-color var(--duration-base) var(--ease-snap),
+    background-color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-slot-next .dawn-slot-meta {
+  color: var(--dawn-fg-2);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.dawn-slot-next .dawn-slot-value {
+  color: var(--dawn-fg);
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+/*
+ * Full ruler: one track under a fixed centre playhead. Rows from the top:
+ * slots, hour labels, the axis (ticks, event marks, playhead), event times.
+ * Every row hangs off --ruler-axis (the tick baseline), so the short and tall
+ * viewports below only move the axis and the slots. The playhead stops under
+ * the hour labels, so it never cuts through a number.
+ */
+@media (min-width: 1024px) {
+  .dawn-ruler {
+    --ruler-slot-top: 16px;
+    --ruler-slot-h: 60px;
+    --ruler-axis: 124px;
+    /* Pixels per hour: from 05:53 at the centre to the end of the 다음 회차 slot must fit half the window. */
+    --ruler-hour: clamp(30px, calc((50cqw - 196px) / 5.12), 72px);
+
+    position: relative;
+  }
+
+  /* Top-left, in the slot row's free half (the slots sit right of centre until they land). */
+  .dawn-ruler-item {
+    position: absolute;
+    top: calc(var(--ruler-slot-top) + 6px);
+    left: 0;
+    z-index: 1;
+    margin: 0;
+  }
+
+  /*
+   * The mask both fades the edges and clips the track to the window (nothing
+   * paints outside the mask's border box). No overflow clip: a clipping
+   * element inside the pinned scene is reported as a layout shift when the
+   * pin toggles.
+   */
+  .dawn-ruler-window {
+    position: relative;
+    height: calc(var(--ruler-axis) + 50px);
+    container-type: inline-size;
+    mask-image: linear-gradient(90deg, transparent 0, #000 72px, #000 calc(100% - 24px), transparent 100%);
+    mask-repeat: no-repeat;
+    mask-clip: border-box;
+  }
+
+  .dawn-ruler-track {
+    position: absolute;
+    inset: 0;
+    translate: calc(50cqw - var(--ruler-at) * var(--ruler-hour)) 0;
+  }
+
+  .dawn-ruler-scale {
+    position: absolute;
+    inset: 0;
+  }
+
+  .dawn-ruler-row {
+    position: absolute;
+    right: 0;
+    left: 0;
+  }
+
+  .dawn-ruler-hours {
+    top: calc(var(--ruler-axis) - 34px);
+    height: 13px;
+  }
+
+  .dawn-ruler-axis {
+    top: calc(var(--ruler-axis) - 18px);
+    height: 24px;
+  }
+
+  .dawn-ruler-times {
+    top: calc(var(--ruler-axis) + 14px);
+    height: 34px;
+  }
+
+  .dawn-tick-label {
+    position: absolute;
+    top: 0;
+    left: calc(var(--at) * var(--ruler-hour));
+    translate: -50% 0;
+    font-size: var(--text-caption);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    color: var(--dawn-fg-2);
+    transition: color var(--duration-base) var(--ease-snap);
+  }
+
+  .dawn-tick {
+    position: absolute;
+    top: 8px;
+    left: calc(var(--at) * var(--ruler-hour));
+    width: 1px;
+    height: 10px;
+    background: var(--dawn-tick);
+    transition: background-color var(--duration-base) var(--ease-snap);
+  }
+
+  .dawn-tick[data-major] {
+    top: 4px;
+    height: 14px;
+  }
+
+  .dawn-mark {
+    position: absolute;
+    top: 0;
+    left: calc(var(--at) * var(--ruler-hour));
+    width: 1px;
+    height: 22px;
+    background: var(--dawn-stroke);
+    transition: background-color var(--duration-base) var(--ease-snap);
+  }
+
+  .dawn-mark-label {
+    position: absolute;
+    top: 0;
+    left: calc(var(--at) * var(--ruler-hour));
+    translate: -50% 0;
+    font-size: var(--text-caption);
+    line-height: 1.2;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--dawn-fg-2);
+    transition: color var(--duration-base) var(--ease-snap);
+  }
+
+  .dawn-mark-label[data-row="1"] {
+    top: 18px;
+  }
+
+  .dawn-slots {
+    position: absolute;
+    inset: 0;
+  }
+
+  .dawn-slot {
+    position: absolute;
+    top: var(--ruler-slot-top);
+    left: calc(var(--at) * var(--ruler-hour));
+    height: var(--ruler-slot-h);
+  }
+
+  .dawn-slot-active {
+    translate: -50% 0;
+  }
+
+  .dawn-slot-next {
+    left: calc(var(--at) * var(--ruler-hour) + 20px);
+  }
+
+  .dawn-playhead {
+    position: absolute;
+    top: calc(var(--ruler-axis) - 18px);
+    left: 50%;
+    width: 1px;
+    height: 28px;
+    translate: -0.5px 0;
+    background: var(--dawn-stroke);
+    transition: background-color var(--duration-base) var(--ease-snap);
+  }
+
+  /* A cap, so the playhead never reads as one more event mark (03:06 sits a minute behind it at 03:07). */
+  .dawn-playhead::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2.5px;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-pill);
+    background: inherit;
+  }
+}
+
+/* 1024-1279: the narrow ruler packs 20:05 and 20:31 into 13px; keep 20:31's mark, drop its time. */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  .dawn-mark-label[data-time="20:31"] {
+    display: none;
+  }
+}
+
+/* Phones and small tablets: the ruler becomes a two-slot scroll-snap row. */
+@media (max-width: 1023.98px) {
+  .dawn-ruler-scale,
+  .dawn-playhead {
+    display: none;
+  }
+
+  /* Room for the slots' card shadow: a scroller clips both axes. */
+  .dawn-slots {
+    display: flex;
+    gap: 0.75rem;
+    margin: -12px calc(-1 * var(--spacing-gutter)) -28px;
+    padding: 12px var(--spacing-gutter) 28px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--spacing-gutter);
+    scrollbar-width: none;
+  }
+
+  .dawn-slots::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The row is full-bleed: an inset ring keeps all four edges on screen. */
+  .dawn-slots:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--radius-card);
+  }
+
+  .dawn-slot {
+    flex: 0 0 min(72%, 18rem);
+    height: 72px;
+    scroll-snap-align: start;
+  }
+}
+
+/* ---------- Desktop motion: the pinned scene ---------- */
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  /*
+   * The clip lives on the section, never on the pinned scene: overflow on the
+   * pin target is reported as a full-viewport layout shift at pin start. The
+   * fixed (pinned) scene escapes this clip; it only applies while unpinned.
+   */
+  .dawn {
+    overflow: clip;
+  }
+
+  .dawn-scene {
+    height: 100dvh;
+  }
+
+  html.js-motion .dawn-root:not(:has(.pin-spacer)) > .dawn-scene {
+    position: sticky;
+    top: 0;
+  }
+
+  html.js-motion .dawn-root:not(:has(.pin-spacer))::after {
+    content: "";
+    display: block;
+    height: 120vh;
+  }
+
+  .dawn-sky-ramp {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: var(--dawn-ramp-height);
+    background-image: var(--dawn-ramp-tall);
+    transform: translateY(var(--dawn-ramp-shift));
+  }
+
+  /* The canvas covers it; hidden it costs no layer. Context loss flips this back first. */
+  .dawn-sky[data-sky="webgl"] .dawn-sky-ramp {
+    visibility: hidden;
+  }
+
+  .dawn-band {
+    display: contents;
+  }
+
+  .dawn-frame {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+    pointer-events: none;
+  }
+
+  /* The card flies over the ruler into its slot. */
+  .dawn-band-night .dawn-frame {
+    z-index: 2;
+  }
+
+  .dawn-band-day .dawn-frame {
+    z-index: 1;
+  }
+
+  .dawn-stage {
+    position: relative;
+    height: 100%;
+  }
+
+  .dawn-stage > * {
+    pointer-events: auto;
+  }
+
+  /* Copy, then the card under it, in flow: the card can never sit on the copy. */
+  .dawn-band-night .dawn-stage {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    align-content: start;
+    justify-items: start;
+    row-gap: clamp(20px, 4dvh, 48px);
+    padding-top: max(calc(var(--nav-clear) + 24px), 13dvh);
+  }
+
+  .dawn-copy {
+    position: relative;
+    width: min(36rem, 100%);
+  }
+
+  .dawn-confirm {
+    position: relative;
+    width: clamp(300px, 30%, 360px);
+  }
+
+  /* The route sits at 66% of the frame (the horizon reaches it as the dot inks). */
+  .dawn-route {
+    position: absolute;
+    top: 66%;
+    right: 40px;
+    left: 0;
+  }
+
+  .dawn-dest {
+    position: absolute;
+    right: 0;
+    bottom: calc(34% + 28px);
+    width: clamp(248px, 30%, 320px);
+  }
+
+  .dawn-dest-connector {
+    position: absolute;
+    top: 100%;
+    right: 40px;
+    display: block;
+    width: 1px;
+    height: 19px;
+    background: var(--dawn-tick);
+    transition: background-color var(--duration-base) var(--ease-snap);
+  }
+
+  /* Under the route's end, mirroring 청평화 under its start. */
+  .dawn-demo {
+    position: absolute;
+    top: calc(100% + 46px);
+    right: 40px;
+    margin: 0;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  .dawn-ruler {
+    position: absolute;
+    right: 0;
+    bottom: max(16px, 2.5dvh);
+    left: 0;
+  }
+
+  /* 다음 회차 arrives as the playhead nears 05:53 (05:18 to 05:42), never as a clipped sliver at the window edge. */
+  .dawn-slot-next {
+    opacity: clamp(0, (var(--ruler-at) - 9.3) * 2.5, 1);
+  }
+}
+
+/*
+ * Short laptop viewports (1366x657, 1280x720, 1024x640): a tighter top and a
+ * compact card and ruler, so the card clears the route (66%) by at least 16px
+ * even 24px low at the start of its rise.
+ */
+@media (min-width: 1024px) and (max-height: 800px) and (prefers-reduced-motion: no-preference) {
+  .dawn-band-night .dawn-stage {
+    row-gap: clamp(16px, 3dvh, 48px);
+    padding-top: max(var(--nav-clear), 12dvh);
+  }
+
+  .dawn-body {
+    margin-top: 1rem;
+  }
+
+  .dawn-confirm-content {
+    padding: 1rem;
+  }
+
+  .dawn-confirm-title {
+    font-size: 1.125rem;
+  }
+
+  .dawn-confirm-body {
+    font-size: 0.875rem;
+  }
+
+  .dawn-confirm-actions {
+    margin-top: 0.75rem;
+  }
+
+  .dawn-dialog-button {
+    height: 2.25rem;
+  }
+
+  .dawn-ruler {
+    --ruler-slot-top: 14px;
+    --ruler-slot-h: 52px;
+    --ruler-axis: 106px;
+  }
+}
+
+/* Tall viewports: the ruler anchors the morning; the landed slot is larger. */
+@media (min-width: 1024px) and (min-height: 880px) and (prefers-reduced-motion: no-preference) {
+  .dawn {
+    --dawn-slot-scale: 1.4;
+  }
+
+  .dawn-ruler {
+    --ruler-slot-top: 26px;
+    --ruler-axis: 134px;
+  }
+}
+
+/* 1024-1279: no rail; the compact plate sits bottom-right, keep the ruler clear of it. */
+@media (min-width: 1024px) and (max-width: 1279.98px) and (prefers-reduced-motion: no-preference) {
+  .dawn-ruler {
+    right: 296px;
+  }
+}
+
+/*
+ * From 1280px the record column is fixed to the right. The frame is centred in
+ * a 90rem container, so above 1440px its right edge would run under the rail;
+ * the stage ends one gutter left of the rail at every width (motion and reduced).
+ */
+@media (min-width: 1280px) {
+  .dawn .dawn-stage {
+    max-width: calc(100vw - var(--record-col) - 2 * var(--spacing-gutter) - var(--dawn-stage-left));
+  }
+}
+
+/* ---------- Mobile motion: the 160vh band ---------- */
+
+@media (max-width: 1023.98px) and (prefers-reduced-motion: no-preference) {
+  .dawn-scene {
+    /*
+     * The band and the vertical route, from below the nav to the destination
+     * card's middle. DawnMotion writes the measured band height and route
+     * bottom (landscape phones and large text make the band taller than 160vh).
+     */
+    --dawn-band-h: 160vh;
+    --dawn-route-top: var(--nav-clear);
+    --dawn-route-bottom: 180px;
+    --dawn-route-length: calc(var(--dawn-band-h) - var(--dawn-route-top) - var(--dawn-route-bottom));
+
+    display: flex;
+    flex-direction: column;
+    min-height: 160vh;
+    view-timeline-name: --dawn-band;
+    view-timeline-axis: block;
+    /*
+     * The whole viewport: the default (auto) takes the root's scroll-padding,
+     * which the mobile record pill sets (80px at the bottom), and would hold
+     * the dot 80px above the centre line and ink it after the phase flip.
+     */
+    view-timeline-inset: 0px;
+  }
+
+  .dawn-sky-ramp {
+    position: absolute;
+    inset: 0;
+    background-image: var(--dawn-ramp-band);
+  }
+
+  .dawn-band {
+    display: flex;
+    flex: 1 0 80vh;
+    flex-direction: column;
+  }
+
+  .dawn-frame {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding-inline: var(--spacing-gutter);
+  }
+
+  .dawn-band-night .dawn-frame {
+    padding-top: var(--nav-clear);
+    padding-bottom: 40px;
+  }
+
+  .dawn-band-day .dawn-frame {
+    padding-top: 48px;
+    padding-bottom: 80px;
+  }
+
+  .dawn-stage {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .dawn-band-day .dawn-stage {
+    gap: 2rem;
+  }
+
+  /* The ruler centres in the day half; the destination ends the route at the bottom. */
+  .dawn-band-day .dawn-ruler {
+    margin-block: auto;
+  }
+
+  .dawn-confirm,
+  .dawn-dest {
+    width: 100%;
+    max-width: 26rem;
+  }
+
+  /*
+   * The slot row sits just under the horizon, where the band is mid-green: the
+   * pending slot is a translucent paper slip, and its labels take the strong inks.
+   */
+  .dawn-band-day .dawn-ruler-item {
+    color: var(--color-grey-800);
+  }
+
+  .dawn-band-day .dawn-slot-next {
+    border-color: var(--color-grey-700);
+    background: rgb(245 244 238 / 0.72);
+  }
+
+  .dawn-band-day .dawn-slot-next .dawn-slot-meta {
+    color: var(--color-grey-800);
+  }
+
+  /* The route runs down the left edge, mint in the night half and ink in the day half. */
+  .dawn-route {
+    position: absolute;
+    top: var(--dawn-route-top);
+    bottom: var(--dawn-route-bottom);
+    left: 11px;
+    width: 0;
+    height: auto;
+  }
+
+  .dawn-route::before,
+  .dawn-route-svg,
+  .dawn-route-origin {
+    display: none;
+  }
+
+  .dawn-route::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -0.75px;
+    width: 1.5px;
+    background: linear-gradient(
+      180deg,
+      var(--color-mint) 0,
+      var(--color-mint) calc(var(--dawn-band-h) / 2 - var(--dawn-route-top)),
+      var(--color-green-800) calc(var(--dawn-band-h) / 2 - var(--dawn-route-top)),
+      var(--color-green-800) 100%
+    );
+  }
+
+  .dawn-route-node {
+    top: auto;
+    right: auto;
+    bottom: -10px;
+    left: -10px;
+    border-color: var(--color-green-800);
+  }
+
+  /*
+   * 05:53 on the line where it turns from mint to ink (the band middle), in
+   * the gap between the card and the slot row, aligned with the content
+   * column. A paper chip, like the rail's times: the sky there is mid-tone,
+   * where no ink holds 4.5:1.
+   */
+  .dawn-route-stamp {
+    position: absolute;
+    top: calc(var(--dawn-band-h) / 2 - var(--dawn-route-top));
+    left: calc(var(--spacing-gutter) - 11px);
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding-inline: 0.625rem;
+    translate: 0 -50%;
+    border-radius: var(--radius-pill);
+    background: var(--record-bg);
+    box-shadow: var(--shadow-card);
+    font-size: var(--text-caption);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--record-fg);
+  }
+
+  .dawn-route .dawn-dot {
+    top: -8px;
+    left: -8px;
+  }
+
+  /* Without view() timelines: three steps at 25, 50 and 75% of the route. */
+  .dawn-route-steps {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  /* Each sentinel runs from its step to the end of the route (state, not a thin line). */
+  .dawn-route-steps > span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 1px;
+  }
+
+  .dawn-route-steps > [data-dawn-step="1"] {
+    top: 25%;
+  }
+
+  .dawn-route-steps > [data-dawn-step="2"] {
+    top: 50%;
+  }
+
+  .dawn-route-steps > [data-dawn-step="3"] {
+    top: 75%;
+  }
+
+  .dawn-route[data-step] .dawn-dot {
+    transition:
+      translate var(--duration-record) var(--ease-snap),
+      background-color 600ms var(--ease-snap);
+  }
+
+  .dawn-route[data-step="1"] .dawn-dot {
+    translate: 0 calc(var(--dawn-route-length) * 0.25);
+  }
+
+  .dawn-route[data-step="2"] .dawn-dot {
+    translate: 0 calc(var(--dawn-route-length) * 0.5);
+  }
+
+  .dawn-route[data-step="3"] .dawn-dot {
+    translate: 0 calc(var(--dawn-route-length) * 0.75);
+  }
+
+  .dawn-route[data-step="2"] .dawn-dot,
+  .dawn-route[data-step="3"] .dawn-dot {
+    background-color: var(--color-green-800);
+    --dawn-ring: 0;
+  }
+
+  /*
+   * The dot holds the viewport's centre line while it descends the band: the
+   * band's cover range starts with its top at the viewport bottom, so the
+   * centre line is at band height (offset - 50vh). The ink switch happens as
+   * the band's middle crosses the centre, with the phase flip.
+   */
+  @supports (animation-timeline: view()) {
+    .dawn-route .dawn-dot {
+      animation: dawn-descend linear both;
+      animation-timeline: --dawn-band;
+      animation-range: cover calc(50vh + var(--dawn-route-top)) cover calc(var(--dawn-band-h) + 50vh - var(--dawn-route-bottom));
+    }
+
+    /* The ink fill fades in over the lamp: opacity runs on the compositor, background-color would not. */
+    .dawn-route .dawn-dot::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: var(--color-green-800);
+      animation: dawn-ink linear both;
+      animation-timeline: --dawn-band;
+      animation-range: cover calc(var(--dawn-band-h) / 2 + 50vh - 24px) cover calc(var(--dawn-band-h) / 2 + 50vh + 24px);
+    }
+
+    .dawn-route .dawn-dot::after {
+      animation: dawn-ring linear both;
+      animation-timeline: --dawn-band;
+      animation-range: cover calc(var(--dawn-band-h) / 2 + 50vh - 24px) cover calc(var(--dawn-band-h) / 2 + 50vh + 24px);
+    }
+  }
+}
+
+@keyframes dawn-descend {
+  from {
+    translate: 0 0;
+  }
+
+  to {
+    translate: 0 var(--dawn-route-length);
+  }
+}
+
+@keyframes dawn-ink {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes dawn-ring {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+/* ---------- Reduced motion: two static bands ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .dawn-sky {
+    display: none;
+  }
+
+  /* The cart's plate feathers into the night band (no hard seam). */
+  .dawn-band-night {
+    background: linear-gradient(180deg, var(--night-1), rgb(9 58 50 / 0) clamp(96px, 14dvh, 160px)) var(--night-0);
+  }
+
+  .dawn-band-day {
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .dawn-horizon {
+    display: block;
+    height: 1px;
+    background: var(--night-ink-2);
+  }
+
+  .dawn-frame {
+    width: 100%;
+    max-width: var(--container-content);
+    margin-inline: auto;
+    padding: var(--nav-clear) var(--spacing-gutter) 80px;
+  }
+
+  .dawn-stage {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  /* The route ends at the destination; the ruler closes the band. */
+  .dawn-route {
+    order: 1;
+    margin-right: 10px;
+  }
+
+  .dawn-band-day .dawn-dest {
+    order: 2;
+  }
+
+  .dawn-band-day .dawn-ruler {
+    order: 3;
+  }
+
+  .dawn-route .dawn-dot {
+    top: -7px;
+    right: -8px;
+    left: auto;
+    background-color: var(--color-green-800);
+    --dawn-ring: 0;
+  }
+
+  .dawn-confirm,
+  .dawn-dest {
+    width: 100%;
+    max-width: 26rem;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .dawn-frame {
+    padding-block: 128px;
+  }
+
+  .dawn-band-night .dawn-stage {
+    grid-template-columns: minmax(0, 1fr) clamp(300px, 34%, 360px);
+    align-items: end;
+    column-gap: 3rem;
+  }
+
+  .dawn-band-day .dawn-stage {
+    grid-template-columns: minmax(0, 1fr) clamp(248px, 30%, 320px);
+    align-items: center;
+    column-gap: 2.5rem;
+  }
+
+  .dawn-band-day .dawn-route {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .dawn-band-day .dawn-dest {
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .dawn-band-day .dawn-ruler {
+    grid-row: 2;
+    grid-column: 1 / -1;
+  }
+
+  /* The composed state: the 1차 slot holds the delivery at full size. */
+  .dawn-slot-active {
+    scale: 1.25;
+  }
+}
