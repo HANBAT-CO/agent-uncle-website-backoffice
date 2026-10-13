@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowRightIcon } from "@phosphor-icons/react";
 import { useActionState } from "react";
 
 import { Button } from "@/components/admin/ui/button";
@@ -15,7 +16,7 @@ export function PasswordSignInForm({ next }: { next: string }) {
   const failed = state.status === "error";
 
   return (
-    <form action={action} className="flex flex-col gap-5">
+    <form action={action} className="flex flex-col gap-6">
       <input type="hidden" name="next" value={next} />
       <div className="flex flex-col gap-2">
         <Label htmlFor="admin-id" className="text-sm">
@@ -33,7 +34,7 @@ export function PasswordSignInForm({ next }: { next: string }) {
           defaultValue={state.id}
           aria-invalid={failed || undefined}
           aria-describedby={failed ? "admin-login-error" : undefined}
-          className="h-10 px-3 text-sm md:text-sm"
+          className="h-12 rounded-lg bg-background/45 px-4 text-base md:text-sm"
         />
       </div>
       <div className="flex flex-col gap-2">
@@ -48,14 +49,15 @@ export function PasswordSignInForm({ next }: { next: string }) {
           required
           aria-invalid={failed || undefined}
           aria-describedby={failed ? "admin-login-error" : undefined}
-          className="h-10 px-3 text-sm md:text-sm"
+          className="h-12 rounded-lg bg-background/45 px-4 text-base md:text-sm"
         />
       </div>
       <p id="admin-login-error" aria-live="polite" className="-mt-2 min-h-5 text-sm text-status-attention empty:hidden">
         {failed ? state.message : null}
       </p>
-      <Button type="submit" size="lg" disabled={pending} className="h-10 w-full text-sm">
-        {pending ? "로그인하는 중…" : "로그인"}
+      <Button type="submit" size="lg" disabled={pending} className="mt-1 h-12 w-full justify-between rounded-lg px-4 text-sm">
+        <span>{pending ? "로그인하는 중…" : "로그인"}</span>
+        <ArrowRightIcon aria-hidden className="size-4" />
       </Button>
     </form>
   );

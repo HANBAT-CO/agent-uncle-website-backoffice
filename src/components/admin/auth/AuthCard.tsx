@@ -1,11 +1,13 @@
+import { ArrowUpRightIcon, LockKeyIcon } from "@phosphor-icons/react/dist/ssr";
 import Image from "next/image";
 
+import { ParcelFigure } from "@/components/admin/dashboard/ParcelFigure";
+import { ADMIN_PANEL_NAME } from "@/lib/admin/brand";
 import { cn } from "@/lib/admin/utils";
 
 /*
- * Frame for the access screens (screens appendix 10.1 to 10.4): the canvas,
- * the 4px deep-green rule across the top, the app mark, and one card. No
- * console chrome, because none of these screens has a verified staff session.
+ * Shared access-screen frame. The parcel is decorative; the form remains
+ * the only task, with no operational data exposed before authentication.
  */
 export function AuthCard({
   title,
@@ -21,29 +23,42 @@ export function AuthCard({
   className?: string;
 }) {
   return (
-    <div className="relative min-h-dvh bg-background">
-      <div aria-hidden className="fixed inset-x-0 top-0 h-1 bg-primary" />
-      <main id="main" className="grid min-h-dvh place-items-center px-6 py-16">
-        <div className={cn("w-full max-w-[400px]", className)}>
-          <Image
-            src="/brand/samchun-app-icon.png"
-            alt=""
-            width={44}
-            height={44}
-            priority
-            className="mb-6 rounded-[0.75rem] ring-1 ring-foreground/10"
-          />
+    <div className="auth-canvas">
+      <main id="main" className="auth-layout">
+        <aside className="auth-story" aria-label={ADMIN_PANEL_NAME}>
+          <div className="flex items-center gap-3">
+            <Image src="/brand/samchun-app-icon.png" alt="" width={40} height={40} priority className="rounded-[11px]" />
+            <div>
+              <p className="text-sm font-semibold tracking-tight break-keep">{ADMIN_PANEL_NAME}</p>
+              <p className="mt-1 text-[9px] tracking-[0.15em] text-[#bed2c4]">OPERATIONS CONSOLE</p>
+            </div>
+          </div>
+          <div className="auth-story-center">
+            <p className="auth-story-kicker">사입의 모든 연결</p>
+            <p className="auth-story-title">한 벌의 시작부터,<br />마지막 전달까지.</p>
+            <div className="auth-parcel"><ParcelFigure stage={1} /></div>
+            <p className="auth-story-description">매장의 요청과 삼춘의 발걸음이<br />끊김 없이 이어지도록.</p>
+          </div>
+          <div className="auth-story-footer" aria-hidden="true">
+            <span>01 요청</span><span className="auth-route-line" /><span>02 사입</span><span className="auth-route-line" /><span>03 전달</span>
+            <ArrowUpRightIcon className="size-4" />
+          </div>
+        </aside>
+        <div className="auth-form-panel">
+          <div className="auth-form-index"><span>STAFF ACCESS</span><LockKeyIcon aria-hidden className="size-4" /></div>
           <section
             aria-labelledby="auth-title"
-            className="rounded-lg bg-card px-7 py-8 text-sm text-card-foreground ring-1 ring-foreground/10"
+            className={cn("auth-form-content w-full text-sm text-card-foreground", className)}
           >
-            <h1 id="auth-title" className="text-xl/snug font-bold tracking-tight text-foreground">
+            <span className="console-eyebrow mb-5">사입삼춘·소매상 통합 관리</span>
+            <h1 id="auth-title" className="text-[1.75rem]/snug font-semibold tracking-[-0.055em] break-keep text-foreground sm:text-[2rem]">
               {title}
             </h1>
-            {description ? <div className="mt-2 text-sm/relaxed text-muted-foreground">{description}</div> : null}
-            {children ? <div className="mt-7">{children}</div> : null}
+            {description ? <div className="mt-3 text-sm/relaxed text-muted-foreground">{description}</div> : null}
+            {children ? <div className="mt-9">{children}</div> : null}
+            {footer ? <div className="mt-8 border-t border-[var(--console-line)] pt-5 text-xs/relaxed text-muted-foreground">{footer}</div> : null}
           </section>
-          {footer ? <div className="mt-5 text-xs/relaxed text-muted-foreground">{footer}</div> : null}
+          <p className="auth-form-footnote">사입삼춘 · 매일의 사입을 잇다</p>
         </div>
       </main>
     </div>
