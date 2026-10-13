@@ -1,0 +1,254 @@
+{
+  "kpi": {
+    "newLeads": 11,
+    "attention": 10,
+    "newRequests": 42,
+    "overdueRechecks": 4,
+    "incompleteSignups": 2,
+    "deliveriesAwaitingReceipt": 7
+  },
+  "days": 7,
+  "leads": {
+    "total": 15,
+    "inPeriod": 6,
+    "unhandled": 13
+  },
+  "queue": [
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-09T15:00:00+00:00",
+      "detail": {
+        "product": "스트라이프 니트 티",
+        "recheck": "2026-10-10"
+      },
+      "severity": "high",
+      "targetId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "targetType": "request"
+    },
+    {
+      "kind": "issue_unresolved",
+      "since": "2026-10-10T07:31:07.480637+00:00",
+      "detail": {
+        "held": 0,
+        "status": "open",
+        "requestId": "18dbbb20-07cf-4ed9-8de4-a72d8bd90e81"
+      },
+      "severity": "high",
+      "targetId": "68dfe500-6436-4482-86e8-acba564b944c",
+      "targetType": "issue"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-10T15:00:00+00:00",
+      "detail": {
+        "product": "리본 타이 블라우스",
+        "recheck": "2026-10-11"
+      },
+      "severity": "high",
+      "targetId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "targetType": "request"
+    },
+    {
+      "kind": "receipt_unconfirmed",
+      "since": "2026-10-11T02:32:00.740454+00:00",
+      "detail": {
+        "quantity": 4,
+        "requestId": "25feda84-e6ca-40b3-8832-e0acae972111"
+      },
+      "severity": "high",
+      "targetId": "7a2c8d08-ffcf-4a04-b8ff-5884cf19d932",
+      "targetType": "delivery"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-11T15:00:00+00:00",
+      "detail": {
+        "product": "벨벳 롱 원피스",
+        "recheck": "2026-10-12"
+      },
+      "severity": "high",
+      "targetId": "54283d03-fb8f-473e-8afb-9bc60c6372de",
+      "targetType": "request"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-12T15:00:00+00:00",
+      "detail": {
+        "product": "캐시미어 블렌드 머플러",
+        "recheck": "2026-10-13"
+      },
+      "severity": "high",
+      "targetId": "7b16cff7-ebad-4bc2-ba97-b32903a0a461",
+      "targetType": "request"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-21T07:17:55.006765+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-22T08:09:18.591574+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-23T07:11:18.212035+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-25T07:54:42.431651+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+      "targetType": "account"
+    }
+  ],
+  "since": "2026-10-06T15:00:00+00:00",
+  "issues": {
+    "open": 3,
+    "resolved": 3,
+    "actionTaken": 2
+  },
+  "accounts": {
+    "total": 20,
+    "uncle": 6,
+    "noRole": 1,
+    "complete": 18,
+    "retailer": 13,
+    "verified": 0,
+    "unclesWorking": 5,
+    "awaitingReview": 12,
+    "documentSubmitted": 12
+  },
+  "authUsers": 24,
+  "openCases": 1,
+  "suspended": 0,
+  "attachments": {
+    "bytes": 573138,
+    "count": 68
+  },
+  "connections": {
+    "pending": 2,
+    "accepted": 19,
+    "rejected": 1,
+    "withdrawn": 1
+  },
+  "generatedAt": "2026-10-13T12:07:52.865032+00:00",
+  "includeDemo": true,
+  "liveNotices": 1,
+  "maintenance": {
+    "active": false,
+    "blockWrites": false
+  },
+  "signupStages": {
+    "role": 1,
+    "profile": 1,
+    "completed": 18
+  },
+  "requestLabels": {
+    "거절": 4,
+    "완료": 11,
+    "진행 중": 5,
+    "답변 필요": 5,
+    "미송 대기": 3,
+    "수령 대기": 6,
+    "취소 종료": 4,
+    "픽업 완료": 3,
+    "확인 대기": 6,
+    "미송 재확인": 4,
+    "문제 확인 중": 5,
+    "변경·취소 협의 중": 5
+  },
+  "requestStatus": {
+    "pending": 6,
+    "accepted": 36,
+    "rejected": 4,
+    "cancelled": 4,
+    "completed": 11
+  },
+  "backorderAging": {
+    "8+": 0,
+    "0-1": 2,
+    "2-3": 2,
+    "4-7": 0
+  },
+  "userMessages24h": 3,
+  "newRequestsByDay": [
+    {
+      "day": "2026-09-30",
+      "count": 1
+    },
+    {
+      "day": "2026-10-01",
+      "count": 1
+    },
+    {
+      "day": "2026-10-02",
+      "count": 1
+    },
+    {
+      "day": "2026-10-03",
+      "count": 1
+    },
+    {
+      "day": "2026-10-04",
+      "count": 2
+    },
+    {
+      "day": "2026-10-05",
+      "count": 2
+    },
+    {
+      "day": "2026-10-06",
+      "count": 2
+    },
+    {
+      "day": "2026-10-07",
+      "count": 3
+    },
+    {
+      "day": "2026-10-08",
+      "count": 4
+    },
+    {
+      "day": "2026-10-09",
+      "count": 6
+    },
+    {
+      "day": "2026-10-10",
+      "count": 8
+    },
+    {
+      "day": "2026-10-11",
+      "count": 10
+    },
+    {
+      "day": "2026-10-12",
+      "count": 8
+    },
+    {
+      "day": "2026-10-13",
+      "count": 3
+    }
+  ],
+  "proposalsPending": 5
+}

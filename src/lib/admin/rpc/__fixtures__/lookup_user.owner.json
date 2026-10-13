@@ -1,0 +1,13 @@
+{
+  "email": "spare@agentuncle.local",
+  "staff": null,
+  "userId": "810f8ce0-9404-4822-8afc-4577ff58cba3",
+  "provider": "email",
+  "createdAt": "2026-10-13T06:40:13.637246+00:00",
+  "providers": [
+    "email"
+  ],
+  "lastSignInAt": "2026-10-13T12:01:27.985801+00:00",
+  "hasAppAccount": false,
+  "emailConfirmed": true
+}

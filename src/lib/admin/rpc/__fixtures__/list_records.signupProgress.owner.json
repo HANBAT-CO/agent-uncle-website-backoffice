@@ -1,0 +1,186 @@
+{
+  "rows": [
+    {
+      "id": "db44dd29-c65a-4b47-bbe1-ad139dd4fe3d",
+      "role": "retailer",
+      "round": null,
+      "stage": "profile",
+      "parties": [
+        {
+          "id": "db44dd29-c65a-4b47-bbe1-ad139dd4fe3d",
+          "demo": false,
+          "name": "을지로 소품가게",
+          "role": "retailer",
+          "complete": false
+        }
+      ],
+      "request": null,
+      "accountId": "db44dd29-c65a-4b47-bbe1-ad139dd4fe3d",
+      "updatedAt": "2026-10-12T21:41:58.752619+00:00",
+      "participants": [
+        "db44dd29-c65a-4b47-bbe1-ad139dd4fe3d"
+      ]
+    },
+    {
+      "id": "90c07d24-d7e4-4c52-b798-c283da999be8",
+      "round": null,
+      "stage": "role",
+      "parties": [
+        {
+          "id": "90c07d24-d7e4-4c52-b798-c283da999be8",
+          "demo": false,
+          "name": "김지우",
+          "role": null,
+          "complete": false
+        }
+      ],
+      "request": null,
+      "accountId": "90c07d24-d7e4-4c52-b798-c283da999be8",
+      "updatedAt": "2026-10-11T14:12:00+00:00",
+      "participants": [
+        "90c07d24-d7e4-4c52-b798-c283da999be8"
+      ]
+    },
+    {
+      "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "updatedAt": "2026-09-02T04:16:08.038628+00:00",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295"
+      ]
+    },
+    {
+      "id": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+          "demo": false,
+          "name": "온라인몰 핏앤무드",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "updatedAt": "2026-09-01T06:01:31.042685+00:00",
+      "participants": [
+        "73916fe0-4836-4d81-aefc-5771aadf2c16"
+      ]
+    },
+    {
+      "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "updatedAt": "2026-08-31T03:26:22.133752+00:00",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484"
+      ]
+    },
+    {
+      "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "updatedAt": "2026-08-30T08:51:11.700682+00:00",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    },
+    {
+      "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "updatedAt": "2026-08-29T04:25:40.736646+00:00",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076"
+      ]
+    },
+    {
+      "id": "31551437-640f-4452-86af-575b1202c1dd",
+      "role": "retailer",
+      "round": null,
+      "stage": "completed",
+      "parties": [
+        {
+          "id": "31551437-640f-4452-86af-575b1202c1dd",
+          "demo": false,
+          "name": "잠실 오늘의옷",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "accountId": "31551437-640f-4452-86af-575b1202c1dd",
+      "updatedAt": "2026-08-28T04:33:39.370724+00:00",
+      "participants": [
+        "31551437-640f-4452-86af-575b1202c1dd"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 20,
+  "facets": {
+    "today": 0,
+    "status": {
+      "": 20
+    },
+    "unread": 0,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 0,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

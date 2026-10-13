@@ -1,0 +1,203 @@
+{
+  "rows": [
+    {
+      "id": "5a8f1f4e-467d-4f3a-8761-ecc33abe6740",
+      "mime": "image/png",
+      "name": "꽈배기_니트_조끼_2.png",
+      "size": 12044,
+      "round": null,
+      "ownerId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "parties": [
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-13T05:10:04.596348+00:00",
+      "updatedAt": "2026-10-13T05:10:04.596+00:00",
+      "participants": [
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ]
+    },
+    {
+      "id": "5b78f4af-66ef-4453-8f7b-70ac9f7cfd1a",
+      "mime": "image/png",
+      "name": "스트라이프_니트_티_1.png",
+      "size": 7361,
+      "round": null,
+      "ownerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "parties": [
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-13T03:40:04.596324+00:00",
+      "updatedAt": "2026-10-13T03:40:04.596+00:00",
+      "participants": [
+        "ab462a8d-9351-47e4-9421-ff257c416b2a"
+      ]
+    },
+    {
+      "id": "bb4ffe50-1c76-4d39-9979-a29d2a915834",
+      "mime": "image/png",
+      "name": "꽈배기_니트_조끼_1.png",
+      "size": 12070,
+      "round": null,
+      "ownerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-13T01:40:04.596714+00:00",
+      "updatedAt": "2026-10-13T01:40:04.596+00:00",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076"
+      ]
+    },
+    {
+      "id": "3d9b1c53-b8d6-45b0-87c6-867734d7d5be",
+      "mime": "image/png",
+      "name": "캐시미어_블렌드_머플러_1.png",
+      "size": 8040,
+      "round": null,
+      "ownerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-12T22:40:04.596384+00:00",
+      "updatedAt": "2026-10-12T22:40:04.596+00:00",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295"
+      ]
+    },
+    {
+      "id": "26016ce2-df18-4f5a-95d5-81afd729d219",
+      "mime": "image/png",
+      "name": "플리츠_롱스커트_1.png",
+      "size": 10641,
+      "round": null,
+      "ownerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "parties": [
+        {
+          "id": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+          "demo": false,
+          "name": "온라인몰 핏앤무드",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-12T08:40:04.596295+00:00",
+      "updatedAt": "2026-10-12T08:40:04.596+00:00",
+      "participants": [
+        "73916fe0-4836-4d81-aefc-5771aadf2c16"
+      ]
+    },
+    {
+      "id": "b923f94b-c802-4e50-8b7d-33d439713528",
+      "mime": "image/png",
+      "name": "기모_후드_집업_1.png",
+      "size": 13712,
+      "round": null,
+      "ownerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-12T02:40:04.596449+00:00",
+      "updatedAt": "2026-10-12T02:40:04.596+00:00",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484"
+      ]
+    },
+    {
+      "id": "c08b9d73-b782-423b-822a-1ce4226be651",
+      "mime": "image/png",
+      "name": "캐시미어_블렌드_머플러_1.png",
+      "size": 8040,
+      "round": null,
+      "ownerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-12T01:00:00.000545+00:00",
+      "updatedAt": "2026-10-12T01:00:00+00:00",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    },
+    {
+      "id": "2b54c834-1faa-4ecb-91e0-c452456f086c",
+      "mime": "image/png",
+      "name": "핀턱_와이드_슬랙스_1.png",
+      "size": 13616,
+      "round": null,
+      "ownerId": "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+      "parties": [
+        {
+          "id": "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+          "demo": false,
+          "name": "강남 스타일숍 리안",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "createdAt": "2026-10-12T00:40:40.143336+00:00",
+      "updatedAt": "2026-10-12T00:40:40.143+00:00",
+      "participants": [
+        "df4283b3-5149-40ee-b8c0-94414bf1f2fd"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 68,
+  "facets": {
+    "today": 4,
+    "status": {
+      "": 68
+    },
+    "unread": 0,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 0,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

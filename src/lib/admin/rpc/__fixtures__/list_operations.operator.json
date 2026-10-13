@@ -1,0 +1,186 @@
+{
+  "rows": [
+    {
+      "actor": {
+        "id": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+        "demo": false,
+        "name": "광희시장 정삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T05:37:13.987+00:00",
+      "operationId": "seed-00921"
+    },
+    {
+      "actor": {
+        "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+        "demo": false,
+        "name": "제일평화 이삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T05:32:24.169+00:00",
+      "operationId": "seed-00920"
+    },
+    {
+      "actor": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T05:16:46.88+00:00",
+      "operationId": "seed-00919"
+    },
+    {
+      "actor": {
+        "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "demo": false,
+        "name": "동대문 박삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T05:16:19.317+00:00",
+      "operationId": "seed-00918"
+    },
+    {
+      "actor": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "da0382e5-2cc7-44f8-8245-1b97fdcf0bf8",
+      "command": "sendMessage",
+      "createdAt": "2026-10-13T05:10:38.482+00:00",
+      "operationId": "da0382e5-2cc7-44f8-8245-1b97fdcf0bf8"
+    },
+    {
+      "actor": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "5a8f1f4e-467d-4f3a-8761-ecc33abe6740",
+      "command": "registerAttachment",
+      "createdAt": "2026-10-13T05:10:04.596+00:00",
+      "operationId": "seed-00917"
+    },
+    {
+      "actor": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T04:57:18.947+00:00",
+      "operationId": "seed-00916"
+    },
+    {
+      "actor": {
+        "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "demo": false,
+        "name": "남대문 김삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "result": "",
+      "command": "refreshReminders",
+      "createdAt": "2026-10-13T04:42:13.062+00:00",
+      "operationId": "seed-00915"
+    },
+    {
+      "actor": {
+        "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+        "demo": false,
+        "name": "수원 행궁 니트하우스",
+        "role": "retailer",
+        "complete": true
+      },
+      "result": "9a5e31c2-7e7e-4411-84ad-c550e66d1893",
+      "command": "saveDraft",
+      "createdAt": "2026-10-13T04:40:04.596+00:00",
+      "operationId": "seed-00914"
+    },
+    {
+      "actor": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "result": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "command": "sendDraft",
+      "createdAt": "2026-10-13T03:41:14.999+00:00",
+      "operationId": "seed-00913"
+    },
+    {
+      "actor": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "result": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "command": "saveDraft",
+      "createdAt": "2026-10-13T03:41:11.827+00:00",
+      "operationId": "seed-00912"
+    },
+    {
+      "actor": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "result": "5b78f4af-66ef-4453-8f7b-70ac9f7cfd1a",
+      "command": "registerAttachment",
+      "createdAt": "2026-10-13T03:40:04.596+00:00",
+      "operationId": "seed-00911"
+    }
+  ],
+  "limit": 12,
+  "total": 1014,
+  "offset": 0,
+  "commands": {
+    "act": 101,
+    "connect": 23,
+    "deliver": 30,
+    "propose": 13,
+    "receive": 25,
+    "bootstrap": 20,
+    "renewCode": 3,
+    "saveDraft": 64,
+    "sendDraft": 61,
+    "actOnIssue": 7,
+    "chooseRole": 19,
+    "readNotice": 316,
+    "reportIssue": 4,
+    "saveProfile": 19,
+    "sendMessage": 73,
+    "markChatRead": 132,
+    "updateRequest": 1,
+    "respondProposal": 8,
+    "refreshReminders": 6,
+    "respondConnection": 21,
+    "registerAttachment": 68
+  }
+}

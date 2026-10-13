@@ -1,0 +1,327 @@
+{
+  "cases": [],
+  "notes": [],
+  "uncle": {
+    "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+    "demo": false,
+    "name": "동대문 박삼촌",
+    "role": "uncle",
+    "complete": true
+  },
+  "checks": {
+    "deliveries": 0,
+    "violations": [],
+    "pendingProposals": 0,
+    "unresolvedIssues": 1,
+    "unconfirmedDeliveries": 0
+  },
+  "events": [
+    {
+      "id": "51c2409e-f8aa-4939-9300-1ce0870b260c",
+      "after": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "pending",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 0,
+        "acquired": 0,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T00:31:59.104511+00:00",
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "title": "새 사입 요청을 보냈어요",
+      "before": {},
+      "actorId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "createdAt": "2026-10-11T00:31:59.104686+00:00",
+      "requestId": "37451c9f-bcfb-4f37-864a-f6aa5820a931"
+    },
+    {
+      "id": "7b1ca3ce-3868-4c54-94ab-41c89f58dbd0",
+      "after": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "accepted",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 1,
+        "acquired": 0,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T11:10:00.000618+00:00",
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "title": "요청을 수락했어요",
+      "before": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "pending",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 0,
+        "acquired": 0,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T00:31:59.104511+00:00",
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "createdAt": "2026-10-11T11:10:00.000913+00:00",
+      "requestId": "37451c9f-bcfb-4f37-864a-f6aa5820a931"
+    },
+    {
+      "id": "2e445834-b549-40d3-aca5-afd4f564e569",
+      "after": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "accepted",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "recheck": "",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 2,
+        "acquired": 20,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T18:20:00.000485+00:00",
+        "needsReply": false,
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "resultShared": true,
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "title": "확보 20개 · 미송 0개 결과를 공유했어요",
+      "before": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "accepted",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 1,
+        "acquired": 0,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T11:10:00.000618+00:00",
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "createdAt": "2026-10-11T18:20:00.000723+00:00",
+      "requestId": "37451c9f-bcfb-4f37-864a-f6aa5820a931"
+    },
+    {
+      "id": "c7f376ce-0ad6-409e-830e-b351333b2374",
+      "after": {
+        "held": 5,
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "accepted",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "recheck": "",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 3,
+        "acquired": 20,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-12T00:40:00.00088+00:00",
+        "needsReply": false,
+        "openIssues": 1,
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "resultShared": true,
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "title": "상품 문제를 알렸어요: 상품·옵션이 달라요: 사진과 컬러가 달라요. 5장 보류 부탁드려요.",
+      "before": {
+        "note": "물류센터 입고 마감은 17시예요.",
+        "option": "차콜 / FREE",
+        "photos": [
+          "b34c1765-6530-4627-91aa-89cfc3408f0f",
+          "3110495c-de8f-4062-b962-19dddd99816d"
+        ],
+        "status": "accepted",
+        "address": "서울 은평구 통일로 684",
+        "product": "하프넥 맨투맨",
+        "recheck": "",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 2,
+        "acquired": 20,
+        "location": "디오트 3층 C-07",
+        "quantity": 20,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T00:31:59.104511+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T18:20:00.000485+00:00",
+        "needsReply": false,
+        "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "wholesaler": "데이핏",
+        "resultShared": true,
+        "addressDetail": "물류센터 4층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "createdAt": "2026-10-12T00:40:00.001199+00:00",
+      "requestId": "37451c9f-bcfb-4f37-864a-f6aa5820a931"
+    }
+  ],
+  "issues": [
+    {
+      "id": "6558a235-dc17-4830-82f7-06d3d00e82c7",
+      "held": 5,
+      "reason": "상품·옵션이 달라요: 사진과 컬러가 달라요. 5장 보류 부탁드려요.",
+      "status": "open",
+      "version": 0,
+      "createdAt": "2026-10-12T00:40:00.000557+00:00",
+      "requestId": "37451c9f-bcfb-4f37-864a-f6aa5820a931",
+      "deliveryId": "",
+      "reporterId": "73916fe0-4836-4d81-aefc-5771aadf2c16"
+    }
+  ],
+  "photos": [
+    {
+      "id": "3110495c-de8f-4062-b962-19dddd99816d",
+      "mime": "image/png",
+      "name": "하프넥_맨투맨_2.png",
+      "size": 7316
+    },
+    {
+      "id": "b34c1765-6530-4627-91aa-89cfc3408f0f",
+      "mime": "image/png",
+      "name": "하프넥_맨투맨_1.png",
+      "size": 7302
+    }
+  ],
+  "request": {
+    "id": "37451c9f-bcfb-4f37-864a-f6aa5820a931",
+    "held": 5,
+    "note": "물류센터 입고 마감은 17시예요.",
+    "label": "문제 확인 중",
+    "ledger": {
+      "held": 5,
+      "acquired": 20,
+      "quantity": 20,
+      "received": 0,
+      "available": 15,
+      "backorder": 0,
+      "cancelled": 0,
+      "delivered": 0,
+      "remaining": 0,
+      "openIssues": 1,
+      "acquiredCancelled": 0
+    },
+    "option": "차콜 / FREE",
+    "photos": [
+      "b34c1765-6530-4627-91aa-89cfc3408f0f",
+      "3110495c-de8f-4062-b962-19dddd99816d"
+    ],
+    "status": "accepted",
+    "address": "서울 은평구 통일로 684",
+    "product": "하프넥 맨투맨",
+    "recheck": "",
+    "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+    "version": 3,
+    "acquired": 20,
+    "location": "디오트 3층 C-07",
+    "quantity": 20,
+    "received": 0,
+    "cancelled": 0,
+    "createdAt": "2026-10-11T00:31:59.104511+00:00",
+    "delivered": 0,
+    "updatedAt": "2026-10-12T00:40:00.001112+00:00",
+    "needsReply": false,
+    "openIssues": 1,
+    "retailerId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+    "wholesaler": "데이핏",
+    "participants": [
+      "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+    ],
+    "resultShared": true,
+    "addressDetail": "물류센터 4층",
+    "acquiredCancelled": 0
+  },
+  "messages": {
+    "user": 1,
+    "system": 4,
+    "unread": 3
+  },
+  "receipts": [],
+  "retailer": {
+    "id": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+    "demo": false,
+    "name": "온라인몰 핏앤무드",
+    "role": "retailer",
+    "complete": true
+  },
+  "proposals": [],
+  "deliveries": [],
+  "recheckNotices": []
+}

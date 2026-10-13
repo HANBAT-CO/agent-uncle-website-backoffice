@@ -1,0 +1,38 @@
+[
+  {
+    "id": "7505e640-0661-495e-8846-dbdbf821bc5a",
+    "body": "요청을 보낼 때 상품 사진을 함께 올리면 사입삼촌이 더 빠르고 정확하게 찾을 수 있어요.",
+    "state": "live",
+    "title": "상품 사진을 함께 올려 주세요",
+    "active": true,
+    "ends_at": null,
+    "version": 0,
+    "audience": "retailer",
+    "link_url": null,
+    "severity": "info",
+    "starts_at": "2026-10-13T06:40:14.048444+00:00",
+    "created_at": "2026-10-13T06:40:14.048444+00:00",
+    "created_by": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+    "updated_at": "2026-10-13T06:40:14.048444+00:00",
+    "updated_by": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+    "dismissible": true
+  },
+  {
+    "id": "135777d6-055a-4a4d-a113-9ba94cfde327",
+    "body": "연휴 기간에는 픽업과 전달이 하루 정도 늦어질 수 있어요. 자세한 일정은 사입삼촌과 채팅으로 확인해 주세요.",
+    "state": "draft",
+    "title": "추석 연휴 픽업 일정 안내",
+    "active": false,
+    "ends_at": null,
+    "version": 0,
+    "audience": "retailer",
+    "link_url": null,
+    "severity": "info",
+    "starts_at": "2026-10-13T06:40:14.045287+00:00",
+    "created_at": "2026-10-13T06:40:14.045287+00:00",
+    "created_by": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+    "updated_at": "2026-10-13T06:40:14.045287+00:00",
+    "updated_by": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+    "dismissible": true
+  }
+]

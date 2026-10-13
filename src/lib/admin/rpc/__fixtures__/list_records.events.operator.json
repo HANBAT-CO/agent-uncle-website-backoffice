@@ -1,0 +1,650 @@
+{
+  "rows": [
+    {
+      "id": "c7c3d8da-b626-465b-aa94-bf48dddaf8e2",
+      "after": {
+        "note": "오후 1시 이후 수령 가능해요. 문 앞 보관은 하지 말아 주세요.",
+        "option": "네이비 / FREE",
+        "photos": [
+          "5b78f4af-66ef-4453-8f7b-70ac9f7cfd1a"
+        ],
+        "status": "pending",
+        "address": "서울 마포구 포은로 81",
+        "product": "스트라이프 니트 티",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 0,
+        "acquired": 0,
+        "location": "청평화 3층 다-02",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-13T03:41:14.999553+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-13T03:41:14.999553+00:00",
+        "retailerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "wholesaler": "써니앤코",
+        "addressDetail": "1층 망원 셀렉트샵",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "새 사입 요청을 보냈어요",
+      "before": {},
+      "actorId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "parties": [
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+        "label": "확인 대기",
+        "option": "네이비 / FREE",
+        "status": "pending",
+        "product": "스트라이프 니트 티"
+      },
+      "createdAt": "2026-10-13T03:41:14.99975+00:00",
+      "requestId": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "updatedAt": "2026-10-13T03:41:14.999+00:00",
+      "participants": [
+        "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ]
+    },
+    {
+      "id": "8995ce59-22eb-4068-be9d-2bb2dbac24ae",
+      "after": {
+        "note": "건물 뒤편 계단으로 올라와 주세요.",
+        "option": "핑크 / 110",
+        "photos": [
+          "2b83e584-0232-43b3-bb4f-ac31c053a467"
+        ],
+        "status": "accepted",
+        "address": "서울 마포구 동교로 233",
+        "product": "아동 기모 트레이닝 세트",
+        "recheck": "",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "version": 5,
+        "acquired": 5,
+        "location": "남대문 삼익패션타운 3층 B-7",
+        "quantity": 5,
+        "received": 3,
+        "cancelled": 0,
+        "createdAt": "2026-10-10T00:20:38.703602+00:00",
+        "delivered": 5,
+        "updatedAt": "2026-10-13T02:40:04.596741+00:00",
+        "needsReply": false,
+        "retailerId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+        "wholesaler": "꼬마숲",
+        "resultShared": true,
+        "addressDetail": "2층",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "2개 전달을 기록했어요",
+      "before": {
+        "note": "건물 뒤편 계단으로 올라와 주세요.",
+        "option": "핑크 / 110",
+        "photos": [
+          "2b83e584-0232-43b3-bb4f-ac31c053a467"
+        ],
+        "status": "accepted",
+        "address": "서울 마포구 동교로 233",
+        "product": "아동 기모 트레이닝 세트",
+        "recheck": "",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "version": 4,
+        "acquired": 5,
+        "location": "남대문 삼익패션타운 3층 B-7",
+        "quantity": 5,
+        "received": 3,
+        "cancelled": 0,
+        "createdAt": "2026-10-10T00:20:38.703602+00:00",
+        "delivered": 3,
+        "updatedAt": "2026-10-11T04:00:00.000859+00:00",
+        "needsReply": false,
+        "retailerId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+        "wholesaler": "꼬마숲",
+        "resultShared": true,
+        "addressDetail": "2층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "parties": [
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+          "demo": false,
+          "name": "연남 데일리룩",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+        "label": "수령 대기",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "createdAt": "2026-10-13T02:40:04.596884+00:00",
+      "requestId": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+      "updatedAt": "2026-10-13T02:40:04.596+00:00",
+      "participants": [
+        "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "9ab0207a-9364-4f7d-8970-e3b65f4185c9"
+      ]
+    },
+    {
+      "id": "c76b57a0-0c42-4f91-946c-a39b9dca03bc",
+      "after": {
+        "note": "가게 옆 창고에 놓아 주세요.",
+        "option": "오트밀 / ONE",
+        "photos": [
+          "c08b9d73-b782-423b-822a-1ce4226be651"
+        ],
+        "status": "accepted",
+        "address": "경기 수원시 팔달구 신풍로 42",
+        "product": "캐시미어 블렌드 머플러",
+        "recheck": "",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "version": 3,
+        "acquired": 3,
+        "location": "청평화 1층 가-31",
+        "quantity": 3,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-12T01:00:45.740883+00:00",
+        "delivered": 3,
+        "updatedAt": "2026-10-13T01:41:44.276753+00:00",
+        "needsReply": false,
+        "retailerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+        "wholesaler": "한올니트",
+        "resultShared": true,
+        "addressDetail": "1층",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "3개 전달을 기록했어요",
+      "before": {
+        "note": "가게 옆 창고에 놓아 주세요.",
+        "option": "오트밀 / ONE",
+        "photos": [
+          "c08b9d73-b782-423b-822a-1ce4226be651"
+        ],
+        "status": "accepted",
+        "address": "경기 수원시 팔달구 신풍로 42",
+        "product": "캐시미어 블렌드 머플러",
+        "recheck": "",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "version": 2,
+        "acquired": 3,
+        "location": "청평화 1층 가-31",
+        "quantity": 3,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-12T01:00:45.740883+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-12T20:40:04.596439+00:00",
+        "needsReply": false,
+        "retailerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+        "wholesaler": "한올니트",
+        "resultShared": true,
+        "addressDetail": "1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "parties": [
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+        "label": "수령 대기",
+        "option": "오트밀 / ONE",
+        "status": "accepted",
+        "product": "캐시미어 블렌드 머플러"
+      },
+      "createdAt": "2026-10-13T01:41:44.276894+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "updatedAt": "2026-10-13T01:41:44.276+00:00",
+      "participants": [
+        "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    },
+    {
+      "id": "3f4a800f-5b1e-42df-8d64-08ca4ab2011c",
+      "after": {
+        "note": "",
+        "option": "크림 / FREE",
+        "photos": [
+          "bb4ffe50-1c76-4d39-9979-a29d2a915834"
+        ],
+        "status": "pending",
+        "address": "경기 성남시 분당구 정자일로 95",
+        "product": "꽈배기 니트 조끼",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "version": 0,
+        "acquired": 0,
+        "location": "청평화 1층 가-31",
+        "quantity": 10,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-13T01:40:43.899724+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-13T01:40:43.899724+00:00",
+        "retailerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "wholesaler": "한올니트",
+        "addressDetail": "1층 102호",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "새 사입 요청을 보냈어요",
+      "before": {},
+      "actorId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "dee74c36-d316-4ec9-88ce-6477d67fbfb7",
+        "label": "확인 대기",
+        "option": "크림 / FREE",
+        "status": "pending",
+        "product": "꽈배기 니트 조끼"
+      },
+      "createdAt": "2026-10-13T01:40:43.899933+00:00",
+      "requestId": "dee74c36-d316-4ec9-88ce-6477d67fbfb7",
+      "updatedAt": "2026-10-13T01:40:43.899+00:00",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ]
+    },
+    {
+      "id": "4c44b330-d69f-4c84-97a7-5bed49f1c898",
+      "after": {
+        "note": "오후 1시 이후 수령 가능해요. 문 앞 보관은 하지 말아 주세요.",
+        "option": "아이보리 / FREE",
+        "photos": [
+          "25a22afd-bafa-47d0-b133-0ed26bad5723"
+        ],
+        "status": "accepted",
+        "address": "서울 마포구 포은로 81",
+        "product": "케이블 니트 가디건",
+        "recheck": "",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 3,
+        "acquired": 8,
+        "location": "청평화 1층 가-31",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T01:21:13.357557+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-13T00:40:04.597075+00:00",
+        "needsReply": false,
+        "retailerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "wholesaler": "한올니트",
+        "resultShared": true,
+        "addressDetail": "1층 망원 셀렉트샵",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "8개 전달을 기록했어요",
+      "before": {
+        "note": "오후 1시 이후 수령 가능해요. 문 앞 보관은 하지 말아 주세요.",
+        "option": "아이보리 / FREE",
+        "photos": [
+          "25a22afd-bafa-47d0-b133-0ed26bad5723"
+        ],
+        "status": "accepted",
+        "address": "서울 마포구 포은로 81",
+        "product": "케이블 니트 가디건",
+        "recheck": "",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "version": 2,
+        "acquired": 8,
+        "location": "청평화 1층 가-31",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T01:21:13.357557+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T17:40:00.000469+00:00",
+        "needsReply": false,
+        "retailerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "wholesaler": "한올니트",
+        "resultShared": true,
+        "addressDetail": "1층 망원 셀렉트샵",
+        "acquiredCancelled": 0
+      },
+      "actorId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "parties": [
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "5401c983-cdcf-4365-afeb-60e8e4563d66",
+        "label": "수령 대기",
+        "option": "아이보리 / FREE",
+        "status": "accepted",
+        "product": "케이블 니트 가디건"
+      },
+      "createdAt": "2026-10-13T00:40:04.597218+00:00",
+      "requestId": "5401c983-cdcf-4365-afeb-60e8e4563d66",
+      "updatedAt": "2026-10-13T00:40:04.596+00:00",
+      "participants": [
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "ab462a8d-9351-47e4-9421-ff257c416b2a"
+      ]
+    },
+    {
+      "id": "9c628c9b-86c8-4ace-8fb8-3aadbabe7735",
+      "after": {
+        "held": 0,
+        "note": "지하상가 10시 오픈이에요.",
+        "option": "핑크 / 110",
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "status": "accepted",
+        "address": "인천 부평구 부평대로 37",
+        "product": "아동 기모 트레이닝 세트",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "version": 4,
+        "acquired": 0,
+        "location": "남대문 삼익패션타운 3층 B-7",
+        "quantity": 4,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T14:41:07.676638+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-12T23:41:18.989932+00:00",
+        "proposalId": "d39ecc16-bd40-4099-83c8-8acbcaa26141",
+        "retailerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "wholesaler": "꼬마숲",
+        "addressDetail": "지하상가 B-112",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "변경·취소·정정 협의를 요청했어요",
+      "before": {
+        "held": 0,
+        "note": "지하상가 10시 오픈이에요.",
+        "option": "핑크 / 110",
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "status": "accepted",
+        "address": "인천 부평구 부평대로 37",
+        "product": "아동 기모 트레이닝 세트",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "version": 3,
+        "acquired": 0,
+        "location": "남대문 삼익패션타운 3층 B-7",
+        "quantity": 4,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T14:41:07.676638+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-12T01:40:04.596992+00:00",
+        "proposalId": "",
+        "retailerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "wholesaler": "꼬마숲",
+        "addressDetail": "지하상가 B-112",
+        "acquiredCancelled": 0
+      },
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "parties": [
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+        "label": "변경·취소 협의 중",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "createdAt": "2026-10-12T23:41:18.990277+00:00",
+      "requestId": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "updatedAt": "2026-10-12T23:41:18.989+00:00",
+      "participants": [
+        "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484"
+      ]
+    },
+    {
+      "id": "ef1c3b27-9a06-47c2-b17d-dcda58a04491",
+      "after": {
+        "note": "",
+        "option": "차콜 / FREE",
+        "photos": [
+          "ae68eacf-701a-499d-b6a8-597e471de74d"
+        ],
+        "status": "accepted",
+        "address": "경기 성남시 분당구 정자일로 95",
+        "product": "하프넥 맨투맨",
+        "recheck": "",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "version": 3,
+        "acquired": 6,
+        "location": "디오트 3층 C-07",
+        "quantity": 6,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T04:10:21.798534+00:00",
+        "delivered": 6,
+        "updatedAt": "2026-10-12T23:40:04.596947+00:00",
+        "needsReply": false,
+        "retailerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "wholesaler": "데이핏",
+        "resultShared": true,
+        "addressDetail": "1층 102호",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "6개 전달을 기록했어요",
+      "before": {
+        "note": "",
+        "option": "차콜 / FREE",
+        "photos": [
+          "ae68eacf-701a-499d-b6a8-597e471de74d"
+        ],
+        "status": "accepted",
+        "address": "경기 성남시 분당구 정자일로 95",
+        "product": "하프넥 맨투맨",
+        "recheck": "",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "version": 2,
+        "acquired": 6,
+        "location": "디오트 3층 C-07",
+        "quantity": 6,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-11T04:10:21.798534+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-11T17:00:00.000727+00:00",
+        "needsReply": false,
+        "retailerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "wholesaler": "데이핏",
+        "resultShared": true,
+        "addressDetail": "1층 102호",
+        "acquiredCancelled": 0
+      },
+      "actorId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "parties": [
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "a7dd0019-9ff7-40df-a2bd-d303b0b5cc05",
+        "label": "수령 대기",
+        "option": "차콜 / FREE",
+        "status": "accepted",
+        "product": "하프넥 맨투맨"
+      },
+      "createdAt": "2026-10-12T23:40:04.597137+00:00",
+      "requestId": "a7dd0019-9ff7-40df-a2bd-d303b0b5cc05",
+      "updatedAt": "2026-10-12T23:40:04.596+00:00",
+      "participants": [
+        "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076"
+      ]
+    },
+    {
+      "id": "f035c5a9-77cd-4054-a860-2d906dfcc599",
+      "after": {
+        "note": "",
+        "option": "오트밀 / ONE",
+        "photos": [
+          "3d9b1c53-b8d6-45b0-87c6-867734d7d5be"
+        ],
+        "status": "pending",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "캐시미어 블렌드 머플러",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 0,
+        "acquired": 0,
+        "location": "청평화 1층 가-31",
+        "quantity": 12,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-12T22:40:40.574523+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-12T22:40:40.574523+00:00",
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "한올니트",
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "round": null,
+      "title": "새 사입 요청을 보냈어요",
+      "before": {},
+      "actorId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "bee4a019-a557-4517-a69b-ef3a1577aed2",
+        "label": "확인 대기",
+        "option": "오트밀 / ONE",
+        "status": "pending",
+        "product": "캐시미어 블렌드 머플러"
+      },
+      "createdAt": "2026-10-12T22:40:40.574727+00:00",
+      "requestId": "bee4a019-a557-4517-a69b-ef3a1577aed2",
+      "updatedAt": "2026-10-12T22:40:40.574+00:00",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 254,
+  "facets": {
+    "today": 16,
+    "status": {
+      "": 254
+    },
+    "unread": 0,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 0,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

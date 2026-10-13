@@ -1,0 +1,22 @@
+{
+  "leads": [
+    {
+      "id": "e534df28-5500-47c1-a3d4-78ce9ed0532f",
+      "name": "윤••",
+      "role": "retailer",
+      "createdAt": "2026-10-05T00:21:00+00:00",
+      "businessName": "재민 셀렉트"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "name": "망원 셀렉트샵",
+      "role": "retailer",
+      "complete": true,
+      "phoneTail": null,
+      "businessName": "망••••"
+    }
+  ],
+  "requests": []
+}

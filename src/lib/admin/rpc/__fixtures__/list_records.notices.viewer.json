@@ -1,0 +1,261 @@
+{
+  "rows": [
+    {
+      "id": "recheck-54283d03-fb8f-473e-8afb-9bc60c6372de-2026-10-12",
+      "kind": "request",
+      "read": false,
+      "round": null,
+      "title": "미송을 재확인해 주세요",
+      "ownerId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "parties": [
+        {
+          "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+          "demo": false,
+          "name": "제일평화 이삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "54283d03-fb8f-473e-8afb-9bc60c6372de",
+        "label": "미송 재확인",
+        "option": "와인 / FREE",
+        "status": "accepted",
+        "product": "벨벳 롱 원피스"
+      },
+      "targetId": "54283d03-fb8f-473e-8afb-9bc60c6372de",
+      "createdAt": "2026-10-13T05:32:24.169579+00:00",
+      "requestId": "54283d03-fb8f-473e-8afb-9bc60c6372de",
+      "updatedAt": "2026-10-13T05:32:24.169+00:00",
+      "participants": [
+        "fb2604e9-a684-40ad-8515-2243b5165d43"
+      ]
+    },
+    {
+      "id": "recheck-b5e2d977-bb68-41dd-8ae7-b3660ead9ec1-2026-10-11",
+      "kind": "request",
+      "read": false,
+      "round": null,
+      "title": "미송을 재확인해 주세요",
+      "ownerId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "parties": [
+        {
+          "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+          "demo": false,
+          "name": "제일평화 이삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+        "label": "미송 재확인",
+        "option": "크림 / FREE",
+        "status": "accepted",
+        "product": "리본 타이 블라우스"
+      },
+      "targetId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "createdAt": "2026-10-13T05:32:24.16939+00:00",
+      "requestId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "updatedAt": "2026-10-13T05:32:24.169+00:00",
+      "participants": [
+        "fb2604e9-a684-40ad-8515-2243b5165d43"
+      ]
+    },
+    {
+      "id": "recheck-7b16cff7-ebad-4bc2-ba97-b32903a0a461-2026-10-13",
+      "kind": "request",
+      "read": false,
+      "round": null,
+      "title": "미송을 재확인해 주세요",
+      "ownerId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "parties": [
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "7b16cff7-ebad-4bc2-ba97-b32903a0a461",
+        "label": "미송 재확인",
+        "option": "오트밀 / ONE",
+        "status": "accepted",
+        "product": "캐시미어 블렌드 머플러"
+      },
+      "targetId": "7b16cff7-ebad-4bc2-ba97-b32903a0a461",
+      "createdAt": "2026-10-13T05:16:19.317424+00:00",
+      "requestId": "7b16cff7-ebad-4bc2-ba97-b32903a0a461",
+      "updatedAt": "2026-10-13T05:16:19.317+00:00",
+      "participants": [
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ]
+    },
+    {
+      "id": "c4282ee5-823c-4185-909d-1bd1a5daff2a",
+      "kind": "chat",
+      "read": false,
+      "round": null,
+      "title": "[채팅 알림]",
+      "ownerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "targetId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-13T05:10:38.482674+00:00",
+      "requestId": "",
+      "updatedAt": "2026-10-13T05:10:38.482+00:00",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    },
+    {
+      "id": "recheck-62b7f913-cb8d-43ad-a8d8-056da62ded00-2026-10-10",
+      "kind": "request",
+      "read": false,
+      "round": null,
+      "title": "미송을 재확인해 주세요",
+      "ownerId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "parties": [
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+        "label": "미송 재확인",
+        "option": "네이비 / FREE",
+        "status": "accepted",
+        "product": "스트라이프 니트 티"
+      },
+      "targetId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "createdAt": "2026-10-13T04:57:18.947908+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "updatedAt": "2026-10-13T04:57:18.947+00:00",
+      "participants": [
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ]
+    },
+    {
+      "id": "f4a73e21-09e9-402a-b27f-855197d3e633",
+      "kind": "request",
+      "read": false,
+      "round": null,
+      "title": "새 사입 요청을 보냈어요",
+      "ownerId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "parties": [
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+        "label": "확인 대기",
+        "option": "네이비 / FREE",
+        "status": "pending",
+        "product": "스트라이프 니트 티"
+      },
+      "targetId": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "createdAt": "2026-10-13T03:41:14.999891+00:00",
+      "requestId": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "updatedAt": "2026-10-13T03:41:14.999+00:00",
+      "participants": [
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ]
+    },
+    {
+      "id": "4f61d9a9-79a5-46cd-bf53-5c98742aba79",
+      "kind": "delivery",
+      "read": false,
+      "round": null,
+      "title": "2개 전달을 기록했어요",
+      "ownerId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+      "parties": [
+        {
+          "id": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+          "demo": false,
+          "name": "연남 데일리룩",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+        "label": "수령 대기",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "targetId": "12064a26-eead-4dac-ace8-9ec31981ebcd",
+      "createdAt": "2026-10-13T02:40:04.597035+00:00",
+      "requestId": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+      "updatedAt": "2026-10-13T02:40:04.596+00:00",
+      "participants": [
+        "9ab0207a-9364-4f7d-8970-e3b65f4185c9"
+      ]
+    },
+    {
+      "id": "00f8dbec-55f0-4f31-ac09-a7c617a0a6c7",
+      "kind": "delivery",
+      "read": false,
+      "round": null,
+      "title": "3개 전달을 기록했어요",
+      "ownerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+        "label": "수령 대기",
+        "option": "오트밀 / ONE",
+        "status": "accepted",
+        "product": "캐시미어 블렌드 머플러"
+      },
+      "targetId": "0be73bed-a308-4bdb-b2f2-da2432f64a8e",
+      "createdAt": "2026-10-13T01:41:44.277044+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "updatedAt": "2026-10-13T01:41:44.276+00:00",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 373,
+  "facets": {
+    "today": 23,
+    "status": {
+      "": 373
+    },
+    "unread": 57,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 0,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

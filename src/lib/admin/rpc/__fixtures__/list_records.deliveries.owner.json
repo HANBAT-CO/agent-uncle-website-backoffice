@@ -1,0 +1,372 @@
+{
+  "rows": [
+    {
+      "id": "12064a26-eead-4dac-ace8-9ec31981ebcd",
+      "round": 2,
+      "option": "핑크 / 110",
+      "address": "서울 마포구 동교로 233",
+      "parties": [
+        {
+          "id": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+          "demo": false,
+          "name": "연남 데일리룩",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "아동 기모 트레이닝 세트",
+      "request": {
+        "id": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+        "label": "수령 대기",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "version": 0,
+      "quantity": 2,
+      "received": 0,
+      "createdAt": "2026-10-13T02:40:04.596472+00:00",
+      "requestId": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+      "updatedAt": "2026-10-13T02:40:04.596+00:00",
+      "retailerId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+      "participants": [
+        "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+        "cdadba68-812a-4caa-b318-11da2c6db3ad"
+      ],
+      "addressDetail": "2층",
+      "receiptRecorded": false
+    },
+    {
+      "id": "0be73bed-a308-4bdb-b2f2-da2432f64a8e",
+      "round": 1,
+      "option": "오트밀 / ONE",
+      "address": "경기 수원시 팔달구 신풍로 42",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "캐시미어 블렌드 머플러",
+      "request": {
+        "id": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+        "label": "수령 대기",
+        "option": "오트밀 / ONE",
+        "status": "accepted",
+        "product": "캐시미어 블렌드 머플러"
+      },
+      "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "version": 0,
+      "quantity": 3,
+      "received": 0,
+      "createdAt": "2026-10-13T01:41:44.276485+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "updatedAt": "2026-10-13T01:41:44.276+00:00",
+      "retailerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ],
+      "addressDetail": "1층",
+      "receiptRecorded": false
+    },
+    {
+      "id": "42e18749-b30d-48a3-b76b-76d72debd623",
+      "round": 1,
+      "option": "아이보리 / FREE",
+      "address": "서울 마포구 포은로 81",
+      "parties": [
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "케이블 니트 가디건",
+      "request": {
+        "id": "5401c983-cdcf-4365-afeb-60e8e4563d66",
+        "label": "수령 대기",
+        "option": "아이보리 / FREE",
+        "status": "accepted",
+        "product": "케이블 니트 가디건"
+      },
+      "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "version": 0,
+      "quantity": 8,
+      "received": 0,
+      "createdAt": "2026-10-13T00:40:04.596805+00:00",
+      "requestId": "5401c983-cdcf-4365-afeb-60e8e4563d66",
+      "updatedAt": "2026-10-13T00:40:04.596+00:00",
+      "retailerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "participants": [
+        "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ],
+      "addressDetail": "1층 망원 셀렉트샵",
+      "receiptRecorded": false
+    },
+    {
+      "id": "c967c881-c805-4b38-bedf-354a8f045a3e",
+      "round": 1,
+      "option": "차콜 / FREE",
+      "address": "경기 성남시 분당구 정자일로 95",
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "하프넥 맨투맨",
+      "request": {
+        "id": "a7dd0019-9ff7-40df-a2bd-d303b0b5cc05",
+        "label": "수령 대기",
+        "option": "차콜 / FREE",
+        "status": "accepted",
+        "product": "하프넥 맨투맨"
+      },
+      "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "version": 0,
+      "quantity": 6,
+      "received": 0,
+      "createdAt": "2026-10-12T23:40:04.596547+00:00",
+      "requestId": "a7dd0019-9ff7-40df-a2bd-d303b0b5cc05",
+      "updatedAt": "2026-10-12T23:40:04.596+00:00",
+      "retailerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ],
+      "addressDetail": "1층 102호",
+      "receiptRecorded": false
+    },
+    {
+      "id": "86bb8726-1c0b-432a-a4d9-abdc929d96ac",
+      "round": 1,
+      "option": "흑청 / 27",
+      "address": "인천 부평구 부평대로 37",
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "부츠컷 데님 팬츠",
+      "request": {
+        "id": "d5d57415-8e82-4737-b18e-2a45ecaf9e07",
+        "label": "수령 대기",
+        "option": "흑청 / 27",
+        "status": "accepted",
+        "product": "부츠컷 데님 팬츠"
+      },
+      "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "version": 0,
+      "quantity": 6,
+      "received": 0,
+      "createdAt": "2026-10-12T21:43:07.22722+00:00",
+      "requestId": "d5d57415-8e82-4737-b18e-2a45ecaf9e07",
+      "updatedAt": "2026-10-12T21:43:07.226+00:00",
+      "retailerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ],
+      "addressDetail": "지하상가 B-112",
+      "receiptRecorded": false
+    },
+    {
+      "id": "c865eab3-f633-49b3-a901-9f19a8c78133",
+      "round": 1,
+      "option": "네이비 / FREE",
+      "address": "인천 부평구 부평대로 37",
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "스트라이프 니트 티",
+      "request": {
+        "id": "63e1f77a-acac-4c51-9647-1a534b17ff51",
+        "label": "수령 대기",
+        "option": "네이비 / FREE",
+        "status": "accepted",
+        "product": "스트라이프 니트 티"
+      },
+      "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "version": 0,
+      "quantity": 4,
+      "received": 0,
+      "createdAt": "2026-10-12T21:43:07.226472+00:00",
+      "requestId": "63e1f77a-acac-4c51-9647-1a534b17ff51",
+      "updatedAt": "2026-10-12T21:43:07.226+00:00",
+      "retailerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ],
+      "addressDetail": "지하상가 B-112",
+      "receiptRecorded": false
+    },
+    {
+      "id": "7a2c8d08-ffcf-4a04-b8ff-5884cf19d932",
+      "round": 1,
+      "option": "크림 / FREE",
+      "address": "경기 수원시 팔달구 신풍로 42",
+      "parties": [
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "꽈배기 니트 조끼",
+      "request": {
+        "id": "25feda84-e6ca-40b3-8832-e0acae972111",
+        "label": "문제 확인 중",
+        "option": "크림 / FREE",
+        "status": "accepted",
+        "product": "꽈배기 니트 조끼"
+      },
+      "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "version": 0,
+      "quantity": 4,
+      "received": 0,
+      "createdAt": "2026-10-11T02:32:00.740454+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "updatedAt": "2026-10-11T02:32:00.74+00:00",
+      "retailerId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "participants": [
+        "2a336ccd-257f-4525-be92-4f3c68888364",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ],
+      "addressDetail": "1층",
+      "receiptRecorded": false
+    },
+    {
+      "id": "96c17919-71d3-48d6-80ec-63385bea5359",
+      "round": 1,
+      "actual": 7,
+      "option": "크림 / FREE",
+      "address": "경기 고양시 일산동구 정발산로 24",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "product": "꽈배기 니트 조끼",
+      "request": {
+        "id": "0ccea7d8-11e8-43dd-8401-05f851af2b24",
+        "label": "미송 대기",
+        "option": "크림 / FREE",
+        "status": "accepted",
+        "product": "꽈배기 니트 조끼"
+      },
+      "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "version": 1,
+      "quantity": 7,
+      "received": 7,
+      "createdAt": "2026-10-10T21:00:00.000374+00:00",
+      "requestId": "0ccea7d8-11e8-43dd-8401-05f851af2b24",
+      "updatedAt": "2026-10-11T02:20:00.000513+00:00",
+      "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ],
+      "addressDetail": "라페스타 A동 1층",
+      "receiptRecorded": true
+    }
+  ],
+  "limit": 8,
+  "total": 32,
+  "facets": {
+    "today": 6,
+    "status": {
+      "": 32
+    },
+    "unread": 0,
+    "mismatch": 2,
+    "corrected": 2,
+    "pending3d": 0,
+    "awaitingReceipt": 7,
+    "awaitingReceipt48h": 1
+  },
+  "offset": 0
+}

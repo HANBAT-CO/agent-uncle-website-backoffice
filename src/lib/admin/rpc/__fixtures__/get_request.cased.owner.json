@@ -1,0 +1,496 @@
+{
+  "cases": [
+    {
+      "id": "c15ad167-3a07-44f6-97ab-b2e2bf94daaa",
+      "title": "수령 수량 차이 확인",
+      "status": "open",
+      "version": 0,
+      "severity": "high",
+      "target_id": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "created_at": "2026-10-13T06:40:14.027467+00:00",
+      "created_by": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "updated_at": "2026-10-13T06:40:14.027467+00:00",
+      "assignee_id": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "resolved_at": null,
+      "target_type": "request"
+    }
+  ],
+  "notes": [
+    {
+      "id": 1,
+      "body": "소매업자에게 받은 수량 차이 사진을 확인했어요. 사입삼촌 답변을 기다리는 중이에요.",
+      "author_id": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "target_id": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "created_at": "2026-10-13T06:40:14.019892+00:00",
+      "target_type": "request"
+    }
+  ],
+  "uncle": {
+    "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+    "demo": false,
+    "name": "청평화 한삼촌",
+    "role": "uncle",
+    "complete": true
+  },
+  "checks": {
+    "deliveries": 1,
+    "violations": [],
+    "pendingProposals": 0,
+    "unresolvedIssues": 1,
+    "unconfirmedDeliveries": 0
+  },
+  "events": [
+    {
+      "id": "9c623d2f-4908-4ffe-90bd-d44feae9b377",
+      "after": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "pending",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 0,
+        "acquired": 0,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T01:02:11.938415+00:00",
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "새 사입 요청을 보냈어요",
+      "before": {},
+      "actorId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "createdAt": "2026-10-08T01:02:11.938594+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    },
+    {
+      "id": "0ee5c850-ef5a-4b66-860f-ec452c51a91c",
+      "after": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 1,
+        "acquired": 0,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T11:30:00.000354+00:00",
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "요청을 수락했어요",
+      "before": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "pending",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 0,
+        "acquired": 0,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T01:02:11.938415+00:00",
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "createdAt": "2026-10-08T11:30:00.000497+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    },
+    {
+      "id": "7f9618e9-0c31-40f0-bdd4-cec4851d5c10",
+      "after": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 2,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T16:20:00.000498+00:00",
+        "needsReply": false,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "확보 8개 · 미송 0개 결과를 공유했어요",
+      "before": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 1,
+        "acquired": 0,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T11:30:00.000354+00:00",
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "createdAt": "2026-10-08T16:20:00.000691+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    },
+    {
+      "id": "ccb3df4b-736c-4681-ae39-2c69bc8e1c26",
+      "after": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 3,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-08T20:40:00.000586+00:00",
+        "needsReply": false,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "8개 전달을 기록했어요",
+      "before": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 2,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 0,
+        "updatedAt": "2026-10-08T16:20:00.000498+00:00",
+        "needsReply": false,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "createdAt": "2026-10-08T20:40:00.000735+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    },
+    {
+      "id": "0c426cf7-6ead-478f-b44c-e9e8ae2c43dd",
+      "after": {
+        "held": 0,
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 4,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 7,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-09T02:01:31.597815+00:00",
+        "needsReply": false,
+        "openIssues": 1,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "수령 수량 차이: 실제 7개 · 기록 8개",
+      "before": {
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 3,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 0,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-08T20:40:00.000586+00:00",
+        "needsReply": false,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "createdAt": "2026-10-09T02:01:31.597945+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    },
+    {
+      "id": "5a9b2978-95c2-4992-a981-307f0507a88c",
+      "after": {
+        "held": 0,
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 5,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 7,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-09T12:10:00.000731+00:00",
+        "needsReply": false,
+        "openIssues": 1,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "title": "문제 조치를 기록했어요: 1장 누락 확인했어요. 다음 배송에 포함할게요.",
+      "before": {
+        "held": 0,
+        "note": "",
+        "option": "블랙 / FREE",
+        "photos": [
+          "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+        ],
+        "status": "accepted",
+        "address": "경기 고양시 일산동구 정발산로 24",
+        "product": "경량 패딩 베스트",
+        "recheck": "",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "version": 4,
+        "acquired": 8,
+        "location": "청평화 2층 나-14",
+        "quantity": 8,
+        "received": 7,
+        "cancelled": 0,
+        "createdAt": "2026-10-08T01:02:11.938415+00:00",
+        "delivered": 8,
+        "updatedAt": "2026-10-09T02:01:31.597815+00:00",
+        "needsReply": false,
+        "openIssues": 1,
+        "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "wholesaler": "누보",
+        "resultShared": true,
+        "addressDetail": "라페스타 A동 1층",
+        "acquiredCancelled": 0
+      },
+      "actorId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "createdAt": "2026-10-09T12:10:00.000879+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+    }
+  ],
+  "issues": [
+    {
+      "id": "47f24931-948f-4daf-8f99-905ef27b0ae7",
+      "held": 0,
+      "action": "1장 누락 확인했어요. 다음 배송에 포함할게요.",
+      "actual": 7,
+      "reason": "8장 중 7장 받았어요.",
+      "status": "actionTaken",
+      "version": 1,
+      "createdAt": "2026-10-09T02:01:31.597651+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "deliveryId": "f0e1dd9e-0dbe-404a-adf8-7da4caaf6202",
+      "reporterId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295"
+    }
+  ],
+  "photos": [
+    {
+      "id": "fa813a13-da06-4d65-ad64-bff1f14e8dfc",
+      "mime": "image/png",
+      "name": "경량_패딩_베스트_1.png",
+      "size": 9244
+    }
+  ],
+  "request": {
+    "id": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+    "held": 0,
+    "note": "",
+    "label": "문제 확인 중",
+    "ledger": {
+      "held": 0,
+      "acquired": 8,
+      "quantity": 8,
+      "received": 7,
+      "available": 0,
+      "backorder": 0,
+      "cancelled": 0,
+      "delivered": 8,
+      "remaining": 0,
+      "openIssues": 1,
+      "acquiredCancelled": 0
+    },
+    "option": "블랙 / FREE",
+    "photos": [
+      "fa813a13-da06-4d65-ad64-bff1f14e8dfc"
+    ],
+    "status": "accepted",
+    "address": "경기 고양시 일산동구 정발산로 24",
+    "product": "경량 패딩 베스트",
+    "recheck": "",
+    "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+    "version": 5,
+    "acquired": 8,
+    "location": "청평화 2층 나-14",
+    "quantity": 8,
+    "received": 7,
+    "cancelled": 0,
+    "createdAt": "2026-10-08T01:02:11.938415+00:00",
+    "delivered": 8,
+    "updatedAt": "2026-10-09T12:10:00.000814+00:00",
+    "needsReply": false,
+    "openIssues": 1,
+    "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+    "wholesaler": "누보",
+    "participants": [
+      "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "ceb972e3-781d-4028-b601-ede07f44c6b2"
+    ],
+    "resultShared": true,
+    "addressDetail": "라페스타 A동 1층",
+    "acquiredCancelled": 0
+  },
+  "messages": {
+    "user": 0,
+    "system": 6,
+    "unread": 0
+  },
+  "receipts": [
+    {
+      "id": "a8403f2a-7666-46ca-b856-a31be1b1668b",
+      "kind": "confirmation",
+      "actual": 7,
+      "reason": "8장 중 7장 받았어요.",
+      "actorId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "confirmed": 7,
+      "createdAt": "2026-10-09T02:01:31.597303+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "deliveryId": "f0e1dd9e-0dbe-404a-adf8-7da4caaf6202",
+      "deliveryVersion": 0
+    }
+  ],
+  "retailer": {
+    "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+    "demo": false,
+    "name": "일산 라페 모노",
+    "role": "retailer",
+    "complete": true
+  },
+  "proposals": [],
+  "deliveries": [
+    {
+      "id": "f0e1dd9e-0dbe-404a-adf8-7da4caaf6202",
+      "round": 1,
+      "actual": 7,
+      "option": "블랙 / FREE",
+      "address": "경기 고양시 일산동구 정발산로 24",
+      "product": "경량 패딩 베스트",
+      "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "version": 1,
+      "quantity": 8,
+      "received": 7,
+      "createdAt": "2026-10-08T20:40:00.000372+00:00",
+      "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "retailerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "addressDetail": "라페스타 A동 1층",
+      "receiptRecorded": true
+    }
+  ],
+  "recheckNotices": []
+}

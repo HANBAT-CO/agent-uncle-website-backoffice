@@ -1,0 +1,124 @@
+{
+  "cases": [],
+  "notes": [],
+  "uncle": {
+    "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+    "demo": false,
+    "name": "동대문 박삼촌",
+    "role": "uncle",
+    "complete": true
+  },
+  "checks": {
+    "deliveries": 0,
+    "violations": [],
+    "pendingProposals": 0,
+    "unresolvedIssues": 0,
+    "unconfirmedDeliveries": 0
+  },
+  "events": [
+    {
+      "id": "c7c3d8da-b626-465b-aa94-bf48dddaf8e2",
+      "scope": "request",
+      "title": "새 사입 요청을 보냈어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 8,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 8,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "pending",
+      "actorId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "createdAt": "2026-10-13T03:41:14.99975+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 0,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    }
+  ],
+  "issues": [],
+  "photos": [
+    {
+      "id": "5b78f4af-66ef-4453-8f7b-70ac9f7cfd1a",
+      "mime": "image/png",
+      "name": null,
+      "size": 7361
+    }
+  ],
+  "request": {
+    "id": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+    "note": "오후 1시 이후 수령 가능해요. 문 앞 보관은 하지 말아 주세요.",
+    "label": "확인 대기",
+    "ledger": {
+      "held": 0,
+      "acquired": 0,
+      "quantity": 8,
+      "received": 0,
+      "available": 0,
+      "backorder": 0,
+      "cancelled": 0,
+      "delivered": 0,
+      "remaining": 8,
+      "openIssues": 0,
+      "acquiredCancelled": 0
+    },
+    "masked": true,
+    "option": "네이비 / FREE",
+    "photos": [
+      "5b78f4af-66ef-4453-8f7b-70ac9f7cfd1a"
+    ],
+    "status": "pending",
+    "address": "서울 …",
+    "product": "스트라이프 니트 티",
+    "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+    "version": 0,
+    "acquired": 0,
+    "location": "청평화 3층 다-02",
+    "quantity": 8,
+    "received": 0,
+    "cancelled": 0,
+    "createdAt": "2026-10-13T03:41:14.999553+00:00",
+    "delivered": 0,
+    "updatedAt": "2026-10-13T03:41:14.999+00:00",
+    "retailerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+    "wholesaler": "써니앤코",
+    "participants": [
+      "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+    ],
+    "addressDetail": "",
+    "acquiredCancelled": 0
+  },
+  "messages": {
+    "user": 0,
+    "system": 1,
+    "unread": 1
+  },
+  "receipts": [],
+  "retailer": {
+    "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+    "demo": false,
+    "name": "망원 셀렉트샵",
+    "role": "retailer",
+    "complete": true
+  },
+  "proposals": [],
+  "deliveries": [],
+  "recheckNotices": []
+}

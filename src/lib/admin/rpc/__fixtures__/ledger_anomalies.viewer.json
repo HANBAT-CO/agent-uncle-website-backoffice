@@ -1,0 +1,410 @@
+{
+  "items": [
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-09T15:00:00+00:00",
+      "detail": {
+        "product": "스트라이프 니트 티",
+        "recheck": "2026-10-10"
+      },
+      "severity": "high",
+      "targetId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "targetType": "request"
+    },
+    {
+      "kind": "issue_unresolved",
+      "since": "2026-10-10T07:31:07.480637+00:00",
+      "detail": {
+        "held": 0,
+        "status": "open",
+        "requestId": "18dbbb20-07cf-4ed9-8de4-a72d8bd90e81"
+      },
+      "severity": "high",
+      "targetId": "68dfe500-6436-4482-86e8-acba564b944c",
+      "targetType": "issue"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-10T15:00:00+00:00",
+      "detail": {
+        "product": "리본 타이 블라우스",
+        "recheck": "2026-10-11"
+      },
+      "severity": "high",
+      "targetId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "targetType": "request"
+    },
+    {
+      "kind": "receipt_unconfirmed",
+      "since": "2026-10-11T02:32:00.740454+00:00",
+      "detail": {
+        "quantity": 4,
+        "requestId": "25feda84-e6ca-40b3-8832-e0acae972111"
+      },
+      "severity": "high",
+      "targetId": "7a2c8d08-ffcf-4a04-b8ff-5884cf19d932",
+      "targetType": "delivery"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-11T15:00:00+00:00",
+      "detail": {
+        "product": "벨벳 롱 원피스",
+        "recheck": "2026-10-12"
+      },
+      "severity": "high",
+      "targetId": "54283d03-fb8f-473e-8afb-9bc60c6372de",
+      "targetType": "request"
+    },
+    {
+      "kind": "recheck_overdue",
+      "since": "2026-10-12T15:00:00+00:00",
+      "detail": {
+        "product": "캐시미어 블렌드 머플러",
+        "recheck": "2026-10-13"
+      },
+      "severity": "high",
+      "targetId": "7b16cff7-ebad-4bc2-ba97-b32903a0a461",
+      "targetType": "request"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-21T07:17:55.006765+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-22T08:09:18.591574+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-23T07:11:18.212035+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-25T07:54:42.431651+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-26T04:37:52.236594+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-27T06:14:29.200568+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-28T04:33:39.370612+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "31551437-640f-4452-86af-575b1202c1dd",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-29T04:25:40.736533+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-30T08:51:11.700575+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-08-31T03:26:22.133634+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-09-01T06:01:31.042563+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+      "targetType": "account"
+    },
+    {
+      "kind": "document_review_pending",
+      "since": "2026-09-02T04:16:08.038514+00:00",
+      "detail": {
+        "state": "unverified"
+      },
+      "severity": "normal",
+      "targetId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "targetType": "account"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-09-26T02:20:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "913a738c-960d-46ae-ba62-9508ef2a120d",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-09-28T07:57:00+00:00",
+      "detail": {
+        "role": "other",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "bc23d333-225b-4222-9cc2-d063f8fff746",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-09-30T01:54:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "8d14b89f-76bd-4a86-94d3-d1e99289ee87",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-02T14:24:00+00:00",
+      "detail": {
+        "role": "uncle",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "6d7c65e6-186e-4239-84c7-be42c4f11c61",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-03T04:20:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "084bbaeb-dacc-4c45-881b-0f266c908fcb",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-05T00:21:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "e534df28-5500-47c1-a3d4-78ce9ed0532f",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-06T06:57:00+00:00",
+      "detail": {
+        "role": "other",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "62d0a65c-e498-4504-be74-fd073b0b30ea",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-06T17:03:00+00:00",
+      "detail": {
+        "role": "uncle",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "833ad614-74bb-4fc6-97d8-74ca5120761c",
+      "targetType": "lead"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-08T03:45:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "bfbb4e64-45a2-4322-b096-d818992018d7",
+      "targetType": "lead"
+    },
+    {
+      "kind": "issue_unresolved",
+      "since": "2026-10-09T02:01:31.597651+00:00",
+      "detail": {
+        "held": 0,
+        "status": "actionTaken",
+        "requestId": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b"
+      },
+      "severity": "normal",
+      "targetId": "47f24931-948f-4daf-8f99-905ef27b0ae7",
+      "targetType": "issue"
+    },
+    {
+      "kind": "proposal_stale",
+      "since": "2026-10-09T10:00:00.000436+00:00",
+      "detail": {
+        "kind": "correction",
+        "requestId": "b864e1f4-30f0-4d00-afdb-2ec33f12d0a3"
+      },
+      "severity": "normal",
+      "targetId": "89245fe7-1343-475d-8ce8-d74c4b64311b",
+      "targetType": "proposal"
+    },
+    {
+      "kind": "issue_unresolved",
+      "since": "2026-10-10T06:00:40.358403+00:00",
+      "detail": {
+        "held": 0,
+        "status": "actionTaken",
+        "requestId": "28b4580e-ebba-4551-96e9-4af322e90d35"
+      },
+      "severity": "normal",
+      "targetId": "fbb0c3b5-599a-482b-a27a-3cb6ef3f6f78",
+      "targetType": "issue"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-10T09:44:00+00:00",
+      "detail": {
+        "role": "retailer",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "3916c4a2-a94e-4bbc-9bcc-b6c52040d20b",
+      "targetType": "lead"
+    },
+    {
+      "kind": "pending_request_stale",
+      "since": "2026-10-11T06:10:19.087466+00:00",
+      "detail": {
+        "product": "레더 미니 숄더백"
+      },
+      "severity": "normal",
+      "targetId": "41d5464a-2b41-4a5f-b3b6-3ae0e1d073e8",
+      "targetType": "request"
+    },
+    {
+      "kind": "pending_request_stale",
+      "since": "2026-10-12T03:40:08.053486+00:00",
+      "detail": {
+        "product": "와이드 데님 팬츠"
+      },
+      "severity": "normal",
+      "targetId": "7201b28e-265d-41ef-923a-365d46da9a47",
+      "targetType": "request"
+    },
+    {
+      "kind": "pending_request_stale",
+      "since": "2026-10-12T08:40:55.781631+00:00",
+      "detail": {
+        "product": "플리츠 롱스커트"
+      },
+      "severity": "normal",
+      "targetId": "d8f159b5-b231-45ec-aefe-6d6dca6dd195",
+      "targetType": "request"
+    },
+    {
+      "kind": "lead_unhandled",
+      "since": "2026-10-12T11:22:00+00:00",
+      "detail": {
+        "role": "uncle",
+        "source": "landing-signup"
+      },
+      "severity": "normal",
+      "targetId": "af684120-413a-4123-8cb1-7751598a4f0e",
+      "targetType": "lead"
+    },
+    {
+      "kind": "connection_pending_stale",
+      "since": "2026-10-10T07:48:00.00029+00:00",
+      "detail": {
+        "to": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "from": "31551437-640f-4452-86af-575b1202c1dd"
+      },
+      "severity": "low",
+      "targetId": "3d6c4a3d-053e-4169-b171-905e2d4fd099",
+      "targetType": "connection"
+    },
+    {
+      "kind": "auth_user_without_account",
+      "since": "2026-10-13T06:40:13.637246+00:00",
+      "detail": {
+        "createdAt": "2026-10-13T06:40:13.637246+00:00"
+      },
+      "severity": "low",
+      "targetId": "810f8ce0-9404-4822-8afc-4577ff58cba3",
+      "targetType": "account"
+    }
+  ],
+  "counts": {
+    "lead_unhandled": 11,
+    "proposal_stale": 1,
+    "recheck_overdue": 4,
+    "issue_unresolved": 3,
+    "receipt_unconfirmed": 1,
+    "pending_request_stale": 3,
+    "document_review_pending": 12,
+    "connection_pending_stale": 1,
+    "auth_user_without_account": 1
+  },
+  "generatedAt": "2026-10-13T12:07:52.926259+00:00"
+}

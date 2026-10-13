@@ -1,0 +1,640 @@
+{
+  "rows": [
+    {
+      "id": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "demo": false,
+      "label": "확인 대기",
+      "uncle": {
+        "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "demo": false,
+        "name": "동대문 박삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 8,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 8,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "네이비 / FREE",
+      "status": "pending",
+      "product": "스트라이프 니트 티",
+      "recheck": null,
+      "version": 0,
+      "location": "청평화 3층 다-02",
+      "retailer": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-13T03:41:14.999553+00:00",
+      "lastEvent": {
+        "title": "새 사입 요청을 보냈어요",
+        "createdAt": "2026-10-13T03:41:14.99975+00:00"
+      },
+      "updatedAt": "2026-10-13T03:41:14.999+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "써니앤코",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "6c50f068-8051-4ac0-80b6-dc527c2aebf6",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "demo": false,
+        "name": "남대문 김삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 5,
+        "quantity": 5,
+        "received": 3,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 5,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "핑크 / 110",
+      "status": "accepted",
+      "product": "아동 기모 트레이닝 세트",
+      "recheck": null,
+      "version": 5,
+      "location": "남대문 삼익패션타운 3층 B-7",
+      "retailer": {
+        "id": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+        "demo": false,
+        "name": "연남 데일리룩",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-10T00:20:38.703602+00:00",
+      "lastEvent": {
+        "title": "2개 전달을 기록했어요",
+        "createdAt": "2026-10-13T02:40:04.596884+00:00"
+      },
+      "updatedAt": "2026-10-13T02:40:04.59682+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "꼬마숲",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 3,
+        "quantity": 3,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 3,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "오트밀 / ONE",
+      "status": "accepted",
+      "product": "캐시미어 블렌드 머플러",
+      "recheck": null,
+      "version": 3,
+      "location": "청평화 1층 가-31",
+      "retailer": {
+        "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+        "demo": false,
+        "name": "수원 행궁 니트하우스",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-12T01:00:45.740883+00:00",
+      "lastEvent": {
+        "title": "3개 전달을 기록했어요",
+        "createdAt": "2026-10-13T01:41:44.276894+00:00"
+      },
+      "updatedAt": "2026-10-13T01:41:44.276832+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "한올니트",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "dee74c36-d316-4ec9-88ce-6477d67fbfb7",
+      "demo": false,
+      "label": "확인 대기",
+      "uncle": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 10,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 10,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "크림 / FREE",
+      "status": "pending",
+      "product": "꽈배기 니트 조끼",
+      "recheck": null,
+      "version": 0,
+      "location": "청평화 1층 가-31",
+      "retailer": {
+        "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "demo": false,
+        "name": "분당 데이지룸",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-13T01:40:43.899724+00:00",
+      "lastEvent": {
+        "title": "새 사입 요청을 보냈어요",
+        "createdAt": "2026-10-13T01:40:43.899933+00:00"
+      },
+      "updatedAt": "2026-10-13T01:40:43.899+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "한올니트",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "5401c983-cdcf-4365-afeb-60e8e4563d66",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "demo": false,
+        "name": "동대문 박삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 8,
+        "quantity": 8,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 8,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "아이보리 / FREE",
+      "status": "accepted",
+      "product": "케이블 니트 가디건",
+      "recheck": null,
+      "version": 3,
+      "location": "청평화 1층 가-31",
+      "retailer": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T01:21:13.357557+00:00",
+      "lastEvent": {
+        "title": "8개 전달을 기록했어요",
+        "createdAt": "2026-10-13T00:40:04.597218+00:00"
+      },
+      "updatedAt": "2026-10-13T00:40:04.597153+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "한올니트",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "demo": false,
+      "label": "변경·취소 협의 중",
+      "uncle": {
+        "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "demo": false,
+        "name": "남대문 김삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "핑크 / 110",
+      "status": "accepted",
+      "product": "아동 기모 트레이닝 세트",
+      "recheck": null,
+      "version": 4,
+      "location": "남대문 삼익패션타운 3층 B-7",
+      "retailer": {
+        "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "demo": false,
+        "name": "부평 걸즈클로젯",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T14:41:07.676638+00:00",
+      "lastEvent": {
+        "title": "변경·취소·정정 협의를 요청했어요",
+        "createdAt": "2026-10-12T23:41:18.990277+00:00"
+      },
+      "updatedAt": "2026-10-12T23:41:18.990041+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "d39ecc16-bd40-4099-83c8-8acbcaa26141",
+      "violations": [],
+      "wholesaler": "꼬마숲",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "a7dd0019-9ff7-40df-a2bd-d303b0b5cc05",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "demo": false,
+        "name": "APM 최삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 6,
+        "quantity": 6,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 6,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "차콜 / FREE",
+      "status": "accepted",
+      "product": "하프넥 맨투맨",
+      "recheck": null,
+      "version": 3,
+      "location": "디오트 3층 C-07",
+      "retailer": {
+        "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "demo": false,
+        "name": "분당 데이지룸",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T04:10:21.798534+00:00",
+      "lastEvent": {
+        "title": "6개 전달을 기록했어요",
+        "createdAt": "2026-10-12T23:40:04.597137+00:00"
+      },
+      "updatedAt": "2026-10-12T23:40:04.597045+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "데이핏",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "bee4a019-a557-4517-a69b-ef3a1577aed2",
+      "demo": false,
+      "label": "확인 대기",
+      "uncle": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 12,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 12,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "오트밀 / ONE",
+      "status": "pending",
+      "product": "캐시미어 블렌드 머플러",
+      "recheck": null,
+      "version": 0,
+      "location": "청평화 1층 가-31",
+      "retailer": {
+        "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "demo": false,
+        "name": "일산 라페 모노",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-12T22:40:40.574523+00:00",
+      "lastEvent": {
+        "title": "새 사입 요청을 보냈어요",
+        "createdAt": "2026-10-12T22:40:40.574727+00:00"
+      },
+      "updatedAt": "2026-10-12T22:40:40.574+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "한올니트",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "d5d57415-8e82-4737-b18e-2a45ecaf9e07",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 6,
+        "quantity": 6,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 6,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "흑청 / 27",
+      "status": "accepted",
+      "product": "부츠컷 데님 팬츠",
+      "recheck": null,
+      "version": 3,
+      "location": "디오트 1층 A-05",
+      "retailer": {
+        "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "demo": false,
+        "name": "부평 걸즈클로젯",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T01:31:34.992587+00:00",
+      "lastEvent": {
+        "title": "6개 전달을 기록했어요",
+        "createdAt": "2026-10-12T21:43:07.227463+00:00"
+      },
+      "updatedAt": "2026-10-12T21:43:07.227417+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "제이원",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "63e1f77a-acac-4c51-9647-1a534b17ff51",
+      "demo": false,
+      "label": "수령 대기",
+      "uncle": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 4,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 4,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "네이비 / FREE",
+      "status": "accepted",
+      "product": "스트라이프 니트 티",
+      "recheck": null,
+      "version": 3,
+      "location": "청평화 3층 다-02",
+      "retailer": {
+        "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "demo": false,
+        "name": "부평 걸즈클로젯",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T01:30:46.953454+00:00",
+      "lastEvent": {
+        "title": "4개 전달을 기록했어요",
+        "createdAt": "2026-10-12T21:43:07.22689+00:00"
+      },
+      "updatedAt": "2026-10-12T21:43:07.226818+00:00",
+      "needsReply": false,
+      "photoCount": 0,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "써니앤코",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "aedfdb0f-ffab-4476-b5af-a3786672e320",
+      "demo": false,
+      "label": "변경·취소 협의 중",
+      "uncle": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 6,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 6,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "블루 / FREE",
+      "status": "accepted",
+      "product": "오버핏 옥스포드 셔츠",
+      "recheck": null,
+      "version": 2,
+      "location": "디오트 2층 B-12",
+      "retailer": {
+        "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "demo": false,
+        "name": "망원 셀렉트샵",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T20:40:59.900562+00:00",
+      "lastEvent": {
+        "title": "변경·취소·정정 협의를 요청했어요",
+        "createdAt": "2026-10-12T19:40:04.597142+00:00"
+      },
+      "updatedAt": "2026-10-12T19:40:04.597084+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "65a69b13-0742-42a0-8985-b35fffc86d31",
+      "violations": [],
+      "wholesaler": "모노스튜디오",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    },
+    {
+      "id": "d76e9a59-65a2-4596-b27e-631128465e48",
+      "demo": false,
+      "label": "픽업 완료",
+      "uncle": {
+        "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+        "demo": false,
+        "name": "제일평화 이삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "ledger": {
+        "held": 0,
+        "acquired": 12,
+        "quantity": 12,
+        "received": 0,
+        "available": 12,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "차콜 / L",
+      "status": "accepted",
+      "product": "핀턱 와이드 슬랙스",
+      "recheck": null,
+      "version": 2,
+      "location": "제일평화 3층 305호",
+      "retailer": {
+        "id": "73916fe0-4836-4d81-aefc-5771aadf2c16",
+        "demo": false,
+        "name": "온라인몰 핏앤무드",
+        "role": "retailer",
+        "complete": true
+      },
+      "createdAt": "2026-10-11T23:40:24.049576+00:00",
+      "lastEvent": {
+        "title": "확보 12개 · 미송 0개 결과를 공유했어요",
+        "createdAt": "2026-10-12T18:40:04.597032+00:00"
+      },
+      "updatedAt": "2026-10-12T18:40:04.596941+00:00",
+      "needsReply": false,
+      "photoCount": 1,
+      "proposalId": "",
+      "violations": [],
+      "wholesaler": "라인바이",
+      "recheckDays": null,
+      "recheckNoticeAt": null
+    }
+  ],
+  "limit": 12,
+  "total": 61,
+  "labels": {
+    "거절": 4,
+    "완료": 11,
+    "진행 중": 5,
+    "답변 필요": 5,
+    "미송 대기": 3,
+    "수령 대기": 6,
+    "취소 종료": 4,
+    "픽업 완료": 3,
+    "확인 대기": 6,
+    "미송 재확인": 4,
+    "문제 확인 중": 5,
+    "변경·취소 협의 중": 5
+  },
+  "offset": 0,
+  "totals": {
+    "acquired": 328,
+    "quantity": 570,
+    "received": 212,
+    "backorder": 65,
+    "delivered": 248
+  }
+}

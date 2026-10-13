@@ -1,0 +1,12 @@
+{
+  "aal": "aal1",
+  "role": "operator",
+  "admin": true,
+  "email": "operator@agentuncle.local",
+  "ready": true,
+  "userId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+  "displayName": "운영 담당",
+  "mfaEnrolled": false,
+  "mfaRequired": false,
+  "hasAppAccount": false
+}

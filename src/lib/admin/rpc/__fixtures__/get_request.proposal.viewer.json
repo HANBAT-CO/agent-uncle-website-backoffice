@@ -1,0 +1,310 @@
+{
+  "cases": [],
+  "notes": [],
+  "uncle": {
+    "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+    "demo": false,
+    "name": "남대문 김삼촌",
+    "role": "uncle",
+    "complete": true
+  },
+  "checks": {
+    "deliveries": 0,
+    "violations": [],
+    "pendingProposals": 1,
+    "unresolvedIssues": 0,
+    "unconfirmedDeliveries": 0
+  },
+  "events": [
+    {
+      "id": "88e1a3df-d51d-4dad-9cc2-362b14d9a8c5",
+      "scope": "request",
+      "title": "새 사입 요청을 보냈어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "pending",
+      "actorId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "createdAt": "2026-10-11T14:41:07.676923+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 0,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "b6d84934-095b-43e4-b316-e7ab9bcdb39c",
+      "scope": "request",
+      "title": "요청을 수락했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "createdAt": "2026-10-11T16:40:04.596889+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "197fe4d2-c7a9-486e-bc60-c6f5f8960920",
+      "scope": "request",
+      "title": "변경·취소·정정 협의를 요청했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "createdAt": "2026-10-12T00:42:28.532258+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "c9af2e59-4923-445a-933b-61e1febed7d6",
+      "scope": "request",
+      "title": "변경·취소·정정안을 종료했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "createdAt": "2026-10-12T01:40:04.597307+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "9c628c9b-86c8-4ace-8fb8-3aadbabe7735",
+      "scope": "request",
+      "title": "변경·취소·정정 협의를 요청했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "createdAt": "2026-10-12T23:41:18.990277+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    }
+  ],
+  "issues": [],
+  "photos": [
+    {
+      "id": "fb9322b8-55fd-44f7-b3dd-082e64510833",
+      "mime": "image/png",
+      "name": null,
+      "size": 7689
+    }
+  ],
+  "request": {
+    "id": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+    "held": 0,
+    "note": "지하상가 10시 오픈이에요.",
+    "label": "변경·취소 협의 중",
+    "ledger": {
+      "held": 0,
+      "acquired": 0,
+      "quantity": 4,
+      "received": 0,
+      "available": 0,
+      "backorder": 0,
+      "cancelled": 0,
+      "delivered": 0,
+      "remaining": 4,
+      "openIssues": 0,
+      "acquiredCancelled": 0
+    },
+    "masked": true,
+    "option": "핑크 / 110",
+    "photos": [
+      "fb9322b8-55fd-44f7-b3dd-082e64510833"
+    ],
+    "status": "accepted",
+    "address": "인천 …",
+    "product": "아동 기모 트레이닝 세트",
+    "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+    "version": 4,
+    "acquired": 0,
+    "location": "남대문 삼익패션타운 3층 B-7",
+    "quantity": 4,
+    "received": 0,
+    "cancelled": 0,
+    "createdAt": "2026-10-11T14:41:07.676638+00:00",
+    "delivered": 0,
+    "updatedAt": "2026-10-12T23:41:18.990041+00:00",
+    "proposalId": "d39ecc16-bd40-4099-83c8-8acbcaa26141",
+    "retailerId": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+    "wholesaler": "꼬마숲",
+    "participants": [
+      "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "cdadba68-812a-4caa-b318-11da2c6db3ad"
+    ],
+    "addressDetail": "",
+    "acquiredCancelled": 0
+  },
+  "messages": {
+    "user": 1,
+    "system": 5,
+    "unread": 2
+  },
+  "receipts": [],
+  "retailer": {
+    "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+    "demo": false,
+    "name": "부평 걸즈클로젯",
+    "role": "retailer",
+    "complete": true
+  },
+  "proposals": [
+    {
+      "id": "eb2f7534-39c9-44ed-837c-3e0b1c2df78e",
+      "held": 0,
+      "kind": "cancel",
+      "status": "withdrawn",
+      "values": {
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "reason": "도매처 품절이라 취소 협의 요청드려요.",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "acquiredCancelled": 0
+      },
+      "version": 1,
+      "createdAt": "2026-10-12T00:42:28.531764+00:00",
+      "requestId": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "proposerId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "resolvedBy": "cdadba68-812a-4caa-b318-11da2c6db3ad"
+    },
+    {
+      "id": "d39ecc16-bd40-4099-83c8-8acbcaa26141",
+      "held": 0,
+      "kind": "cancel",
+      "status": "pending",
+      "values": {
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "reason": "다른 매장도 품절 확정이에요. 취소 확인 부탁드려요.",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "acquiredCancelled": 0
+      },
+      "version": 0,
+      "createdAt": "2026-10-12T23:41:18.989701+00:00",
+      "requestId": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "proposerId": "cdadba68-812a-4caa-b318-11da2c6db3ad"
+    }
+  ],
+  "deliveries": [],
+  "recheckNotices": []
+}

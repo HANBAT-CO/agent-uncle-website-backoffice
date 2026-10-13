@@ -1,0 +1,77 @@
+[
+  {
+    "key": "feature_flags",
+    "value": {
+      "newRequest": true
+    },
+    "version": 1,
+    "is_public": true,
+    "updated_at": "2026-10-13T06:40:14.052492+00:00",
+    "updated_by": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+    "write_role": "operator",
+    "description": "앱 기능 스위치 { \"이름\": true|false }. 앱은 키가 없으면 기본값을 써요.",
+    "updatedByName": "대표"
+  },
+  {
+    "key": "maintenance",
+    "value": {
+      "title": "",
+      "endsAt": null,
+      "enabled": false,
+      "message": "",
+      "startsAt": null,
+      "blockWrites": false
+    },
+    "version": 0,
+    "is_public": true,
+    "updated_at": "2026-10-13T06:39:49.878153+00:00",
+    "updated_by": null,
+    "write_role": "owner",
+    "description": "점검 모드. enabled=true면 앱이 점검 화면을 보여 주고, blockWrites=true면 서버가 모든 앱 쓰기를 거부해요.",
+    "updatedByName": null
+  },
+  {
+    "key": "min_app_version",
+    "value": {
+      "ios": {
+        "minimum": "0.1.0",
+        "storeUrl": "",
+        "recommended": "0.1.0"
+      },
+      "web": {
+        "minimum": "0.1.0",
+        "storeUrl": "",
+        "recommended": "0.1.0"
+      },
+      "android": {
+        "minimum": "0.1.0",
+        "storeUrl": "",
+        "recommended": "0.1.0"
+      },
+      "message": ""
+    },
+    "version": 0,
+    "is_public": true,
+    "updated_at": "2026-10-13T06:39:49.878153+00:00",
+    "updated_by": null,
+    "write_role": "owner",
+    "description": "플랫폼별 최소(강제) / 권장 버전. 현재 앱 버전 0.1.0+1.",
+    "updatedByName": null
+  },
+  {
+    "key": "support",
+    "value": {
+      "email": "",
+      "hours": "",
+      "phone": "",
+      "kakaoChannel": ""
+    },
+    "version": 0,
+    "is_public": true,
+    "updated_at": "2026-10-13T06:39:49.878153+00:00",
+    "updated_by": null,
+    "write_role": "operator",
+    "description": "앱 내 정보 화면의 고객센터 안내.",
+    "updatedByName": null
+  }
+]

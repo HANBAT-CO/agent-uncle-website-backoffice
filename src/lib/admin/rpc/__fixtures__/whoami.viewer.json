@@ -1,0 +1,12 @@
+{
+  "aal": "aal1",
+  "role": "viewer",
+  "admin": true,
+  "email": "viewer@agentuncle.local",
+  "ready": true,
+  "userId": "e4bade38-42bd-4fa2-946c-7a4910ceaab0",
+  "displayName": "조회 담당",
+  "mfaEnrolled": false,
+  "mfaRequired": false,
+  "hasAppAccount": false
+}

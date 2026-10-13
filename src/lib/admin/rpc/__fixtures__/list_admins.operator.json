@@ -1,0 +1,29 @@
+[
+  {
+    "isMe": false,
+    "role": "owner",
+    "userId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+    "createdAt": "2026-10-13T06:40:13.678235+00:00",
+    "revokedAt": null,
+    "requireMfa": false,
+    "displayName": "대표"
+  },
+  {
+    "isMe": true,
+    "role": "operator",
+    "userId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+    "createdAt": "2026-10-13T06:40:13.678235+00:00",
+    "revokedAt": null,
+    "requireMfa": false,
+    "displayName": "운영 담당"
+  },
+  {
+    "isMe": false,
+    "role": "viewer",
+    "userId": "e4bade38-42bd-4fa2-946c-7a4910ceaab0",
+    "createdAt": "2026-10-13T06:40:13.678235+00:00",
+    "revokedAt": null,
+    "requireMfa": false,
+    "displayName": "조회 담당"
+  }
+]

@@ -1,0 +1,352 @@
+{
+  "hasMore": false,
+  "messages": [
+    {
+      "id": "c0eb78ed-0b73-4437-a53e-8b01b81fbea6",
+      "body": "삼촌 안녕하세요! 앞으로 잘 부탁드려요.",
+      "read": true,
+      "status": "sent",
+      "system": false,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-09-09T11:44:02.957316+00:00",
+      "requestId": "",
+      "attachments": [],
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "adb52313-6ed8-4df6-8d38-fc3ddf195c02",
+      "body": "네 사장님, 반갑습니다. 요청 마감 시간만 지켜주시면 다음 날 전달해 드려요.",
+      "read": true,
+      "status": "sent",
+      "system": false,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-09-09T13:18:00.000279+00:00",
+      "requestId": "",
+      "attachments": [],
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "cbbf9b3d-72bb-45a0-9498-2e7374c8ff1c",
+      "body": "새 사입 요청을 보냈어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-09-30T02:41:36.758725+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "bb480111-d5fe-4e35-91c2-2cafe66e7292",
+      "body": "요청을 수락했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-09-30T12:30:00.000682+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "eb532b98-a10c-4431-b869-f988771c4bcf",
+      "body": "이 컬러 맞으시죠?",
+      "read": true,
+      "status": "sent",
+      "system": false,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-09-30T12:31:12.858415+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "attachments": [
+        "54ca5f11-b3b0-4d67-805a-589d002441e8"
+      ],
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "385f146b-2a86-4753-9860-25792eb0a0ae",
+      "body": "맞아요! 감사합니다.",
+      "read": true,
+      "status": "sent",
+      "system": false,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-09-30T12:50:00.000311+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "attachments": [],
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "99c90866-8af3-4c4a-9cec-fd40d7630e39",
+      "body": "확보 15개 · 미송 0개 결과를 공유했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-09-30T18:10:00.000724+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "0fbda00b-3e6a-4f43-9820-e7fb983e4a37",
+      "body": "15개 전달을 기록했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-01T02:30:00.001093+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "5ea779a1-bd31-4dad-8a83-8ea8baa795c9",
+      "body": "15개 수령을 확인했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-01T06:00:00.000832+00:00",
+      "requestId": "227e1185-ab9b-4d6b-a2de-e8dbd339f38f",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "d7127bdc-b5e0-4ba8-a1f5-cce8a46b867b",
+      "body": "새 사입 요청을 보냈어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-07T01:11:05.349623+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "f6ebe1ee-30d3-4075-a72a-1cc7ac53cbad",
+      "body": "요청을 수락했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-07T12:00:00.000688+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "3eea8391-3c5c-473c-92dd-6d99535075c8",
+      "body": "확보 9개 · 미송 3개 결과를 공유했어요\n네이비 3장은 공장 확인 중이에요.",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-07T17:20:00.000755+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "b97cc151-3c44-4d6c-a4c9-f77ca75b85d9",
+      "body": "9개 전달을 기록했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-08T02:40:00.000826+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "b981ecb7-70a6-4c46-9b20-912f416e9ea2",
+      "body": "9개 수령을 확인했어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-08T07:00:00.00079+00:00",
+      "requestId": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "dfc8a149-06dc-4ea5-9cf9-831238e3b7ce",
+      "body": "새 사입 요청을 보냈어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-10T01:01:31.647673+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "2579daf0-c748-4ff1-9103-66a823265586",
+      "body": "새 사입 요청을 보냈어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-10T01:41:03.97569+00:00",
+      "requestId": "f7c69f68-cfaf-4644-876e-4c5a37c7e624",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "97643927-ae0e-4120-b483-20742684cd71",
+      "body": "요청을 수락했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-10T11:50:00.00061+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "b232bab7-6a12-44ec-9b2b-7d5e61c8fc3e",
+      "body": "요청을 수락했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-10T12:20:00.000552+00:00",
+      "requestId": "f7c69f68-cfaf-4644-876e-4c5a37c7e624",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "527af1cd-a347-4c00-8063-e720fb5c3e4f",
+      "body": "오늘 밤 누존 들러서 확인해 볼게요.",
+      "read": false,
+      "status": "sent",
+      "system": false,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-10T12:21:12.431349+00:00",
+      "requestId": "f7c69f68-cfaf-4644-876e-4c5a37c7e624",
+      "attachments": [],
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "3c359eae-4318-40af-96b3-957e054c3313",
+      "body": "확보 4개 · 미송 0개 결과를 공유했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-10T17:00:00.000728+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "4b44e053-97fb-4255-9318-7e40bb2f1376",
+      "body": "4개 전달을 기록했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-11T02:32:00.740974+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "ad4027e0-2d14-4ea0-9bdf-a92894c6b11c",
+      "body": "상품 문제를 알렸어요: 수량이 부족해요: 4장 중 3장만 들어 있었어요.",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-11T06:10:44.320811+00:00",
+      "requestId": "25feda84-e6ca-40b3-8832-e0acae972111",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "8e8d833c-1f6b-4fce-a7bf-379da0cc8aa3",
+      "body": "새 사입 요청을 보냈어요",
+      "read": true,
+      "status": "sent",
+      "system": true,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-12T01:00:45.741164+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "fba64907-62c9-4bac-acf1-bce355ae13a2",
+      "body": "다음 주 니트 신상 나오면 사진 먼저 보내주실 수 있나요?",
+      "read": true,
+      "status": "sent",
+      "system": false,
+      "senderId": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "createdAt": "2026-10-12T05:10:00.000436+00:00",
+      "requestId": "",
+      "attachments": [],
+      "recipientId": "c8bc5f8d-4021-495d-9660-64b09131c33a"
+    },
+    {
+      "id": "d805e4da-19af-46b6-8f33-9d666105d156",
+      "body": "네 누존 신상 들어오면 사진 찍어서 보내드릴게요.",
+      "read": false,
+      "status": "sent",
+      "system": false,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-12T11:35:00.000471+00:00",
+      "requestId": "",
+      "attachments": [],
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "12fa199e-5bb3-491a-98c2-8883cc630d3e",
+      "body": "요청을 수락했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-12T11:40:00.000749+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "5d5a2292-dfd0-48d7-b065-5cc058bef989",
+      "body": "확보 3개 · 미송 0개 결과를 공유했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-12T20:40:04.596718+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "c76b57a0-0c42-4f91-946c-a39b9dca03bc",
+      "body": "3개 전달을 기록했어요",
+      "read": false,
+      "status": "sent",
+      "system": true,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-13T01:41:44.27697+00:00",
+      "requestId": "1b2109ac-5d1b-41df-a746-56e5004b0272",
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    },
+    {
+      "id": "da0382e5-2cc7-44f8-8245-1b97fdcf0bf8",
+      "body": "누존에 들어온 신상 니트예요.",
+      "read": false,
+      "status": "sent",
+      "system": false,
+      "senderId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "createdAt": "2026-10-13T05:10:38.482536+00:00",
+      "requestId": "",
+      "attachments": [
+        "5a8f1f4e-467d-4f3a-8761-ecc33abe6740"
+      ],
+      "recipientId": "2a336ccd-257f-4525-be92-4f3c68888364"
+    }
+  ],
+  "participants": [
+    {
+      "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "demo": false,
+      "name": "수원 행궁 니트하우스",
+      "role": "retailer",
+      "complete": true
+    },
+    {
+      "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "demo": false,
+      "name": "APM 최삼촌",
+      "role": "uncle",
+      "complete": true
+    }
+  ]
+}

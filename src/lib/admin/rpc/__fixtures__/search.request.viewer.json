@@ -1,0 +1,38 @@
+{
+  "leads": [],
+  "accounts": [],
+  "requests": [
+    {
+      "id": "31d0f1ab-9c46-4d13-832d-3afc75206b0f",
+      "label": "확인 대기",
+      "uncle": "동대문 박삼촌",
+      "option": "네이비 / FREE",
+      "product": "스트라이프 니트 티",
+      "retailer": "망원 셀렉트샵"
+    },
+    {
+      "id": "63e1f77a-acac-4c51-9647-1a534b17ff51",
+      "label": "수령 대기",
+      "uncle": "청평화 한삼촌",
+      "option": "네이비 / FREE",
+      "product": "스트라이프 니트 티",
+      "retailer": "부평 걸즈클로젯"
+    },
+    {
+      "id": "7d1b87b7-0e90-4346-9bda-1db070f58998",
+      "label": "변경·취소 협의 중",
+      "uncle": "동대문 박삼촌",
+      "option": "네이비 / FREE",
+      "product": "스트라이프 니트 티",
+      "retailer": "연남 데일리룩"
+    },
+    {
+      "id": "62b7f913-cb8d-43ad-a8d8-056da62ded00",
+      "label": "미송 재확인",
+      "uncle": "APM 최삼촌",
+      "option": "네이비 / FREE",
+      "product": "스트라이프 니트 티",
+      "retailer": "수원 행궁 니트하우스"
+    }
+  ]
+}

@@ -1,0 +1,313 @@
+{
+  "cases": [],
+  "notes": [
+    {
+      "id": 2,
+      "body": "도매처에 재입고 일정을 물어봤어요. 금요일 입고 예정이라고 해요.",
+      "author_id": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "target_id": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "created_at": "2026-10-13T06:40:14.024495+00:00",
+      "target_type": "request"
+    }
+  ],
+  "uncle": {
+    "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+    "demo": false,
+    "name": "제일평화 이삼촌",
+    "role": "uncle",
+    "complete": true
+  },
+  "checks": {
+    "deliveries": 1,
+    "violations": [],
+    "pendingProposals": 0,
+    "unresolvedIssues": 0,
+    "unconfirmedDeliveries": 0
+  },
+  "events": [
+    {
+      "id": "2ef50d72-b304-4383-8aa0-c0cae6f92aba",
+      "scope": "request",
+      "title": "새 사입 요청을 보냈어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 14,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "pending",
+      "actorId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "createdAt": "2026-10-04T01:30:55.79667+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 0,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "a0c3e670-92ff-4103-97fa-f2d04bd3d7dd",
+      "scope": "request",
+      "title": "요청을 수락했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 14,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "createdAt": "2026-10-04T13:00:00.000586+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 14,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "f22afc67-fdb3-403a-911b-a8880c4f88bd",
+      "scope": "request",
+      "title": "확보 10개 · 미송 4개 결과를 공유했어요\n원단 수급이 늦어져 4장은 재입고 미정이에요.",
+      "ledger": {
+        "held": 0,
+        "acquired": 10,
+        "quantity": 14,
+        "received": 0,
+        "available": 10,
+        "backorder": 4,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "createdAt": "2026-10-04T18:30:00.000962+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 14,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "214dc7d9-0adf-48d7-8342-f5383f736303",
+      "scope": "request",
+      "title": "10개 전달을 기록했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 10,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 4,
+        "cancelled": 0,
+        "delivered": 10,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "createdAt": "2026-10-05T02:30:00.000832+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 10,
+        "quantity": 14,
+        "received": 0,
+        "available": 10,
+        "backorder": 4,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    },
+    {
+      "id": "884dedf4-5a51-41a6-b4d6-7767677e41f8",
+      "scope": "request",
+      "title": "10개 수령을 확인했어요",
+      "ledger": {
+        "held": 0,
+        "acquired": 10,
+        "quantity": 14,
+        "received": 10,
+        "available": 0,
+        "backorder": 4,
+        "cancelled": 0,
+        "delivered": 10,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "status": "accepted",
+      "actorId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "createdAt": "2026-10-05T06:00:00.000753+00:00",
+      "deliveryId": null,
+      "ledgerBefore": {
+        "held": 0,
+        "acquired": 10,
+        "quantity": 14,
+        "received": 0,
+        "available": 0,
+        "backorder": 4,
+        "cancelled": 0,
+        "delivered": 10,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      }
+    }
+  ],
+  "issues": [],
+  "photos": [
+    {
+      "id": "fdf2dd32-2141-4126-97e4-effb8be6f06c",
+      "mime": "image/png",
+      "name": null,
+      "size": 7651
+    }
+  ],
+  "request": {
+    "id": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+    "note": "",
+    "label": "미송 재확인",
+    "ledger": {
+      "held": 0,
+      "acquired": 10,
+      "quantity": 14,
+      "received": 10,
+      "available": 0,
+      "backorder": 4,
+      "cancelled": 0,
+      "delivered": 10,
+      "remaining": 4,
+      "openIssues": 0,
+      "acquiredCancelled": 0
+    },
+    "masked": true,
+    "option": "크림 / FREE",
+    "photos": [
+      "fdf2dd32-2141-4126-97e4-effb8be6f06c"
+    ],
+    "status": "accepted",
+    "address": "서울 …",
+    "product": "리본 타이 블라우스",
+    "recheck": "2026-10-11",
+    "uncleId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+    "version": 4,
+    "acquired": 10,
+    "location": "제일평화 3층 318호",
+    "quantity": 14,
+    "received": 10,
+    "cancelled": 0,
+    "createdAt": "2026-10-04T01:30:55.796453+00:00",
+    "delivered": 10,
+    "updatedAt": "2026-10-05T06:00:00.000696+00:00",
+    "needsReply": false,
+    "retailerId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+    "wholesaler": "르블랑",
+    "participants": [
+      "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "fb2604e9-a684-40ad-8515-2243b5165d43"
+    ],
+    "resultShared": true,
+    "addressDetail": "",
+    "acquiredCancelled": 0
+  },
+  "messages": {
+    "user": 0,
+    "system": 5,
+    "unread": 0
+  },
+  "receipts": [
+    {
+      "id": "9291f183-0695-46fb-bad5-ccd94fcdc665",
+      "kind": "confirmation",
+      "actual": 10,
+      "reason": "",
+      "actorId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "confirmed": 10,
+      "createdAt": "2026-10-05T06:00:00.000281+00:00",
+      "requestId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "deliveryId": "3dbed9bb-2ad7-4028-9037-903be083bfdb",
+      "deliveryVersion": 0
+    }
+  ],
+  "retailer": {
+    "id": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+    "demo": false,
+    "name": "성수 무드옷장",
+    "role": "retailer",
+    "complete": true
+  },
+  "proposals": [],
+  "deliveries": [
+    {
+      "id": "3dbed9bb-2ad7-4028-9037-903be083bfdb",
+      "round": 1,
+      "actual": 10,
+      "option": "크림 / FREE",
+      "address": "서울 …",
+      "product": "리본 타이 블라우스",
+      "uncleId": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "version": 1,
+      "quantity": 10,
+      "received": 10,
+      "createdAt": "2026-10-05T02:30:00.000432+00:00",
+      "requestId": "b5e2d977-bb68-41dd-8ae7-b3660ead9ec1",
+      "retailerId": "175ec3af-2d36-4075-b81c-ae0ce66b9fd2",
+      "addressDetail": "",
+      "receiptRecorded": true
+    }
+  ],
+  "recheckNotices": [
+    {
+      "id": "recheck-b5e2d977-bb68-41dd-8ae7-b3660ead9ec1-2026-10-11",
+      "read": false,
+      "createdAt": "2026-10-13T05:32:24.16939+00:00"
+    }
+  ]
+}

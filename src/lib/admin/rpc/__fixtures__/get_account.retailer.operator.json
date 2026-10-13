@@ -1,0 +1,269 @@
+{
+  "auth": {
+    "email": "ilsan.mono@demo.agentuncle.local",
+    "isStaff": false,
+    "provider": "google",
+    "createdAt": "2026-09-02T04:11:00+00:00",
+    "bannedUntil": null,
+    "lastSignInAt": "2026-10-12T22:40:40.574+00:00",
+    "emailConfirmed": true
+  },
+  "cases": [],
+  "notes": [],
+  "signup": {
+    "stage": "completed",
+    "missing": [],
+    "updatedAt": "2026-09-02T04:16:08.038572+00:00"
+  },
+  "account": {
+    "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+    "name": "일산 라페 모노",
+    "role": "retailer",
+    "email": "ilsan.mono@demo.agentuncle.local",
+    "label": "고은비",
+    "phone": "010-2710-5563",
+    "terms": true,
+    "address": "경기 고양시 일산동구 정발산로 24",
+    "contact": "고은비",
+    "markets": [
+      "동대문"
+    ],
+    "photoId": "",
+    "privacy": true,
+    "version": 2,
+    "working": true,
+    "complete": true,
+    "deadline": "",
+    "provider": "google",
+    "documentId": "855c978f-79a3-410a-9984-ffbc49af5b6f",
+    "pickupArea": "",
+    "codeExpires": "2026-09-09T04:14:00+00:00",
+    "businessName": "라페모노",
+    "deliveryArea": "",
+    "deliveryNote": "",
+    "salesChannel": "온라인·오프라인 병행",
+    "verification": "unverified",
+    "addressDetail": "라페스타 A동 1층",
+    "businessNumber": "128-37-60145",
+    "documentStatus": "submitted",
+    "verificationStatus": "unverified",
+    "notificationSettings": {}
+  },
+  "reviews": [],
+  "draftCount": 0,
+  "moderation": null,
+  "attachments": [
+    {
+      "id": "3d9b1c53-b8d6-45b0-87c6-867734d7d5be",
+      "mime": "image/png",
+      "name": "캐시미어_블렌드_머플러_1.png",
+      "size": 8040,
+      "usage": [
+        "requestPhoto"
+      ],
+      "createdAt": "2026-10-12T22:40:04.596384+00:00"
+    },
+    {
+      "id": "619adf54-f065-4ca3-96e7-a25a635f4825",
+      "mime": "image/png",
+      "name": "꽈배기_니트_조끼_1.png",
+      "size": 12070,
+      "usage": [
+        "requestPhoto"
+      ],
+      "createdAt": "2026-10-10T01:30:00.000374+00:00"
+    },
+    {
+      "id": "fa813a13-da06-4d65-ad64-bff1f14e8dfc",
+      "mime": "image/png",
+      "name": "경량_패딩_베스트_1.png",
+      "size": 9244,
+      "usage": [
+        "requestPhoto"
+      ],
+      "createdAt": "2026-10-08T01:01:54.152388+00:00"
+    },
+    {
+      "id": "855c978f-79a3-410a-9984-ffbc49af5b6f",
+      "mime": "application/pdf",
+      "name": "사업자등록증.pdf",
+      "size": 703,
+      "usage": [
+        "businessDocument"
+      ],
+      "createdAt": "2026-09-02T04:15:43.027311+00:00"
+    }
+  ],
+  "connections": [
+    {
+      "id": "d0a89d6a-be90-4013-8b6b-8eaddb822acc",
+      "status": "rejected",
+      "partner": {
+        "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+        "demo": false,
+        "name": "제일평화 이삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "version": 1,
+      "createdAt": "2026-09-23T06:02:00.000256+00:00",
+      "direction": "sent"
+    },
+    {
+      "id": "f95d1def-8080-4c0d-8b8c-dc24b8103cb2",
+      "status": "accepted",
+      "partner": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "version": 1,
+      "createdAt": "2026-09-11T02:27:00.000319+00:00",
+      "direction": "sent"
+    }
+  ],
+  "recentAudit": [
+    {
+      "at": "2026-10-13T12:06:01.874212+00:00",
+      "id": 60,
+      "action": "account.view",
+      "reason": "",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "actorName": "대표"
+    },
+    {
+      "at": "2026-10-13T12:06:01.515633+00:00",
+      "id": 53,
+      "action": "account.view",
+      "reason": "",
+      "actorId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "actorName": "운영 담당"
+    }
+  ],
+  "requestStats": {
+    "asUncle": {},
+    "asRetailer": {
+      "미송 대기": 1,
+      "취소 종료": 1,
+      "확인 대기": 1,
+      "문제 확인 중": 1
+    }
+  },
+  "unreadNotices": 0,
+  "recentRequests": [
+    {
+      "id": "bee4a019-a557-4517-a69b-ef3a1577aed2",
+      "label": "확인 대기",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 12,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 12,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "오트밀 / ONE",
+      "partner": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "product": "캐시미어 블렌드 머플러",
+      "createdAt": "2026-10-12T22:40:40.574523+00:00",
+      "updatedAt": "2026-10-12T22:40:40.574+00:00"
+    },
+    {
+      "id": "0ccea7d8-11e8-43dd-8401-05f851af2b24",
+      "label": "미송 대기",
+      "ledger": {
+        "held": 0,
+        "acquired": 7,
+        "quantity": 9,
+        "received": 7,
+        "available": 0,
+        "backorder": 2,
+        "cancelled": 0,
+        "delivered": 7,
+        "remaining": 2,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "크림 / FREE",
+      "partner": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "product": "꽈배기 니트 조끼",
+      "createdAt": "2026-10-10T01:30:25.917434+00:00",
+      "updatedAt": "2026-10-11T02:20:00.000763+00:00"
+    },
+    {
+      "id": "1da2c862-fd6b-4b8e-9a20-f8435bd1f66b",
+      "label": "문제 확인 중",
+      "ledger": {
+        "held": 0,
+        "acquired": 8,
+        "quantity": 8,
+        "received": 7,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 8,
+        "remaining": 0,
+        "openIssues": 1,
+        "acquiredCancelled": 0
+      },
+      "option": "블랙 / FREE",
+      "partner": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "product": "경량 패딩 베스트",
+      "createdAt": "2026-10-08T01:02:11.938415+00:00",
+      "updatedAt": "2026-10-09T12:10:00.000814+00:00"
+    },
+    {
+      "id": "cef2e59f-54fc-4684-9ea8-b2f69c54d543",
+      "label": "취소 종료",
+      "ledger": {
+        "held": 0,
+        "acquired": 2,
+        "quantity": 5,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 5,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 2
+      },
+      "option": "와인 / FREE",
+      "partner": {
+        "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "demo": false,
+        "name": "청평화 한삼촌",
+        "role": "uncle",
+        "complete": true
+      },
+      "product": "벨벳 롱 원피스",
+      "createdAt": "2026-10-06T01:00:03.838428+00:00",
+      "updatedAt": "2026-10-07T11:40:00.000727+00:00"
+    }
+  ]
+}

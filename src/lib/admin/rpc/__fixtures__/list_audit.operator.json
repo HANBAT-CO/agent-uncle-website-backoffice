@@ -1,0 +1,299 @@
+{
+  "rows": [
+    {
+      "at": "2026-10-13T12:07:53.671929+00:00",
+      "id": 76,
+      "after": {
+        "count": 1
+      },
+      "action": "lead.view_list",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "",
+      "actorId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "targetId": "contacted",
+      "actorName": "운영 담당",
+      "actorRole": "operator",
+      "targetType": "lead",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.494995+00:00",
+      "id": 75,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 15,
+        "includeDemo": true
+      },
+      "action": "export.leads",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "leads",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.488596+00:00",
+      "id": 74,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 20,
+        "includeDemo": true
+      },
+      "action": "export.accounts",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "accounts",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.475158+00:00",
+      "id": 73,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 32,
+        "includeDemo": true
+      },
+      "action": "export.deliveries",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "deliveries",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.469248+00:00",
+      "id": 72,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 61,
+        "includeDemo": true
+      },
+      "action": "export.requests",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "requests",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.060671+00:00",
+      "id": 71,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 32,
+        "includeDemo": true
+      },
+      "action": "export.deliveries",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "targetId": "deliveries",
+      "actorName": "운영 담당",
+      "actorRole": "operator",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:07:42.051521+00:00",
+      "id": 70,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 61,
+        "includeDemo": true
+      },
+      "action": "export.requests",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "targetId": "requests",
+      "actorName": "운영 담당",
+      "actorRole": "operator",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:06:02.100277+00:00",
+      "id": 69,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 15,
+        "includeDemo": true
+      },
+      "action": "export.leads",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "leads",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:06:02.093179+00:00",
+      "id": 68,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 20,
+        "includeDemo": true
+      },
+      "action": "export.accounts",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "accounts",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:06:02.083879+00:00",
+      "id": 67,
+      "after": null,
+      "action": "admin.lookup",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "810f8ce0-9404-4822-8afc-4577ff58cba3",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "account",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:06:02.073753+00:00",
+      "id": 66,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 32,
+        "includeDemo": true
+      },
+      "action": "export.deliveries",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "deliveries",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    },
+    {
+      "at": "2026-10-13T12:06:02.011834+00:00",
+      "id": 65,
+      "after": {
+        "to": null,
+        "from": null,
+        "rows": 61,
+        "includeDemo": true
+      },
+      "action": "export.requests",
+      "before": null,
+      "client": {
+        "ip": "192.168.117.1",
+        "gatewayIp": "192.168.117.1",
+        "userAgent": "node",
+        "clientInfo": "supabase-js/2.117.3; runtime=node; runtime-version=25.6.1"
+      },
+      "reason": "월간 정산 확인 (fixture)",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "targetId": "requests",
+      "actorName": "대표",
+      "actorRole": "owner",
+      "targetType": "export",
+      "operationId": null
+    }
+  ],
+  "limit": 12,
+  "total": 32,
+  "offset": 0
+}

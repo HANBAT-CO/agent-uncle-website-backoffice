@@ -1,0 +1,270 @@
+{
+  "rows": [
+    {
+      "id": "ad37d85e-dc4d-46d5-9911-2c8c2f9c2275",
+      "to": "2a336ccd-257f-4525-be92-4f3c68888364",
+      "from": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "round": null,
+      "status": "pending",
+      "parties": [
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        },
+        {
+          "id": "2a336ccd-257f-4525-be92-4f3c68888364",
+          "demo": false,
+          "name": "수원 행궁 니트하우스",
+          "role": "retailer",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 0,
+      "createdAt": "2026-10-12T10:40:04.596304+00:00",
+      "updatedAt": "2026-10-12T10:40:04.596+00:00",
+      "participants": [
+        "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "2a336ccd-257f-4525-be92-4f3c68888364"
+      ]
+    },
+    {
+      "id": "3d6c4a3d-053e-4169-b171-905e2d4fd099",
+      "to": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+      "from": "31551437-640f-4452-86af-575b1202c1dd",
+      "round": null,
+      "status": "pending",
+      "parties": [
+        {
+          "id": "31551437-640f-4452-86af-575b1202c1dd",
+          "demo": false,
+          "name": "잠실 오늘의옷",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 0,
+      "createdAt": "2026-10-10T07:48:00.00029+00:00",
+      "updatedAt": "2026-10-10T07:48:00+00:00",
+      "participants": [
+        "31551437-640f-4452-86af-575b1202c1dd",
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ]
+    },
+    {
+      "id": "04e6989e-0b22-4141-9121-311965bf53a7",
+      "to": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "from": "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+      "round": null,
+      "status": "withdrawn",
+      "parties": [
+        {
+          "id": "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+          "demo": false,
+          "name": "강남 스타일숍 리안",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-28T04:25:00.000272+00:00",
+      "updatedAt": "2026-09-29T01:05:00.00036+00:00",
+      "participants": [
+        "df4283b3-5149-40ee-b8c0-94414bf1f2fd",
+        "cdadba68-812a-4caa-b318-11da2c6db3ad"
+      ]
+    },
+    {
+      "id": "d0a89d6a-be90-4013-8b6b-8eaddb822acc",
+      "to": "fb2604e9-a684-40ad-8515-2243b5165d43",
+      "from": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "round": null,
+      "status": "rejected",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "fb2604e9-a684-40ad-8515-2243b5165d43",
+          "demo": false,
+          "name": "제일평화 이삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-23T06:02:00.000256+00:00",
+      "updatedAt": "2026-09-24T12:40:00.000358+00:00",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "fb2604e9-a684-40ad-8515-2243b5165d43"
+      ]
+    },
+    {
+      "id": "7484cd6d-0836-49a6-97ba-f2e5b6cb5289",
+      "to": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "from": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "round": null,
+      "status": "accepted",
+      "parties": [
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-12T02:28:00.000254+00:00",
+      "updatedAt": "2026-09-12T11:48:00.000602+00:00",
+      "participants": [
+        "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    },
+    {
+      "id": "f95d1def-8080-4c0d-8b8c-dc24b8103cb2",
+      "to": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "from": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "round": null,
+      "status": "accepted",
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-11T02:27:00.000319+00:00",
+      "updatedAt": "2026-09-11T11:47:12.790374+00:00",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    },
+    {
+      "id": "b8c495bd-aba6-4585-8dc6-c6d94cea78b3",
+      "to": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "from": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+      "round": null,
+      "status": "accepted",
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-11T02:26:00.000289+00:00",
+      "updatedAt": "2026-09-11T11:46:00.000271+00:00",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    },
+    {
+      "id": "4e82ebe6-5fbe-4ad5-8f6a-d4ce5f3300cd",
+      "to": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+      "from": "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+      "round": null,
+      "status": "accepted",
+      "parties": [
+        {
+          "id": "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+          "demo": false,
+          "name": "한남 아틀리에 소이",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+          "demo": false,
+          "name": "광희시장 정삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": null,
+      "version": 1,
+      "createdAt": "2026-09-10T02:25:00.000265+00:00",
+      "updatedAt": "2026-09-10T11:45:08.456323+00:00",
+      "participants": [
+        "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+        "5a025d38-5684-406a-8e1c-b1cc1eae9cf1"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 23,
+  "facets": {
+    "today": 0,
+    "status": {
+      "pending": 2,
+      "accepted": 19,
+      "rejected": 1,
+      "withdrawn": 1
+    },
+    "unread": 0,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 1,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

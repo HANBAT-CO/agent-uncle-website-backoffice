@@ -1,0 +1,263 @@
+{
+  "auth": {
+    "email": "g•••@demo.agentuncle.local",
+    "isStaff": false,
+    "provider": "kakao",
+    "createdAt": "2026-08-24T09:48:00+00:00",
+    "bannedUntil": null,
+    "lastSignInAt": "2026-10-13T05:37:13.987+00:00",
+    "emailConfirmed": true
+  },
+  "cases": [],
+  "notes": [],
+  "signup": {
+    "stage": "completed",
+    "missing": [],
+    "updatedAt": "2026-08-24T09:53:13.916724+00:00"
+  },
+  "account": {
+    "id": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+    "name": "광희시장 정삼촌",
+    "role": "uncle",
+    "email": "g•••@demo.agentuncle.local",
+    "intro": "가죽·잡화 전문. 샘플 사진 확인 후 진행해요.",
+    "label": "정삼촌",
+    "phone": "•••••••8821",
+    "terms": true,
+    "masked": true,
+    "address": "",
+    "contact": "광•••••••",
+    "holiday": "이번 주는 휴가예요. 급한 요청은 채팅 남겨 주세요.",
+    "photoId": "",
+    "privacy": true,
+    "version": 2,
+    "working": false,
+    "complete": true,
+    "deadline": "20:00",
+    "provider": "kakao",
+    "transport": "도보",
+    "documentId": "",
+    "pickupArea": "광희시장 2층 가죽·잡화",
+    "activityEnd": "",
+    "codeExpires": "2026-08-31T09:51:00+00:00",
+    "activityDays": [
+      "화",
+      "목",
+      "토"
+    ],
+    "businessName": "",
+    "deliveryArea": "서울 전 지역 · 퀵 연계",
+    "verification": "not_required",
+    "activityHours": "일정에 따라 달라요",
+    "activityStart": "",
+    "businessNumber": "",
+    "documentStatus": "missing",
+    "verificationStatus": "unverified",
+    "notificationSettings": {}
+  },
+  "reviews": [],
+  "draftCount": 0,
+  "moderation": null,
+  "attachments": [],
+  "connections": [
+    {
+      "id": "4e82ebe6-5fbe-4ad5-8f6a-d4ce5f3300cd",
+      "status": "accepted",
+      "partner": {
+        "id": "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+        "demo": false,
+        "name": "한남 아틀리에 소이",
+        "role": "retailer",
+        "complete": true
+      },
+      "version": 1,
+      "createdAt": "2026-09-10T02:25:00.000265+00:00",
+      "direction": "received"
+    },
+    {
+      "id": "db254142-ba82-4e05-b9d6-ccde1fa19245",
+      "status": "accepted",
+      "partner": {
+        "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "demo": false,
+        "name": "합정 빈티지랩",
+        "role": "retailer",
+        "complete": true
+      },
+      "version": 1,
+      "createdAt": "2026-09-10T02:24:00.000197+00:00",
+      "direction": "received"
+    }
+  ],
+  "recentAudit": [
+    {
+      "at": "2026-10-13T12:06:01.882666+00:00",
+      "id": 61,
+      "action": "account.view",
+      "reason": "",
+      "actorId": "0d4c9d74-c99b-4269-a1b7-1bf223d7e199",
+      "actorName": "대표"
+    },
+    {
+      "at": "2026-10-13T12:06:01.522472+00:00",
+      "id": 54,
+      "action": "account.view",
+      "reason": "",
+      "actorId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+      "actorName": "운영 담당"
+    }
+  ],
+  "requestStats": {
+    "asUncle": {
+      "거절": 1,
+      "완료": 1,
+      "픽업 완료": 1,
+      "확인 대기": 1,
+      "변경·취소 협의 중": 1
+    },
+    "asRetailer": {}
+  },
+  "unreadNotices": 2,
+  "recentRequests": [
+    {
+      "id": "41d5464a-2b41-4a5f-b3b6-3ae0e1d073e8",
+      "label": "확인 대기",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 4,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "블랙 / ONE",
+      "partner": {
+        "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "demo": false,
+        "name": "합정 빈티지랩",
+        "role": "retailer",
+        "complete": true
+      },
+      "product": "레더 미니 숄더백",
+      "createdAt": "2026-10-11T06:10:19.087466+00:00",
+      "updatedAt": "2026-10-11T06:10:19.087+00:00"
+    },
+    {
+      "id": "fca7ef74-92e1-4110-850e-a703463b55d3",
+      "label": "거절",
+      "ledger": {
+        "held": 0,
+        "acquired": 0,
+        "quantity": 6,
+        "received": 0,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 6,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "브라운 / ONE",
+      "partner": {
+        "id": "673e8e4e-d2b4-48b1-aa7c-11ce175a520c",
+        "demo": false,
+        "name": "한남 아틀리에 소이",
+        "role": "retailer",
+        "complete": true
+      },
+      "product": "소가죽 벨트",
+      "createdAt": "2026-10-10T02:01:01.875533+00:00",
+      "updatedAt": "2026-10-10T04:30:00.000455+00:00"
+    },
+    {
+      "id": "b864e1f4-30f0-4d00-afdb-2ec33f12d0a3",
+      "label": "변경·취소 협의 중",
+      "ledger": {
+        "held": 2,
+        "acquired": 5,
+        "quantity": 5,
+        "received": 3,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 3,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "블랙 / ONE",
+      "partner": {
+        "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "demo": false,
+        "name": "합정 빈티지랩",
+        "role": "retailer",
+        "complete": true
+      },
+      "product": "레더 미니 숄더백",
+      "createdAt": "2026-10-08T04:01:14.699375+00:00",
+      "updatedAt": "2026-10-09T10:00:00.000652+00:00"
+    },
+    {
+      "id": "0e751ff8-cb94-404a-a382-832f9811bbf3",
+      "label": "픽업 완료",
+      "ledger": {
+        "held": 0,
+        "acquired": 2,
+        "quantity": 2,
+        "received": 0,
+        "available": 2,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 0,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "브라운 / ONE",
+      "partner": {
+        "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "demo": false,
+        "name": "합정 빈티지랩",
+        "role": "retailer",
+        "complete": true
+      },
+      "product": "소가죽 벨트",
+      "createdAt": "2026-10-09T02:01:13.416347+00:00",
+      "updatedAt": "2026-10-09T08:30:00.000541+00:00"
+    },
+    {
+      "id": "c8ba7a8d-231e-420c-9342-0d4e02709ce5",
+      "label": "완료",
+      "ledger": {
+        "held": 0,
+        "acquired": 3,
+        "quantity": 3,
+        "received": 3,
+        "available": 0,
+        "backorder": 0,
+        "cancelled": 0,
+        "delivered": 3,
+        "remaining": 0,
+        "openIssues": 0,
+        "acquiredCancelled": 0
+      },
+      "option": "브라운 / ONE",
+      "partner": {
+        "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "demo": false,
+        "name": "합정 빈티지랩",
+        "role": "retailer",
+        "complete": true
+      },
+      "product": "레더 미니 숄더백",
+      "createdAt": "2026-10-01T01:31:13.436402+00:00",
+      "updatedAt": "2026-10-02T05:20:00.000691+00:00"
+    }
+  ]
+}

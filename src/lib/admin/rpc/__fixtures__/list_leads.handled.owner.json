@@ -1,0 +1,36 @@
+{
+  "rows": [
+    {
+      "id": "d5f1fc7f-6f47-4614-9e20-0d4439272f58",
+      "utm": {
+        "utm_medium": "social",
+        "utm_source": "instagram",
+        "utm_campaign": "fw26_launch"
+      },
+      "name": "정다은",
+      "role": "retailer",
+      "notes": 1,
+      "market": "동대문",
+      "source": "landing-signup",
+      "status": "contacted",
+      "contact": "010-3021-7745",
+      "message": "동대문 야간 사입을 처음 맡겨 보려는데 수수료 구조가 궁금해요.",
+      "suspect": false,
+      "assignee": {
+        "userId": "8f4c5665-83b8-49eb-b7bd-a0cfc3f012f4",
+        "displayName": "운영 담당"
+      },
+      "createdAt": "2026-09-22T05:26:00+00:00",
+      "businessName": "신촌 데일리클로젯",
+      "statusUpdatedAt": "2026-10-13T06:40:14.039229+00:00"
+    }
+  ],
+  "limit": 12,
+  "total": 1,
+  "facets": {
+    "new": 13,
+    "contacted": 1,
+    "qualified": 1
+  },
+  "offset": 0
+}

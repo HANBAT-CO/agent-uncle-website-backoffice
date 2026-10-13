@@ -1,0 +1,441 @@
+{
+  "rows": [
+    {
+      "id": "d39ecc16-bd40-4099-83c8-8acbcaa26141",
+      "held": 0,
+      "kind": "cancel",
+      "round": null,
+      "status": "pending",
+      "values": {
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "reason": "다른 매장도 품절 확정이에요. 취소 확인 부탁드려요.",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+        "label": "변경·취소 협의 중",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "version": 0,
+      "createdAt": "2026-10-12T23:41:18.989701+00:00",
+      "requestId": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "updatedAt": "2026-10-12T23:41:18.989+00:00",
+      "proposerId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "cdadba68-812a-4caa-b318-11da2c6db3ad"
+      ]
+    },
+    {
+      "id": "65a69b13-0742-42a0-8985-b35fffc86d31",
+      "held": 0,
+      "kind": "change",
+      "round": null,
+      "status": "pending",
+      "values": {
+        "note": "오후 1시 이후 수령 가능해요. 문 앞 보관은 하지 말아 주세요.",
+        "option": "블루 / L",
+        "photos": [
+          "983d53fc-f807-4589-a50c-8362b0baafdb"
+        ],
+        "reason": "사이즈를 L로 바꾸고 1장 더 부탁드려요.",
+        "address": "서울 마포구 포은로 81",
+        "product": "오버핏 옥스포드 셔츠",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "acquired": 0,
+        "location": "디오트 2층 B-12",
+        "quantity": 7,
+        "received": 0,
+        "wholesaler": "모노스튜디오",
+        "addressDetail": "1층 망원 셀렉트샵",
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+          "demo": false,
+          "name": "망원 셀렉트샵",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "aedfdb0f-ffab-4476-b5af-a3786672e320",
+        "label": "변경·취소 협의 중",
+        "option": "블루 / FREE",
+        "status": "accepted",
+        "product": "오버핏 옥스포드 셔츠"
+      },
+      "version": 0,
+      "createdAt": "2026-10-12T19:40:04.596795+00:00",
+      "requestId": "aedfdb0f-ffab-4476-b5af-a3786672e320",
+      "updatedAt": "2026-10-12T19:40:04.596+00:00",
+      "proposerId": "ab462a8d-9351-47e4-9421-ff257c416b2a",
+      "participants": [
+        "ab462a8d-9351-47e4-9421-ff257c416b2a",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    },
+    {
+      "id": "f15f105b-c8e8-4fd9-b44d-c28becf0b4d7",
+      "held": 0,
+      "kind": "cancel",
+      "round": null,
+      "status": "pending",
+      "values": {
+        "photos": [
+          "cb0037b5-c1d5-4cd1-a230-f91ccd40fe6f"
+        ],
+        "reason": "남은 미송 6장은 취소할게요.",
+        "uncleId": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+        "acquired": 4,
+        "quantity": 6,
+        "received": 0,
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+          "demo": false,
+          "name": "연남 데일리룩",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "b4a3be7c-eca0-405b-9744-537eb9c0bb80",
+          "demo": false,
+          "name": "동대문 박삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "7d1b87b7-0e90-4346-9bda-1db070f58998",
+        "label": "변경·취소 협의 중",
+        "option": "네이비 / FREE",
+        "status": "accepted",
+        "product": "스트라이프 니트 티"
+      },
+      "version": 0,
+      "createdAt": "2026-10-12T16:40:04.596444+00:00",
+      "requestId": "7d1b87b7-0e90-4346-9bda-1db070f58998",
+      "updatedAt": "2026-10-12T16:40:04.596+00:00",
+      "proposerId": "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+      "participants": [
+        "9ab0207a-9364-4f7d-8970-e3b65f4185c9",
+        "b4a3be7c-eca0-405b-9744-537eb9c0bb80"
+      ]
+    },
+    {
+      "id": "0568982c-99b2-4bfe-a94c-9b96c9ce02e4",
+      "held": 6,
+      "kind": "change",
+      "round": null,
+      "status": "pending",
+      "values": {
+        "note": "",
+        "option": "와인 / FREE",
+        "photos": [],
+        "reason": "이번 건은 2층 사무실로 받아야 해요.",
+        "address": "경기 성남시 분당구 정자일로 95",
+        "product": "벨벳 롱 원피스",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "acquired": 6,
+        "location": "APM 럭스 3층 302호",
+        "quantity": 6,
+        "received": 0,
+        "wholesaler": "미드나잇",
+        "addressDetail": "2층 201호 (사무실)",
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "80e345a3-bd59-462b-8546-45943ddf8cb3",
+        "label": "변경·취소 협의 중",
+        "option": "와인 / FREE",
+        "status": "accepted",
+        "product": "벨벳 롱 원피스"
+      },
+      "version": 0,
+      "createdAt": "2026-10-12T15:40:04.596954+00:00",
+      "requestId": "80e345a3-bd59-462b-8546-45943ddf8cb3",
+      "updatedAt": "2026-10-12T15:40:04.596+00:00",
+      "proposerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ]
+    },
+    {
+      "id": "eb2f7534-39c9-44ed-837c-3e0b1c2df78e",
+      "held": 0,
+      "kind": "cancel",
+      "round": null,
+      "status": "withdrawn",
+      "values": {
+        "photos": [
+          "fb9322b8-55fd-44f7-b3dd-082e64510833"
+        ],
+        "reason": "도매처 품절이라 취소 협의 요청드려요.",
+        "uncleId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+        "acquired": 0,
+        "quantity": 4,
+        "received": 0,
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+          "demo": false,
+          "name": "부평 걸즈클로젯",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+          "demo": false,
+          "name": "남대문 김삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+        "label": "변경·취소 협의 중",
+        "option": "핑크 / 110",
+        "status": "accepted",
+        "product": "아동 기모 트레이닝 세트"
+      },
+      "version": 1,
+      "createdAt": "2026-10-12T00:42:28.531764+00:00",
+      "requestId": "6acfbe2f-3e51-409a-8d54-891c34ff9413",
+      "updatedAt": "2026-10-12T01:40:04.596802+00:00",
+      "proposerId": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "resolvedBy": "cdadba68-812a-4caa-b318-11da2c6db3ad",
+      "participants": [
+        "5805a26a-56ef-4df6-ade9-1fa6dd943484",
+        "cdadba68-812a-4caa-b318-11da2c6db3ad"
+      ]
+    },
+    {
+      "id": "3b579cda-a7d6-48ea-ba9f-9523fe147a90",
+      "held": 6,
+      "kind": "change",
+      "round": null,
+      "status": "rejected",
+      "values": {
+        "note": "",
+        "option": "와인 / FREE",
+        "photos": [],
+        "reason": "2장 추가 가능할까요?",
+        "address": "경기 성남시 분당구 정자일로 95",
+        "product": "벨벳 롱 원피스",
+        "uncleId": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+        "acquired": 6,
+        "location": "APM 럭스 3층 302호",
+        "quantity": 8,
+        "received": 0,
+        "wholesaler": "미드나잇",
+        "addressDetail": "1층 102호",
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+          "demo": false,
+          "name": "분당 데이지룸",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+          "demo": false,
+          "name": "APM 최삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "80e345a3-bd59-462b-8546-45943ddf8cb3",
+        "label": "변경·취소 협의 중",
+        "option": "와인 / FREE",
+        "status": "accepted",
+        "product": "벨벳 롱 원피스"
+      },
+      "version": 1,
+      "createdAt": "2026-10-10T00:31:27.37461+00:00",
+      "requestId": "80e345a3-bd59-462b-8546-45943ddf8cb3",
+      "updatedAt": "2026-10-10T11:40:00.000384+00:00",
+      "proposerId": "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+      "resolvedBy": "c8bc5f8d-4021-495d-9660-64b09131c33a",
+      "participants": [
+        "4e6128f2-5cbf-4e4e-936c-9723dd1e1076",
+        "c8bc5f8d-4021-495d-9660-64b09131c33a"
+      ]
+    },
+    {
+      "id": "89245fe7-1343-475d-8ce8-d74c4b64311b",
+      "held": 2,
+      "kind": "correction",
+      "round": null,
+      "status": "pending",
+      "values": {
+        "photos": [
+          "fc5ebedd-7892-439e-8c71-9afd612906cf"
+        ],
+        "reason": "확보 수량을 5장으로 잘못 기록했어요. 실제 확보는 4장이에요.",
+        "recheck": "2026-10-15",
+        "uncleId": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+        "acquired": 4,
+        "quantity": 5,
+        "received": 3,
+        "acquiredCancelled": 0
+      },
+      "parties": [
+        {
+          "id": "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+          "demo": false,
+          "name": "합정 빈티지랩",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+          "demo": false,
+          "name": "광희시장 정삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "b864e1f4-30f0-4d00-afdb-2ec33f12d0a3",
+        "label": "변경·취소 협의 중",
+        "option": "블랙 / ONE",
+        "status": "accepted",
+        "product": "레더 미니 숄더백"
+      },
+      "version": 0,
+      "createdAt": "2026-10-09T10:00:00.000436+00:00",
+      "requestId": "b864e1f4-30f0-4d00-afdb-2ec33f12d0a3",
+      "updatedAt": "2026-10-09T10:00:00+00:00",
+      "proposerId": "5a025d38-5684-406a-8e1c-b1cc1eae9cf1",
+      "participants": [
+        "4c9cccab-70b2-4306-9efc-0b00aea94d55",
+        "5a025d38-5684-406a-8e1c-b1cc1eae9cf1"
+      ]
+    },
+    {
+      "id": "f28e7fc6-7426-4139-b0b9-5caa5617ed3c",
+      "held": 2,
+      "kind": "cancel",
+      "round": null,
+      "status": "approved",
+      "values": {
+        "photos": [],
+        "reason": "세트로 팔아야 해서 확보분 2장 포함 전량 취소할게요. 확보분은 도매처 반품 부탁드려요.",
+        "uncleId": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+        "acquired": 2,
+        "quantity": 5,
+        "received": 0,
+        "acquiredCancelled": 2
+      },
+      "parties": [
+        {
+          "id": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+          "demo": false,
+          "name": "일산 라페 모노",
+          "role": "retailer",
+          "complete": true
+        },
+        {
+          "id": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+          "demo": false,
+          "name": "청평화 한삼촌",
+          "role": "uncle",
+          "complete": true
+        }
+      ],
+      "request": {
+        "id": "cef2e59f-54fc-4684-9ea8-b2f69c54d543",
+        "label": "취소 종료",
+        "option": "와인 / FREE",
+        "status": "cancelled",
+        "product": "벨벳 롱 원피스"
+      },
+      "version": 1,
+      "createdAt": "2026-10-07T02:00:00.000408+00:00",
+      "requestId": "cef2e59f-54fc-4684-9ea8-b2f69c54d543",
+      "updatedAt": "2026-10-07T11:40:00.000491+00:00",
+      "proposerId": "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+      "resolvedBy": "ceb972e3-781d-4028-b601-ede07f44c6b2",
+      "participants": [
+        "fc0ef1e2-01e1-45b9-952e-53af6bafd295",
+        "ceb972e3-781d-4028-b601-ede07f44c6b2"
+      ]
+    }
+  ],
+  "limit": 8,
+  "total": 13,
+  "facets": {
+    "today": 4,
+    "status": {
+      "pending": 5,
+      "approved": 6,
+      "rejected": 1,
+      "withdrawn": 1
+    },
+    "unread": 0,
+    "mismatch": 0,
+    "corrected": 0,
+    "pending3d": 1,
+    "awaitingReceipt": 0,
+    "awaitingReceipt48h": 0
+  },
+  "offset": 0
+}

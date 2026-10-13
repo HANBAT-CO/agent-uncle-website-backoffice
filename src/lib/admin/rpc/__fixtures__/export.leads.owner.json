@@ -1,0 +1,164 @@
+{
+  "kind": "leads",
+  "rows": [
+    {
+      "id": "d5f1fc7f-6f47-4614-9e20-0d4439272f58",
+      "utm": {
+        "utm_medium": "social",
+        "utm_source": "instagram",
+        "utm_campaign": "fw26_launch"
+      },
+      "name": "정다은",
+      "role": "retailer",
+      "market": "동대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "010-3021-7745",
+      "message": "동대문 야간 사입을 처음 맡겨 보려는데 수수료 구조가 궁금해요.",
+      "created_at": "2026-09-22T05:26:00+00:00",
+      "business_name": "신촌 데일리클로젯"
+    },
+    {
+      "id": "ba550531-94ce-42a5-8cce-de09fd55aab1",
+      "utm": null,
+      "name": "김영철",
+      "role": "uncle",
+      "market": "동대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "kimyc.dm@gmail.com",
+      "message": "청평화 15년차 사입삼촌입니다. 거래처 관리용으로 써보고 싶어요.",
+      "created_at": "2026-09-24T13:07:00+00:00",
+      "business_name": null
+    },
+    {
+      "id": "913a738c-960d-46ae-ba62-9508ef2a120d",
+      "utm": {
+        "utm_term": "사입삼춘",
+        "utm_medium": "cpc",
+        "utm_source": "naver",
+        "utm_campaign": "brand_search"
+      },
+      "name": "이민아",
+      "role": "retailer",
+      "market": "동대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "minashop@naver.com",
+      "message": null,
+      "created_at": "2026-09-26T02:20:00+00:00",
+      "business_name": "온라인몰 민아샵"
+    },
+    {
+      "id": "bc23d333-225b-4222-9cc2-d063f8fff746",
+      "utm": null,
+      "name": "박서윤",
+      "role": "other",
+      "market": null,
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "kakao: seoyun_p",
+      "message": "물류 연동 제휴 문의드립니다.",
+      "created_at": "2026-09-28T07:57:00+00:00",
+      "business_name": "패션 커머스 스타트업"
+    },
+    {
+      "id": "8d14b89f-76bd-4a86-94d3-d1e99289ee87",
+      "utm": {
+        "utm_medium": "channel",
+        "utm_source": "kakao",
+        "utm_campaign": "oct_news"
+      },
+      "name": "최유리",
+      "role": "retailer",
+      "market": "남대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "010-9932-1180",
+      "message": "지방이라 택배 발송도 되는지 궁금해요.",
+      "created_at": "2026-09-30T01:54:00+00:00",
+      "business_name": "대구 유리옷장"
+    },
+    {
+      "id": "6d7c65e6-186e-4239-84c7-be42c4f11c61",
+      "utm": null,
+      "name": "오세훈",
+      "role": "uncle",
+      "market": "남대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "010-2209-4471",
+      "message": "남대문 아동복 전문입니다. 사전 신청합니다.",
+      "created_at": "2026-10-02T14:24:00+00:00",
+      "business_name": "남대문 오삼촌"
+    },
+    {
+      "id": "084bbaeb-dacc-4c45-881b-0f266c908fcb",
+      "utm": {
+        "utm_medium": "social",
+        "utm_source": "instagram",
+        "utm_campaign": "fw26_launch"
+      },
+      "name": "한소희",
+      "role": "retailer",
+      "market": "동대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "sohee.han@gmail.com",
+      "message": "거래 중인 삼촌도 같이 가입해야 하나요?",
+      "created_at": "2026-10-03T04:20:00+00:00",
+      "business_name": "망원 소소"
+    },
+    {
+      "id": "e534df28-5500-47c1-a3d4-78ce9ed0532f",
+      "utm": {
+        "utm_term": "사입삼춘",
+        "utm_medium": "cpc",
+        "utm_source": "naver",
+        "utm_campaign": "brand_search"
+      },
+      "name": "윤재민",
+      "role": "retailer",
+      "market": "기타",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "010-4410-2983",
+      "message": "광희시장 위주로 사입해요.",
+      "created_at": "2026-10-05T00:21:00+00:00",
+      "business_name": "재민 셀렉트"
+    },
+    {
+      "id": "62d0a65c-e498-4504-be74-fd073b0b30ea",
+      "utm": null,
+      "name": "강다현",
+      "role": "other",
+      "market": null,
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "dahyun.kang@daum.net",
+      "message": "촬영 협업 문의예요.",
+      "created_at": "2026-10-06T06:57:00+00:00",
+      "business_name": "패션 유튜버"
+    },
+    {
+      "id": "833ad614-74bb-4fc6-97d8-74ca5120761c",
+      "utm": {
+        "utm_medium": "channel",
+        "utm_source": "kakao",
+        "utm_campaign": "oct_news"
+      },
+      "name": "서준호",
+      "role": "uncle",
+      "market": "동대문",
+      "source": "landing-signup",
+      "consent": true,
+      "contact": "010-7012-3398",
+      "message": null,
+      "created_at": "2026-10-06T17:03:00+00:00",
+      "business_name": null
+    }
+  ],
+  "rowCount": 15,
+  "truncated": false,
+  "generatedAt": "2026-10-13T12:07:54.198315+00:00"
+}
