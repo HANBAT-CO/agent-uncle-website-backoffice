@@ -1,0 +1,123 @@
+/*
+ * Phone frame (spec 4.7): a CSS frame, no image. Every size follows one
+ * variable, --device-screen-w (set from the screenWidth prop), so the radii
+ * stay concentric at any width: outer radius 0.175 x screen width (56px at a
+ * 320px screen), screen radius 0.1375 x (44px), bezel 0.0375 x (12px).
+ *
+ * Screen aspect 1320:2868 (the captures; the 720x1564 clips are the same
+ * ratio). The Dynamic Island is drawn here at the capture geometry, because
+ * the media had it removed in post: 29.24% x 4.18% of the screen at 35.45%,
+ * 1.32% (386x120 at 468,38 on 1320x2868).
+ */
+
+.device {
+  --device-screen-w: 300px;
+  --device-bezel: calc(var(--device-screen-w) * 0.0375);
+  --device-radius: calc(var(--device-screen-w) * 0.175);
+  --device-screen-radius: calc(var(--device-screen-w) * 0.1375);
+
+  display: grid;
+  justify-items: center;
+  width: calc(var(--device-screen-w) + 2 * var(--device-bezel));
+  margin: 0;
+}
+
+.device-frame {
+  position: relative;
+  padding: var(--device-bezel);
+  border-radius: var(--device-radius);
+  background: #101010;
+  /* 1px inner highlight on the bezel; a tinted floating shadow on paper. */
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 18px 48px -12px rgb(7 35 28 / 0.22);
+}
+
+[data-tone="night"] .device-frame,
+[data-tone="dawn"] .device-frame {
+  /* At night paper objects get a mint hairline ring instead of a shadow (spec 4.4). */
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.08),
+    0 0 0 1px rgb(242 255 232 / 0.08);
+}
+
+.device-screen {
+  position: relative;
+  width: var(--device-screen-w);
+  aspect-ratio: 1320 / 2868;
+  border-radius: var(--device-screen-radius);
+  /* The app canvas, shown until the media paints. */
+  background: #f5f4ee;
+  isolation: isolate;
+}
+
+/* Children fill the screen and are clipped to its corners. */
+.device-screen > :where(:not(.device-island, .device-controls)) {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.device-screen :where(img, video) {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.device-island {
+  position: absolute;
+  z-index: 2;
+  left: 35.45%;
+  top: 1.32%;
+  width: 29.24%;
+  height: 4.18%;
+  border-radius: 9999px;
+  background: #050505;
+  pointer-events: none;
+}
+
+.device-caption {
+  margin-top: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+/* ---------- DeviceVideo ---------- */
+
+.device-media > :where(picture, video) {
+  position: absolute;
+  inset: 0;
+}
+
+.device-media video {
+  opacity: 0;
+  transition: opacity 300ms var(--ease-snap);
+}
+
+.device-media[data-state="playing"] video,
+.device-media[data-state="paused"] video,
+.device-media[data-state="ended"] video {
+  opacity: 1;
+}
+
+/* Controls sit under the frame by default (the screen shows only real app pixels). */
+.device-controls {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: calc(100% + var(--device-bezel) + 1rem);
+  translate: -50% 0;
+}
+
+.device-controls[data-placement="overlay"] {
+  top: auto;
+  bottom: 5.5%;
+}
+
+.device:has(.device-controls:not([data-placement="overlay"])) .device-frame {
+  margin-bottom: calc(2.75rem + 1rem);
+}
