@@ -36,20 +36,20 @@ export function UserMenu({ name, email, role }: { name: string; email: string | 
       </form>
       <DropdownMenu>
         <DropdownMenuTrigger
-          className="flex h-8 max-w-56 shrink-0 items-center gap-2 rounded-full py-0.5 pr-2.5 pl-0.5 text-left text-xs outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-muted"
+          className="flex size-9 shrink-0 items-center justify-center gap-2 rounded-full text-left text-xs outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/30 aria-expanded:bg-muted md:w-auto md:max-w-56 md:py-0.5 md:pr-2.5 md:pl-0.5"
         >
-          <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
+          <span aria-hidden className="grid size-8 shrink-0 place-items-center rounded-full bg-primary text-xs font-bold text-primary-foreground">
             {initial(name)}
           </span>
           {/* The accessible name is the visible name and role plus a hidden hint (WCAG 2.5.3). */}
-          <span className="flex min-w-0 flex-col leading-tight">
+          <span className="sr-only md:not-sr-only md:flex md:min-w-0 md:flex-col md:leading-tight">
             <span className="truncate font-semibold text-foreground">{name}</span>
             <span className="text-[0.6875rem] text-muted-foreground">
               {ROLE_LABEL[role]}
               <span className="sr-only"> 계정 메뉴</span>
             </span>
           </span>
-          <CaretDownIcon aria-hidden className="size-3 shrink-0 text-muted-foreground" />
+          <CaretDownIcon aria-hidden className="hidden size-3 shrink-0 text-muted-foreground md:block" />
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-56">
           <DropdownMenuLabel className="flex flex-col gap-0.5">

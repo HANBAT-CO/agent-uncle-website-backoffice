@@ -16,14 +16,16 @@ export function TopBar({ session }: { session: AdminSession }) {
   return (
     <header
       data-testid="admin-topbar"
-      className="sticky top-1 z-20 flex h-14 shrink-0 items-center gap-3 border-b bg-background/92 px-4 backdrop-blur-sm supports-[backdrop-filter]:bg-background/80 lg:px-6"
+      className="console-topbar sticky top-1 z-20 shrink-0 border-b border-[var(--console-line)] bg-background/95 backdrop-blur-md"
     >
-      <SidebarTrigger className="-ml-1 size-8 text-muted-foreground" />
+      <SidebarTrigger className="console-sidebar-trigger size-8 text-muted-foreground" />
       <Breadcrumbs />
-      <div className="flex min-w-0 shrink items-center justify-end gap-2.5">
-        <CommandPalette role={session.role} />
+      <CommandPalette role={session.role} />
+      <div className="console-topbar-environment flex items-center gap-2">
         <EnvPill target={session.target} role={session.role} />
         {session.target === "live" ? <DemoToggle /> : null}
+      </div>
+      <div className="console-topbar-account">
         <UserMenu name={session.displayName} email={session.email} role={session.role} />
       </div>
     </header>

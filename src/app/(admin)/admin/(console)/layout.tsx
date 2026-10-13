@@ -49,13 +49,13 @@ export default async function ConsoleLayout({ children, sheet }: { children: Rea
   const sidebarOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
-    <SidebarProvider defaultOpen={sidebarOpen}>
+    <SidebarProvider defaultOpen={sidebarOpen} style={{ "--sidebar-width": "14.75rem" } as React.CSSProperties}>
       <SkipLink />
       <LiveRule />
       <AppSidebar role={session.role} badges={badges} />
       <div data-slot="console-column" className="flex min-h-svh min-w-0 flex-1 flex-col pt-1">
         <TopBar session={session} />
-        <main id="main" tabIndex={-1} className="flex min-w-0 flex-1 flex-col gap-6 px-4 pt-6 pb-16 outline-none lg:px-8">
+        <main id="main" tabIndex={-1} className="console-main flex min-w-0 flex-1 flex-col gap-6 px-4 pt-7 pb-12 outline-none sm:px-6 lg:px-8">
           {children}
         </main>
       </div>

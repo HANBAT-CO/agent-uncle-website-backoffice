@@ -183,11 +183,11 @@ export function CommandPalette({ role }: { role: AdminRole }) {
         onClick={() => changeOpen(true)}
         aria-keyshortcuts="Meta+K Control+K"
         aria-haspopup="dialog"
-        className="h-8 w-full max-w-72 min-w-44 justify-start gap-2 rounded-full bg-card px-3 text-xs font-normal text-muted-foreground hover:bg-card hover:text-foreground"
+        className="console-search-trigger size-9 justify-center rounded-lg bg-card p-0 text-xs font-normal text-muted-foreground hover:bg-card hover:text-foreground lg:h-9 lg:w-56 lg:justify-start lg:gap-2 lg:px-3 xl:w-64"
       >
         <MagnifyingGlassIcon aria-hidden className="size-3.5" />
-        <span className="truncate">계정·요청·화면 찾기</span>
-        <Kbd className="ml-auto bg-muted text-[0.6875rem]">⌘K</Kbd>
+        <span className="sr-only lg:not-sr-only lg:truncate">계정·요청·화면 찾기</span>
+        <Kbd aria-hidden="true" className="ml-auto hidden bg-muted text-[0.6875rem] lg:inline-flex">⌘K</Kbd>
       </Button>
 
       <CommandDialog
