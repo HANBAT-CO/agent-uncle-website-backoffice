@@ -8,7 +8,17 @@ import "server-only";
  *   BACKOFFICE_SUPABASE_PUBLISHABLE_KEY  publishable (anon) key only
  * A local target must point at this machine and a live target must not, so a
  * preview or a laptop can never reach the other database by accident.
+ *
+ * Production default (2026-10-14): on a Vercel Production deployment
+ * (VERCEL_ENV=production) with no BACKOFFICE_SUPABASE_TARGET, the console
+ * turns on against the live project, using BACKOFFICE_* values when present,
+ * then the landing's NEXT_PUBLIC_SUPABASE_* values, then the project defaults
+ * below. Preview and development deployments stay off unless configured.
  */
+
+/** The live project and its publishable key (public: it also ships in the mobile app). */
+export const LIVE_SUPABASE_URL = "https://auicerytbhnqeakmkscs.supabase.co";
+export const LIVE_SUPABASE_PUBLISHABLE_KEY = "sb_publishable_mOfMxJwI_iWlc7_JQ1MuVA_ApBXJPEd";
 
 export type BackofficeTarget = "local" | "live";
 
@@ -40,7 +50,18 @@ function isPublishableKey(key: string): boolean {
 
 /** Pure: validates the three backoffice variables from an env record. */
 export function readBackofficeEnv(env: Record<string, string | undefined>): BackofficeEnv {
-  const target = env.BACKOFFICE_SUPABASE_TARGET?.trim();
+  const explicit = env.BACKOFFICE_SUPABASE_TARGET?.trim();
+  if (!explicit && env.VERCEL_ENV?.trim() === "production") {
+    return readBackofficeEnv({
+      ...env,
+      VERCEL_ENV: undefined,
+      BACKOFFICE_SUPABASE_TARGET: "live",
+      BACKOFFICE_SUPABASE_URL: env.BACKOFFICE_SUPABASE_URL?.trim() || env.NEXT_PUBLIC_SUPABASE_URL?.trim() || LIVE_SUPABASE_URL,
+      BACKOFFICE_SUPABASE_PUBLISHABLE_KEY:
+        env.BACKOFFICE_SUPABASE_PUBLISHABLE_KEY?.trim() || env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() || LIVE_SUPABASE_PUBLISHABLE_KEY,
+    });
+  }
+  const target = explicit;
   if (!target) {
     return { enabled: false, reason: "disabled", detail: "BACKOFFICE_SUPABASE_TARGET is not set" };
   }
@@ -87,5 +108,8 @@ export function getBackofficeEnv(): BackofficeEnv {
     BACKOFFICE_SUPABASE_TARGET: process.env.BACKOFFICE_SUPABASE_TARGET,
     BACKOFFICE_SUPABASE_URL: process.env.BACKOFFICE_SUPABASE_URL,
     BACKOFFICE_SUPABASE_PUBLISHABLE_KEY: process.env.BACKOFFICE_SUPABASE_PUBLISHABLE_KEY,
+    VERCEL_ENV: process.env.VERCEL_ENV,
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
   });
 }

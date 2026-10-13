@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
-import { readBackofficeEnv } from "./env";
+import { LIVE_SUPABASE_PUBLISHABLE_KEY, LIVE_SUPABASE_URL, readBackofficeEnv } from "./env";
 
 const LOCAL_URL = "http://127.0.0.1:55321";
 const LIVE_URL = "https://auicerytbhnqeakmkscs.supabase.co";
@@ -89,5 +89,38 @@ describe("readBackofficeEnv", () => {
     expect(withKey(jwt("authenticated"))).toMatchObject({ enabled: false, reason: "misconfigured" });
     expect(withKey("sb_other_abc")).toMatchObject({ enabled: false, reason: "misconfigured" });
     expect(withKey("not-a-key")).toMatchObject({ enabled: false, reason: "misconfigured" });
+  });
+
+  describe("Vercel Production default", () => {
+    it("turns on against the live project with no backoffice variables", () => {
+      expect(readBackofficeEnv({ VERCEL_ENV: "production" })).toEqual({
+        enabled: true,
+        target: "live",
+        url: LIVE_SUPABASE_URL,
+        publishableKey: LIVE_SUPABASE_PUBLISHABLE_KEY,
+      });
+    });
+
+    it("prefers the landing's public Supabase variables over the defaults", () => {
+      expect(
+        readBackofficeEnv({
+          VERCEL_ENV: "production",
+          NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co/",
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_landing",
+        }),
+      ).toEqual({ enabled: true, target: "live", url: "https://example.supabase.co", publishableKey: "sb_publishable_landing" });
+    });
+
+    it("still refuses a secret key supplied through the fallback", () => {
+      expect(readBackofficeEnv({ VERCEL_ENV: "production", NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "sb_secret_x" })).toMatchObject({
+        enabled: false,
+        reason: "misconfigured",
+      });
+    });
+
+    it("keeps an explicit target, and stays off on preview deployments", () => {
+      expect(readBackofficeEnv({ VERCEL_ENV: "production", BACKOFFICE_SUPABASE_TARGET: "local", BACKOFFICE_SUPABASE_URL: "http://127.0.0.1:55321", BACKOFFICE_SUPABASE_PUBLISHABLE_KEY: "sb_publishable_x" })).toMatchObject({ enabled: true, target: "local" });
+      expect(readBackofficeEnv({ VERCEL_ENV: "preview" })).toMatchObject({ enabled: false, reason: "disabled" });
+    });
   });
 });
