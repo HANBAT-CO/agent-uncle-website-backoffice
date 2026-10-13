@@ -1,5 +1,5 @@
 /**
- * Text drawn by the share image (src/app/opengraph-image.tsx) and the
+ * Text drawn by the share image (src/app/(site)/opengraph-image.tsx) and the
  * characters its TTF subsets must hold (scripts/fonts/og-fonts.mjs,
  * src/app/fonts/og-fonts.test.ts). The subset script reads site.ts directly
  * with the same mapping; the test fails if the two ever disagree.

@@ -1,4 +1,4 @@
-// Subset the Paperlogy TTFs that the share image (src/app/opengraph-image.tsx)
+// Subset the Paperlogy TTFs that the share image (src/app/(site)/opengraph-image.tsx)
 // renders with. Satori reads TTF/OTF only (no WOFF2), and the full KS X 1001
 // sets are about 350 KB each, so the image route reads two tiny subsets that
 // hold exactly the characters it draws: the wordmark (900) and the one-liner

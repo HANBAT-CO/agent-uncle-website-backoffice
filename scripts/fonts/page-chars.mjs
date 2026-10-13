@@ -12,21 +12,33 @@
 // Shared by scripts/fonts/page-subset.mjs (builds the files) and
 // src/app/fonts/page-subset.test.ts (fails when copy changes and the subsets
 // or the ranges in paperlogy.ts are stale).
+//
+// The /admin console (src/app/(admin), src/{components,lib,hooks}/admin) is a
+// separate root layout with its own full Paperlogy files, so its copy is not
+// page text and never changes the landing subsets (backoffice spec D1).
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { extname, join } from "node:path";
+import { extname, join, relative, sep } from "node:path";
 
 import { woff2CodePoints } from "./woff2-cmap.mjs";
 
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".json", ".mjs"]);
 const MAX_CODE_POINT = 0x10ffff;
+/** Console folders, relative to src/ (their text is not landing page text). */
+const CONSOLE_DIRS = new Set(["app/(admin)", "components/admin", "lib/admin", "hooks/admin"]);
 
-function sourceFiles(dir) {
+/**
+ * Non-test source files under `src` whose text the landing can print.
+ * @param {string} src absolute path of the src/ folder
+ * @returns {string[]}
+ */
+export function pageSourceFiles(src, dir = src) {
   const out = [];
   for (const name of readdirSync(dir)) {
     const full = join(dir, name);
-    if (statSync(full).isDirectory()) out.push(...sourceFiles(full));
-    else if (SOURCE_EXTENSIONS.has(extname(name)) && !/\.test\.[a-z]+$/.test(name)) out.push(full);
+    if (statSync(full).isDirectory()) {
+      if (!CONSOLE_DIRS.has(relative(src, full).split(sep).join("/"))) out.push(...pageSourceFiles(src, full));
+    } else if (SOURCE_EXTENSIONS.has(extname(name)) && !/\.test\.[a-z]+$/.test(name)) out.push(full);
   }
   return out;
 }
@@ -40,7 +52,7 @@ export function pageCodePoints(root) {
   const font = woff2CodePoints(readFileSync(join(root, "src/app/fonts/paperlogy-400.woff2")));
   const set = new Set();
   for (let c = 0x20; c < 0x7f; c += 1) set.add(c);
-  for (const file of sourceFiles(join(root, "src"))) {
+  for (const file of pageSourceFiles(join(root, "src"))) {
     for (const char of readFileSync(file, "utf8")) {
       const code = char.codePointAt(0) ?? 0;
       if (code >= 0x80 && font.has(code)) set.add(code);

@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { SmoothScroll } from "@/components/motion/SmoothScroll";
 import { getSiteUrl, MAIN_CONTENT_ID, site } from "@/lib/site";
 
-import { fontVariables } from "./fonts/paperlogy";
+import { fontVariables } from "../fonts/paperlogy";
 import "./globals.css";
 
 // No `alternates.canonical` or `openGraph.url` here: metadata is shallow-merged
