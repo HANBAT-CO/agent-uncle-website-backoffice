@@ -1,0 +1,297 @@
+/*
+ * S4 cart: the hairline stage theme, the rolling digit cells, the exploring
+ * note and the object-stage layout (spec S4, 8).
+ *
+ * Class names are cart-prefixed and read through cartClass() (cart-styles.ts):
+ * the current Turbopack CSS rule in next.config.ts emits *.module.css as
+ * global CSS with unhashed names, and these must not collide with anything
+ * else on the page in that mode.
+ */
+
+/*
+ * The section ground: the night plate #093A32, feathered in from the route's
+ * night #07231C above instead of meeting it in a hard horizontal edge (a
+ * lighter slab cut into the night reads as an alternating card band). Dawn
+ * feathers the plate back out below over the same height. The feather ends
+ * above the H2 (the section's top padding is 80px, 128px from 1024px), so
+ * the copy and the figure always sit on the plate itself.
+ */
+.cartGround {
+  background: linear-gradient(180deg, var(--night-0), var(--night-1) clamp(96px, 14svh, 160px)) var(--night-1);
+}
+
+/*
+ * The hairline stage. The plate equals the section ground (#093A32), so the
+ * drawing sits directly on the section. These are the figure's whole palette:
+ * the kernel reads them through its own --hl-* variables.
+ *
+ * Deviations from spec 8, on purpose:
+ * - --hairline-edge: the spec sets #EDECE3, but that is within a few points
+ *   of the mint highlight #F2FFE8. Then the one bright stroke (the knot of the
+ *   top secured bag) cannot be told from every silhouette, which breaks the
+ *   figure's accent rule (hairline rule 04). The silhouettes take the night
+ *   secondary #B6D7C2 at 82% on the plate instead (about 6.6:1 against it),
+ *   so mint stays the only light that means something.
+ * - --hairline-mid and --hairline-lo: at the spec's 60% and 25% the four
+ *   미송 ghosts (1px dots, a quarter of the line inked) and the bag folds
+ *   (about 1.8:1) all but vanished on the plate, though the ghosts are half of
+ *   the section's headline. Mid is 76% (about 5:1, still below edge, so the
+ *   silhouettes lead) and lo 44% (about 2.6:1); the ghosts' dots are longer
+ *   (2 on 2.5) and the stroke is a little heavier.
+ * - The box is 4:5, not 5:4: the SVG shows only the drawing (CART_CROP in
+ *   cart-host.ts), so the cart is larger at every width.
+ */
+.cartStage {
+  --hairline-plate: #093a32;
+  --hairline-hi: #f2ffe8;
+  --hairline-edge: color-mix(in srgb, #b6d7c2 82%, #093a32);
+  --hairline-mid: color-mix(in srgb, #b6d7c2 76%, #093a32);
+  --hairline-lo: color-mix(in srgb, #b6d7c2 44%, #093a32);
+  --hairline-stroke: 1.2;
+
+  /* The kernel's own stage rules arrive with the lazy chunk; reserve the box before that. */
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 256 / 320;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/*
+ * The ghosts' dashes. The kernel's rule sits inside :where() (no
+ * specificity), so this wins; the attribute selector is left as written by
+ * the CSS-module transform, so it matches the kernel's literal class.
+ */
+.cartStage > svg [class~="dash"] {
+  stroke-dasharray: 2 2.5;
+}
+
+@media (min-width: 1024px) {
+  .cartStage {
+    --hairline-stroke: 1.35;
+  }
+}
+
+/*
+ * Fixed-width digit cell (spec 4.2): changing numbers never jitter. The cell
+ * is exactly one line box of its parent (1lh, same line-height, top-aligned),
+ * so the digit sits on the same baseline as the words around it.
+ */
+.cartCell {
+  display: inline-block;
+  overflow: hidden;
+  width: 0.62em;
+  height: 1lh;
+  line-height: inherit;
+  text-align: center;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+/* inline-block, not block: the text layer keeps 확보 2 · 미송 4 on one line for copy and for assistive tech. */
+.cartDigit {
+  display: inline-block;
+  width: 100%;
+}
+
+/* roll: 300ms out-expo (spec 6.2). The global reduced-motion rule shortens it to nothing. */
+.cartDigit[data-direction="1"] {
+  animation: cart-roll-up var(--duration-roll) var(--ease-out-expo);
+}
+
+.cartDigit[data-direction="-1"] {
+  animation: cart-roll-down var(--duration-roll) var(--ease-out-expo);
+}
+
+@keyframes cart-roll-up {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes cart-roll-down {
+  from {
+    transform: translateY(-100%);
+  }
+}
+
+/* The exploring note keeps its space, so the read-out never shifts the layout below it. */
+.cartNote {
+  opacity: 0;
+  transform: translateY(8px);
+  visibility: hidden;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    transform var(--duration-record) var(--ease-snap),
+    visibility 0s linear var(--duration-record);
+}
+
+.cartNote[data-on] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+/*
+ * An [app] card recedes while a preview leaves nothing owed (see
+ * CartMootCard): its paper sinks toward the plate (78% paper) and the text,
+ * by its data-cart-moot-tone, holds ink (bold lines) or darkens to #2D2D2D
+ * (the rest), so the sunk paper costs no legibility. Colour, not opacity:
+ * at opacity 0.4 the home card's live 남은 미송 0장 fell to 2.4:1. Now the
+ * lowest line is #2D2D2D on the home card, about 8.3:1 (APCA Lc 69, level
+ * with the exploring #636363 on full paper). The selectors outrank the
+ * cards' bg and text utilities.
+ */
+.cartMoot {
+  transition: background-color var(--duration-record) var(--ease-snap);
+}
+
+.cartMoot [data-cart-moot-tone] {
+  transition: color var(--duration-record) var(--ease-snap);
+}
+
+.cartMoot[data-moot][data-cart-mint-card] {
+  background-color: color-mix(in srgb, #f2ffe8 78%, #093a32);
+}
+
+.cartMoot[data-moot][data-cart-home-card] {
+  background-color: color-mix(in srgb, #f5f4ee 78%, #093a32);
+}
+
+.cartMoot[data-moot] [data-cart-moot-tone="strong"] {
+  color: #101010;
+}
+
+.cartMoot[data-moot] [data-cart-moot-tone="soft"] {
+  color: #2d2d2d;
+}
+
+/*
+ * Object stage. Below 1024px one column in reading order: the figure, the
+ * stepper, the read-out, then the two cards (side by side from 768px). The
+ * stack is tight on phones so the figure, the stepper and the read-out fit
+ * on one screen above the record pill. The figure never grows taller than
+ * the screen leaves room for.
+ * From 1024px: a centred cluster, the mint card high on the left beside the
+ * hanging bags and their tag, the figure in the centre, the home card low on
+ * the right beside the cart, the read-out and the stepper under the figure.
+ */
+.cartLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cartFigure {
+  justify-self: center;
+  width: 100%;
+  max-width: min(20rem, max(15rem, calc((100svh - 22rem) * 0.8)));
+}
+
+.cartStepper,
+.cartReadout {
+  justify-self: center;
+}
+
+.cartMint,
+.cartHome {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .cartLayout {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    row-gap: 1.5rem;
+    margin-top: 3rem;
+  }
+
+  .cartFigure,
+  .cartStepper,
+  .cartReadout {
+    grid-column: 1 / -1;
+  }
+
+  .cartFigure {
+    max-width: min(24rem, max(16rem, calc((100svh - 19rem) * 0.8)));
+  }
+
+  /* Side by side, each card keeps its own height: a stretched mint card would leave a band of empty paper. */
+  .cartMint,
+  .cartHome {
+    align-self: start;
+  }
+}
+
+@media (min-width: 1024px) {
+  /*
+   * The figure column is about 400px (a 500px-tall stage), less on short
+   * screens, so the figure, the read-out and its note fit one screen together.
+   */
+  .cartLayout {
+    --cart-figure-width: min(25rem, max(18rem, calc((100svh - 22rem) * 0.8)));
+
+    grid-template-columns: minmax(0, 13.5rem) var(--cart-figure-width) minmax(0, 13.5rem);
+    grid-template-areas:
+      "mint figure ."
+      ". figure home"
+      ". readout ."
+      ". stepper .";
+    justify-content: center;
+    column-gap: 2rem;
+    row-gap: 0;
+    margin-top: 4rem;
+  }
+
+  .cartFigure {
+    grid-area: figure;
+    max-width: none;
+  }
+
+  .cartMint {
+    grid-area: mint;
+    align-self: start;
+    position: relative;
+    z-index: var(--z-raised);
+    margin-top: 3.5rem;
+  }
+
+  .cartHome {
+    grid-area: home;
+    align-self: end;
+    position: relative;
+    z-index: var(--z-raised);
+    margin-bottom: 4rem;
+  }
+
+  /* Centred on the figure, whatever the side tracks; the note may run past the column, evenly. */
+  .cartReadout {
+    grid-area: readout;
+    justify-self: center;
+    width: max-content;
+    max-width: 26rem;
+    margin-top: 1.5rem;
+  }
+
+  .cartStepper {
+    grid-area: stepper;
+    margin-top: 0.75rem;
+  }
+}
+
+/*
+ * 1280 to 1439px: the record column takes the right of the screen. A
+ * narrower home track and tighter gaps keep the home card with the cart (its
+ * counterpart, the mint card, is on the other side) and clear of the record
+ * cards. The mint track keeps its width so its date line stays on one line.
+ */
+@media (min-width: 1280px) and (max-width: 1439.98px) {
+  .cartLayout {
+    grid-template-columns: minmax(0, 13.5rem) var(--cart-figure-width) minmax(0, 12rem);
+    column-gap: 1.5rem;
+  }
+}
