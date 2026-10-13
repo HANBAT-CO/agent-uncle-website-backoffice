@@ -3,12 +3,11 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-import { getSiteUrl } from "@/lib/site";
-
 import { gateRedirectPath, resolveAdminGate } from "../dal";
 import { getBackofficeEnv } from "../env";
 import { safeNext } from "../session";
 import { createAdminServerClient, type AdminSupabaseClient } from "../supabase/server";
+import { staffEmailFromId } from "./staff-id";
 
 /*
  * Staff sign-in, MFA and sign-out (backoffice spec 5, screens 10.1 to 10.3).
@@ -16,11 +15,10 @@ import { createAdminServerClient, type AdminSupabaseClient } from "../supabase/s
  * environment and the session itself.
  */
 
-export type AuthFormState = { status: "idle" | "error"; message?: string; email?: string };
+export type AuthFormState = { status: "idle" | "error"; message?: string; id?: string };
 
 const COPY = {
-  badCredentials: "이메일 또는 비밀번호를 확인해 주세요.",
-  localOnly: "로컬 테스트 계정만 쓸 수 있어요.",
+  badCredentials: "아이디 또는 비밀번호를 확인해 주세요.",
   badCode: "코드가 맞지 않아요. 새 코드로 다시 입력해 주세요.",
   totpDisabled: "2단계 인증이 아직 켜지지 않았어요. 관리자에게 문의해 주세요.",
   retry: "잠시 후 다시 시도해 주세요.",
@@ -46,37 +44,19 @@ async function routeAfterSignIn(supabase: AdminSupabaseClient, target: "local" |
   redirect(gate.state === "ok" ? next : gateRedirectPath(gate, next));
 }
 
-/** Google OAuth with PKCE (production sign-in). */
-export async function signInWithGoogleAction(formData: FormData): Promise<void> {
-  enabledEnv();
-  const next = safeNext(field(formData, "next"));
-  const supabase = await createAdminServerClient();
-  const redirectTo = `${new URL("/admin/auth/callback", getSiteUrl()).href}?next=${encodeURIComponent(next)}`;
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo, queryParams: { prompt: "select_account" } },
-  });
-  if (error || !data?.url) redirect("/admin/login?error=oauth");
-  redirect(data.url);
-}
+const passwordSchema = z.string().min(1).max(256);
 
-const passwordSchema = z.object({
-  email: z.string().trim().toLowerCase().pipe(z.email()),
-  password: z.string().min(1).max(256),
-});
-
-/** Email and password, for the seeded local staff only (target=local). */
+/** Staff ID and password: the only console sign-in, on every target. */
 export async function signInWithPasswordAction(_prev: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const env = enabledEnv();
-  const email = field(formData, "email").trim();
-  if (env.target !== "local") return { status: "error", message: COPY.localOnly, email };
-
-  const parsed = passwordSchema.safeParse({ email, password: field(formData, "password") });
-  if (!parsed.success) return { status: "error", message: COPY.badCredentials, email };
+  const id = field(formData, "id").trim();
+  const email = staffEmailFromId(id, env.target);
+  const password = passwordSchema.safeParse(field(formData, "password"));
+  if (!email || !password.success) return { status: "error", message: COPY.badCredentials, id };
 
   const supabase = await createAdminServerClient();
-  const { error } = await supabase.auth.signInWithPassword(parsed.data);
-  if (error) return { status: "error", message: COPY.badCredentials, email };
+  const { error } = await supabase.auth.signInWithPassword({ email, password: password.data });
+  if (error) return { status: "error", message: COPY.badCredentials, id };
 
   return routeAfterSignIn(supabase, env.target, safeNext(field(formData, "next")));
 }

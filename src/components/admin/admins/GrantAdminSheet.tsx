@@ -130,7 +130,7 @@ function LookupSummary({ user }: { user: LookupUser }) {
         ]}
       />
       {user.hasAppAccount ? (
-        <p className="text-xs text-status-attention">앱에서 쓰는 계정은 운영 계정으로 쓸 수 없어요. 운영용 Google 계정으로 다시 로그인해 달라고 요청해 주세요.</p>
+        <p className="text-xs text-status-attention">앱에서 쓰는 계정은 운영 계정으로 쓸 수 없어요. 운영용 아이디로 만든 계정을 등록해 주세요.</p>
       ) : null}
       {!user.emailConfirmed ? <p className="text-xs text-status-attention">이메일 인증을 마친 계정만 운영 계정으로 등록할 수 있어요.</p> : null}
     </section>

@@ -50,7 +50,7 @@ describe("updateAdminSession", () => {
 
   it("lets the public screens through and forwards the console path", async () => {
     stubEnv(LOCAL);
-    for (const path of ["/admin/login?next=%2Fadmin", "/admin/auth/callback?code=x", "/admin/unavailable"]) {
+    for (const path of ["/admin/login?next=%2Fadmin", "/admin/unavailable"]) {
       const response = await updateAdminSession(request(path));
       expect(response.status, path).toBe(200);
       expect(response.headers.get("x-middleware-next"), path).toBe("1");

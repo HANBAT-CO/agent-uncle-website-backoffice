@@ -9,7 +9,7 @@ import { signInWithPasswordAction, type AuthFormState } from "@/lib/admin/auth/a
 
 const initial: AuthFormState = { status: "idle" };
 
-/** Local sign-in for the seeded staff (target=local only; the action refuses otherwise). */
+/** Staff sign-in with an ID and a password (the only console sign-in). */
 export function PasswordSignInForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState(signInWithPasswordAction, initial);
   const failed = state.status === "error";
@@ -18,17 +18,19 @@ export function PasswordSignInForm({ next }: { next: string }) {
     <form action={action} className="flex flex-col gap-5">
       <input type="hidden" name="next" value={next} />
       <div className="flex flex-col gap-2">
-        <Label htmlFor="admin-email" className="text-sm">
-          이메일
+        <Label htmlFor="admin-id" className="text-sm">
+          아이디
         </Label>
         <Input
-          id="admin-email"
-          name="email"
-          type="email"
+          id="admin-id"
+          name="id"
+          type="text"
           autoComplete="username"
+          autoCapitalize="none"
+          autoCorrect="off"
           spellCheck={false}
           required
-          defaultValue={state.email}
+          defaultValue={state.id}
           aria-invalid={failed || undefined}
           aria-describedby={failed ? "admin-login-error" : undefined}
           className="h-10 px-3 text-sm md:text-sm"
@@ -55,7 +57,6 @@ export function PasswordSignInForm({ next }: { next: string }) {
       <Button type="submit" size="lg" disabled={pending} className="h-10 w-full text-sm">
         {pending ? "로그인하는 중…" : "로그인"}
       </Button>
-      <p className="text-xs/relaxed text-muted-foreground">로컬 테스트 계정만 쓸 수 있어요.</p>
     </form>
   );
 }

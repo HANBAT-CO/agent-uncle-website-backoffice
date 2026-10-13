@@ -33,7 +33,7 @@ function originOf(url: string | undefined): string | null {
  * same keys (X-Frame-Options, Referrer-Policy) override it under /admin. The
  * CSP ships in production builds only (dev needs eval for React refresh) and
  * only when BACKOFFICE_SUPABASE_URL is set: Supabase is the one third-party
- * origin (signed file URLs, the OAuth form post), plus Google for sign-in.
+ * origin (signed file URLs).
  */
 export function adminHeaders({ nodeEnv, supabaseUrl }: { nodeEnv: string | undefined; supabaseUrl: string | undefined }): Header[] {
   const headers: Header[] = [
@@ -51,7 +51,7 @@ export function adminHeaders({ nodeEnv, supabaseUrl }: { nodeEnv: string | undef
       `img-src 'self' data: blob: ${supabase}`,
       `frame-src ${supabase}`,
       "connect-src 'self'",
-      `form-action 'self' ${supabase} https://accounts.google.com`,
+      "form-action 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",
     ];

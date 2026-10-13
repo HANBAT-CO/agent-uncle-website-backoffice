@@ -32,7 +32,7 @@ export default async function NoAccessPage() {
       <div className="flex flex-col gap-5">
         {gate.hasAppAccount ? (
           <AuthNotice tone="attention">
-            앱에서 쓰는 계정은 운영 계정으로 쓸 수 없어요. 운영용 Google 계정으로 다시 로그인해 주세요.
+            앱에서 쓰는 계정은 운영 계정으로 쓸 수 없어요. 운영용 아이디로 다시 로그인해 주세요.
           </AuthNotice>
         ) : null}
         <SignOutButton className="h-10 w-full text-sm" />

@@ -192,7 +192,7 @@ describe("next.config admin headers (spec 4)", () => {
       "img-src 'self' data: blob: https://auicerytbhnqeakmkscs.supabase.co",
       "frame-src https://auicerytbhnqeakmkscs.supabase.co",
       "connect-src 'self'",
-      "form-action 'self' https://auicerytbhnqeakmkscs.supabase.co https://accounts.google.com",
+      "form-action 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",
     ]);

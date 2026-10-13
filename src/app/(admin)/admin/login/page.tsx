@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import { AuthCard } from "@/components/admin/auth/AuthCard";
 import { AuthNotice } from "@/components/admin/auth/AuthNotice";
-import { GoogleSignInButton } from "@/components/admin/auth/GoogleSignInButton";
 import { PasswordSignInForm } from "@/components/admin/auth/PasswordSignInForm";
 import { getAdminGate, gateRedirectPath, type AdminGate } from "@/lib/admin/dal";
 import { getBackofficeEnv } from "@/lib/admin/env";
@@ -17,7 +16,7 @@ function first(value: string | string[] | undefined): string | undefined {
   return Array.isArray(value) ? value[0] : value;
 }
 
-/** 로그인 (screens appendix 10.1). Google on live, the seeded password logins on local. */
+/** 로그인 (screens appendix 10.1). Staff ID and password on every target. */
 export default async function LoginPage({ searchParams }: { searchParams: SearchParams }) {
   const params = await searchParams;
   const next = safeNext(first(params.next));
@@ -34,7 +33,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
   if (gate?.state === "mfa_required" || gate?.state === "unavailable") redirect(gateRedirectPath(gate, next));
 
   const notice =
-    first(params.error) === "oauth" ? (
+    first(params.error) ? (
       <AuthNotice tone="attention">로그인하지 못했어요. 다시 시도해 주세요.</AuthNotice>
     ) : first(params.reason) === "expired" ? (
       <AuthNotice>보안을 위해 다시 로그인해 주세요.</AuthNotice>
@@ -48,7 +47,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
     >
       <div className="flex flex-col gap-6">
         {notice}
-        {env.target === "local" ? <PasswordSignInForm next={next} /> : <GoogleSignInButton next={next} />}
+        <PasswordSignInForm next={next} />
       </div>
     </AuthCard>
   );
