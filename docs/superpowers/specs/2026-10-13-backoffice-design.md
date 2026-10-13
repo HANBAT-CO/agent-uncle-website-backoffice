@@ -33,7 +33,7 @@ If any other copy of the migration differs from the repo file, the repo file win
 | D8 | Viewers see PII masked. Operators see it unmasked, and their dossier views are audited. Owners also get the app-wide switches, PII exports and staff management. |
 | D9 | Remote config and notices live in new tables. The app reads them only through `app_bootstrap_config()`. The Realtime publication is unchanged in v1; the app polls. |
 | D10 | The migration ships only through the app repo's migration history. This repo keeps the canonical proposal and its checks, and applies them only to the LOCAL stack. |
-| D11 | The console is off in any deployment without `BACKOFFICE_SUPABASE_TARGET`. Only Production sets `live`, so preview URLs never reach live data. |
+| D11 | The console is off in any deployment without `BACKOFFICE_SUPABASE_TARGET`, except Vercel Production (`VERCEL_ENV=production`), which defaults to `live` with the BACKOFFICE_*, then NEXT_PUBLIC_SUPABASE_*, then built-in project values (changed 2026-10-14 so the deployed console works without extra Vercel variables). Preview URLs still never reach live data. |
 | D12 | v1 has a light theme only and is desktop-first. It is designed for 1280px and above and usable down to 1024px. |
 | D13 | The attention tone is the app's own red, `#D22030`: a weak tint, always paired with an icon and a label, and used only in admin files. Orange, lime and purple stay banned everywhere. `scripts/qa/no-banned-colors.mjs` gets an admin-path exemption for the two app reds only. |
 

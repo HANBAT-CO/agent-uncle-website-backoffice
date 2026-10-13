@@ -88,7 +88,7 @@ e2e가 남긴 메모, 감사 로그, 설정 버전은 `reset.sh`로 지울 수 �
 
 | 변수 | 로컬 | 프로덕션 | 프리뷰 |
 |---|---|---|---|
-| `BACKOFFICE_SUPABASE_TARGET` | `local` | `live` | 없음 (운영 화면 꺼짐) |
+| `BACKOFFICE_SUPABASE_TARGET` | `local` | `live` (없으면 Vercel Production에서 자동으로 `live`) | 없음 (운영 화면 꺼짐) |
 | `BACKOFFICE_SUPABASE_URL` | `http://127.0.0.1:55321` | `https://auicerytbhnqeakmkscs.supabase.co` | - |
 | `BACKOFFICE_SUPABASE_PUBLISHABLE_KEY` | 로컬 publishable 키 | 앱과 랜딩이 쓰는 publishable 키 | - |
 
@@ -96,11 +96,13 @@ e2e가 남긴 메모, 감사 로그, 설정 버전은 `reset.sh`로 지울 수 �
   `.env.development.local`에 써요. 이 파일은 `next dev`에서만 읽혀요.
 - `target=local`은 localhost만, `target=live`는 localhost가 아닌 주소만 허용해요.
   어긋나면 "운영 화면 설정을 확인해 주세요."가 보여요.
-- `BACKOFFICE_SUPABASE_TARGET`이 없으면 모든 `/admin` 주소가
+- `BACKOFFICE_SUPABASE_TARGET`이 없으면 Vercel Production(`VERCEL_ENV=production`)에서는
+  라이브 프로젝트로 자동으로 켜져요. URL과 키는 `BACKOFFICE_*` → 랜딩의 `NEXT_PUBLIC_SUPABASE_*` →
+  프로젝트 기본값 순서로 정해져요. 그 밖의 배포(프리뷰 등)에서는 모든 `/admin` 주소가
   "이 배포에서는 운영 화면이 꺼져 있어요."를 보여 줘요 (spec D11). 그래서 프리뷰 URL은
   라이브 데이터에 닿지 않아요.
-- 프로덕션 빌드의 CSP는 빌드 시점의 `BACKOFFICE_SUPABASE_URL`로 만들어져요. 프로덕션 빌드
-  환경에도 이 값을 넣어 주세요.
+- 프로덕션 빌드의 CSP는 빌드 시점의 Supabase URL로 만들어져요. Vercel Production에서는 값이
+  없어도 위와 같은 순서로 정해져요.
 - 랜딩의 `NEXT_PUBLIC_SUPABASE_*`(`.env.local`)는 그대로 두고 덮어쓰지 않아요.
 
 ### 역할
