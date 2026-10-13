@@ -25,17 +25,17 @@ export function Pagination({ total, page, size }: { total: number; page: number;
   const to = Math.min(current * size, total);
 
   return (
-    <nav aria-label="페이지" aria-busy={pending || undefined} className="flex flex-wrap items-center justify-between gap-3 px-1 text-xs">
+    <nav aria-label="페이지" aria-busy={pending || undefined} className="flex flex-wrap items-center justify-between gap-3 px-1 pt-1 text-xs">
       <p className="num text-muted-foreground">
         {from.toLocaleString("ko-KR")}-{to.toLocaleString("ko-KR")} / {total.toLocaleString("ko-KR")}건
       </p>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <label className="flex items-center gap-1.5 text-muted-foreground">
           <span>한 번에</span>
           <select
             value={size}
             onChange={(event) => setParams({ size: Number(event.target.value) as (typeof PAGE_SIZES)[number], page: null })}
-            className="h-7 rounded-md border border-input bg-background/60 px-1.5 text-xs text-foreground"
+            className="h-8 rounded-md border border-input bg-card px-2 text-xs text-foreground"
           >
             {PAGE_SIZES.map((option) => (
               <option key={option} value={option}>

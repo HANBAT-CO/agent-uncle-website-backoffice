@@ -31,12 +31,15 @@ export function DateRangeFilter({
   const to = (params[toParam] as string | null) ?? "";
 
   const inputClass =
-    "num h-9 rounded-md border border-input bg-card px-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30";
+    "num h-10 w-full min-w-0 rounded-md border border-input bg-card px-2 text-xs outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 sm:h-9 sm:w-auto sm:text-sm";
 
   return (
-    <fieldset aria-busy={pending || undefined} className={cn("flex items-center gap-1.5", className)}>
+    <fieldset
+      aria-busy={pending || undefined}
+      className={cn("grid w-full min-w-0 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-1.5 sm:flex sm:w-auto", className)}
+    >
       <legend className="sr-only">{label} (한국 시간)</legend>
-      <span aria-hidden className="text-xs text-muted-foreground">
+      <span aria-hidden className="col-span-3 text-xs text-muted-foreground sm:col-auto">
         {label}
       </span>
       <label htmlFor={`${id}-from`} className="sr-only">

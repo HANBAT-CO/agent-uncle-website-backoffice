@@ -145,15 +145,15 @@ export function DataTable<T>({
   };
 
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <div className={cn("console-data-table flex min-w-0 flex-col gap-3", className)}>
       {selectable && selectedIds.length > 0 ? <SelectionBar ids={selectedIds} onClear={() => setSelection({})} /> : null}
       {rows.length === 0 ? (
         empty
       ) : (
-        <div ref={scrollRef} className="relative overflow-auto rounded-xl border bg-card" style={{ maxHeight }}>
+        <div ref={scrollRef} className="console-table-scroll relative overflow-auto rounded-xl border bg-card" style={{ maxHeight }}>
           <table className="w-full caption-bottom border-separate border-spacing-0 text-[0.8125rem]">
             <caption className="sr-only">{caption}</caption>
-            <thead className="sticky top-0 z-10 bg-card">
+            <thead className="sticky top-0 z-10 bg-muted">
               {table.getHeaderGroups().map((group) => (
                 <tr key={group.id}>
                   {group.headers.map((header) => {
@@ -166,7 +166,7 @@ export function DataTable<T>({
                         aria-sort={sorted}
                         style={meta?.width ? { width: meta.width } : undefined}
                         className={cn(
-                          "h-10 border-b px-3 text-left align-middle text-xs font-medium whitespace-nowrap text-muted-foreground",
+                          "h-11 border-b px-4 text-left align-middle text-[0.6875rem] font-medium whitespace-nowrap text-muted-foreground",
                           meta?.align === "right" && "text-right",
                           meta?.align === "center" && "text-center",
                         )}
@@ -192,7 +192,7 @@ export function DataTable<T>({
                     data-state={row.getIsSelected() ? "selected" : undefined}
                     onClick={(event) => openRow(event, href)}
                     className={cn(
-                      "group/row h-12 transition-colors hover:bg-accent data-[state=selected]:bg-secondary",
+                      "group/row h-12 transition-colors hover:bg-accent focus-within:bg-accent data-[state=selected]:bg-secondary",
                       href && "cursor-pointer",
                     )}
                   >
@@ -203,13 +203,13 @@ export function DataTable<T>({
                         <td
                           key={cell.id}
                           className={cn(
-                            "h-12 max-w-80 border-b px-3 align-middle whitespace-nowrap group-last/row:border-b-0",
+                            "h-12 max-w-80 border-b border-[var(--console-line)]/65 px-4 align-middle whitespace-nowrap group-last/row:border-b-0",
                             meta?.align === "right" && "num text-right",
                             meta?.align === "center" && "text-center",
                           )}
                         >
                           {href && cell.column.id === linkColumnId ? (
-                            <Link href={href} prefetch={false} scroll={false} className="block rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+                            <Link href={href} prefetch={false} scroll={false} className="block rounded-sm py-1 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
                               {content}
                             </Link>
                           ) : (

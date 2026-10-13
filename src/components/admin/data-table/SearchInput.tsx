@@ -72,11 +72,11 @@ export function SearchInput({
   };
 
   return (
-    <div role="search" className={cn("relative w-full max-w-sm", className)}>
+    <div role="search" className={cn("relative w-full max-w-md", className)}>
       <label htmlFor={id} className="sr-only">
         {label ?? placeholder}
       </label>
-      <MagnifyingGlassIcon aria-hidden className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
+      <MagnifyingGlassIcon aria-hidden className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-muted-foreground" />
       <input
         ref={inputRef}
         id={id}
@@ -106,7 +106,7 @@ export function SearchInput({
             commit();
           }
         }}
-        className="h-9 w-full rounded-md border border-input bg-card pr-8 pl-8 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 [&::-webkit-search-cancel-button]:hidden"
+        className="h-10 w-full rounded-lg border border-input bg-card pr-10 pl-10 text-sm outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 [&::-webkit-search-cancel-button]:hidden"
       />
       {value ? (
         <button
@@ -118,7 +118,7 @@ export function SearchInput({
             commit();
             inputRef.current?.focus();
           }}
-          className="absolute top-1/2 right-1.5 flex size-6 -translate-y-1/2 items-center justify-center rounded-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
+          className="absolute top-1/2 right-1 flex size-8 -translate-y-1/2 items-center justify-center rounded-md text-muted-foreground outline-none hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40"
         >
           <XIcon aria-hidden className="size-3.5" />
         </button>
