@@ -35,6 +35,19 @@ function originOf(url: string | undefined): string | null {
  * only when BACKOFFICE_SUPABASE_URL is set: Supabase is the one third-party
  * origin (signed file URLs).
  */
+/**
+ * The Supabase origin for the console CSP. Mirrors src/lib/admin/env.ts: on a
+ * Vercel Production build with no BACKOFFICE_SUPABASE_URL the console talks to
+ * the live project, so the CSP must allow it too.
+ */
+function adminSupabaseUrl(): string | undefined {
+  if (process.env.BACKOFFICE_SUPABASE_URL) return process.env.BACKOFFICE_SUPABASE_URL;
+  if (!process.env.BACKOFFICE_SUPABASE_TARGET && process.env.VERCEL_ENV === "production") {
+    return process.env.NEXT_PUBLIC_SUPABASE_URL || "https://auicerytbhnqeakmkscs.supabase.co";
+  }
+  return undefined;
+}
+
 export function adminHeaders({ nodeEnv, supabaseUrl }: { nodeEnv: string | undefined; supabaseUrl: string | undefined }): Header[] {
   const headers: Header[] = [
     { key: "X-Robots-Tag", value: "noindex, nofollow" },
@@ -123,7 +136,7 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: securityHeaders },
       {
         source: "/admin/:path*",
-        headers: adminHeaders({ nodeEnv: process.env.NODE_ENV, supabaseUrl: process.env.BACKOFFICE_SUPABASE_URL }),
+        headers: adminHeaders({ nodeEnv: process.env.NODE_ENV, supabaseUrl: adminSupabaseUrl() }),
       },
     ];
   },
