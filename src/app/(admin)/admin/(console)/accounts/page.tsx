@@ -93,7 +93,8 @@ export default async function AccountsPage({ searchParams }: { searchParams: Sea
   const header = (
     <PageHeader
       title="계정·가입"
-      description="가입 진행과 사업자 서류 확인, 이용 제한을 다뤄요."
+      eyebrow={params.role === "uncle" ? "사입삼춘 관리" : params.role === "retailer" ? "소매상 관리" : "회원 관리"}
+      description="사입삼춘과 소매상의 가입, 사업자 서류, 이용 상태를 함께 관리해요."
       meta={canSeeContact ? null : <span>열람자 권한에서는 이메일과 연락처가 가려져요.</span>}
     />
   );

@@ -9,6 +9,7 @@ import { AttentionQueue } from "@/components/admin/dashboard/AttentionQueue";
 import { BackorderAgingChart } from "@/components/admin/dashboard/BackorderAgingChart";
 import { DashboardSkeleton } from "@/components/admin/dashboard/DashboardSkeleton";
 import { KpiTiles } from "@/components/admin/dashboard/KpiTiles";
+import { MemberManagement } from "@/components/admin/dashboard/MemberManagement";
 import { kpiTiles, parseRange, stampLabel, summaryLines } from "@/components/admin/dashboard/model";
 import { NewRequestsChart } from "@/components/admin/dashboard/NewRequestsChart";
 import { RangeToggle } from "@/components/admin/dashboard/RangeToggle";
@@ -58,6 +59,7 @@ async function DashboardBody({
 
   return (
     <>
+      <MemberManagement accounts={data.accounts} includeDemo={includeDemo} />
       <KpiTiles tiles={kpiTiles(data, { includeDemo })} />
       <StageBar stages={[...stages]} ended={stages.ended} includeDemo={includeDemo} />
       <div className="dashboard-workspace grid gap-5">
@@ -74,7 +76,7 @@ async function DashboardBody({
 
 /**
  * 대시보드 /admin (screens 10.5, viewer). One backoffice_overview call for
- * the chosen range feeds the stamp, the six KPI tiles, the 지금 확인할 일
+ * the chosen range feeds the stamp, both member directories, the six KPI tiles, the 지금 확인할 일
  * queue, the side summary, request flow and two charts. Refreshes every 30 s while
  * the tab is visible. Demo rows count only on live with `demo=1`.
  */
@@ -94,6 +96,7 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
       <PageHeader
         title="대시보드"
         eyebrow="OPERATIONS OVERVIEW"
+        description="사입삼춘과 소매상, 두 이용자의 계정과 거래 흐름을 함께 관리해요."
         meta={
           <Suspense fallback={<span aria-hidden>…</span>}>
             <Stamp overview={overview} />
