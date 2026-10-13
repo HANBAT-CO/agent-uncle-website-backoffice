@@ -27,13 +27,13 @@ export function RequestSheet({ title, description, children }: { title: string; 
           event.preventDefault();
           (event.currentTarget as HTMLElement | null)?.focus();
         }}
-        className="w-full gap-0 overflow-y-auto bg-background p-0 data-[side=right]:sm:max-w-[min(64rem,calc(100vw-4rem))]"
+        className="request-sheet gap-0 overflow-y-auto border-l border-[var(--console-line)] bg-background p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-[min(64rem,calc(100vw-4rem))]"
       >
         <SheetHeader className="sr-only">
           <SheetTitle>{title}</SheetTitle>
           <SheetDescription>{description}</SheetDescription>
         </SheetHeader>
-        <div className="px-6 pt-6 pb-10 text-sm">{children}</div>
+        <div className="px-4 pt-7 pb-10 text-sm sm:px-8 sm:pt-8">{children}</div>
       </SheetContent>
     </Sheet>
   );

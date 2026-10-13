@@ -54,7 +54,7 @@ export function RequestDetailTabs({
     setTab(NOTES_TAB);
     window.requestAnimationFrame(() => {
       const field = notesRef.current?.querySelector<HTMLElement>(selector);
-      field?.scrollIntoView({ block: "center", behavior: "smooth" });
+      field?.scrollIntoView({ block: "center", behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
       field?.focus({ preventScroll: true });
     });
   };
@@ -70,21 +70,21 @@ export function RequestDetailTabs({
 
   return (
     <>
-      <div className={cn("flex flex-wrap items-start justify-between gap-x-6 gap-y-3", inSheet && "pr-10")}>
+      <div className={cn("flex flex-col items-start gap-5 border-b border-[var(--console-line)] pb-5", inSheet && "pr-6")}>
         {header}
         <div role="toolbar" aria-label="요청 작업" className="flex flex-wrap items-center gap-2">
-          <Button type="button" variant="outline" size="lg" onClick={copyLink}>
+          <Button type="button" variant="outline" size="lg" className="h-9 bg-card" onClick={copyLink}>
             {copied ? <CheckIcon aria-hidden data-icon="inline-start" /> : <LinkIcon aria-hidden data-icon="inline-start" />}
             <span aria-live="polite">{copied ? "링크를 복사했어요" : "링크 복사"}</span>
           </Button>
           {canWrite ? (
-            <Button type="button" variant="outline" size="lg" onClick={() => jump('form[aria-label="메모 남기기"] textarea')}>
+            <Button type="button" variant="default" size="lg" className="h-9 px-3" onClick={() => jump('form[aria-label="메모 남기기"] textarea')}>
               <NotePencilIcon aria-hidden data-icon="inline-start" />
               메모 남기기
             </Button>
           ) : null}
           {canWrite && !hasOpenCase ? (
-            <Button type="button" variant="outline" size="lg" onClick={() => jump('form[aria-label="케이스 열기"] input[name="title"]')}>
+            <Button type="button" variant="outline" size="lg" className="h-9 bg-card" onClick={() => jump('form[aria-label="케이스 열기"] input[name="title"]')}>
               <FolderOpenIcon aria-hidden data-icon="inline-start" />
               케이스 열기
             </Button>
@@ -94,7 +94,7 @@ export function RequestDetailTabs({
 
       {summary}
 
-      <Tabs value={tab} onValueChange={setTab} className="gap-4">
+      <Tabs value={tab} onValueChange={setTab} className="min-w-0 gap-5">
         <div className="-mx-1 overflow-x-auto border-b px-1">
           <TabsList variant="line" aria-label="요청 상세" className="h-10! min-w-max gap-1">
             {tabs.map((item) => (
@@ -113,7 +113,7 @@ export function RequestDetailTabs({
             value={item.key}
             forceMount
             ref={item.key === NOTES_TAB ? notesRef : undefined}
-            className="text-sm data-[state=inactive]:hidden"
+            className="min-w-0 text-sm data-[state=inactive]:hidden"
           >
             {item.content}
           </TabsContent>

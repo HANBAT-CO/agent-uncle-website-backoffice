@@ -116,8 +116,8 @@ export default async function RequestsPage({ searchParams }: { searchParams: Sea
   const filtered = chips.length > 0;
 
   return (
-    <div className="flex flex-col gap-4">
-      <PageHeader title="사입 요청" />
+    <div className="flex min-w-0 flex-col gap-5">
+      <PageHeader title="사입 요청" eyebrow="REQUEST DESK" description="요청부터 수령까지, 거래의 흐름을 확인하세요." />
 
       {data ? <RequestTabs labels={data.labels} view={params.view} /> : null}
 
@@ -132,7 +132,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Sea
         <SearchInput placeholder="상품명·옵션·도매처·요청 ID로 검색" />
       </DataTableToolbar>
 
-      <div role="group" aria-label="필터" className="flex flex-wrap items-center gap-2">
+      <div role="group" aria-label="필터" className="flex flex-wrap items-center gap-2 rounded-lg border border-[var(--console-line)] bg-card/55 p-2.5">
         <RequestFilters accountId={params.account} accountName={selectedAccount} />
         <FilterChips chips={chips} className="ml-1" />
       </div>

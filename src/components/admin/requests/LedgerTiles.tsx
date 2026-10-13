@@ -23,21 +23,21 @@ export function LedgerTiles({ ledger }: { ledger: Ledger }) {
   ];
 
   return (
-    <section aria-label="수량" data-testid="ledger-tiles" className="flex flex-col gap-2">
-      <dl className="grid grid-cols-2 gap-2 md:grid-cols-4">
+    <section aria-label="수량" data-testid="ledger-tiles" className="request-ledger overflow-hidden rounded-xl border border-[var(--console-line)] bg-card">
+      <dl className="request-ledger-main grid grid-cols-2 md:grid-cols-4">
         {main.map((tile) => (
-          <div key={tile.label} data-testid="ledger-tile" className="flex flex-col gap-1 rounded-xl border bg-card px-4 py-3">
+          <div key={tile.label} data-testid="ledger-tile" className="flex flex-col gap-3 px-5 py-5">
             <dt className="text-xs text-muted-foreground">{tile.label}</dt>
-            <dd className={cn("num text-2xl font-bold tracking-tight", tile.attention && "text-primary")}>
+            <dd className={cn("num text-[2rem] leading-none font-medium tracking-[-0.06em]", tile.attention && "text-primary")}>
               {tile.value.toLocaleString("ko-KR")}
-              <span className="ml-0.5 text-sm font-medium text-muted-foreground">장</span>
+              <span className="ml-1 text-xs font-normal text-muted-foreground">장</span>
             </dd>
           </div>
         ))}
       </dl>
-      <dl className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      <dl className="grid grid-cols-2 border-t border-[var(--console-line)] bg-muted/50 md:grid-cols-4">
         {minor.map((tile) => (
-          <div key={tile.label} data-testid="ledger-tile" className="flex items-baseline justify-between gap-2 rounded-lg bg-muted/60 px-4 py-2">
+          <div key={tile.label} data-testid="ledger-tile" className="flex items-baseline justify-between gap-2 px-5 py-3">
             <dt className="text-xs text-muted-foreground">{tile.label}</dt>
             <dd className="num text-sm font-semibold">
               {tile.value.toLocaleString("ko-KR")}

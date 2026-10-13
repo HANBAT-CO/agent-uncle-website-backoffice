@@ -131,14 +131,15 @@ export function RequestDetail({
   ];
 
   return (
-    <article data-testid="request-detail" data-variant={variant} aria-labelledby={`request-${request.id}-title`} className="flex flex-col gap-5">
+    <article data-testid="request-detail" data-variant={variant} aria-labelledby={`request-${request.id}-title`} className="request-dossier flex min-w-0 flex-col gap-6">
       <RequestDetailTabs
         header={
-          <header className="flex min-w-0 flex-col gap-2">
+          <header className="flex min-w-0 flex-col gap-3">
+            <span className="console-eyebrow">REQUEST RECORD</span>
             <div className="flex flex-wrap items-center gap-2">
               <Heading
                 id={`request-${request.id}-title`}
-                className={cn("font-bold tracking-tight text-foreground", variant === "page" ? "text-xl" : "text-lg")}
+                className={cn("font-semibold tracking-[-0.045em] text-foreground", variant === "page" ? "text-2xl lg:text-3xl" : "text-xl sm:text-2xl")}
               >
                 {requestTitle(request)}
               </Heading>
@@ -157,7 +158,7 @@ export function RequestDetail({
           </header>
         }
         summary={
-          <div className="flex flex-col gap-4">
+          <div className="request-summary flex flex-col gap-5">
             <ViolationBanner codes={data.checks.violations} />
             <LedgerTiles ledger={request.ledger} />
             <DefinitionList
