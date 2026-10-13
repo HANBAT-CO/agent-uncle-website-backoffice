@@ -1,0 +1,232 @@
+{
+  "units": "world",
+  "radius": 2,
+  "crease": 1.2,
+  "buildings": [
+    {
+      "id": "apm",
+      "footprint": [
+        18,
+        62,
+        38,
+        80
+      ],
+      "height": 38,
+      "floors": 4,
+      "door": [
+        38,
+        75,
+        0
+      ],
+      "ticks": {
+        "face": "east",
+        "at": 0.36,
+        "length": 7
+      }
+    },
+    {
+      "id": "cheongpyeonghwa",
+      "footprint": [
+        66,
+        24,
+        104,
+        40
+      ],
+      "height": 14,
+      "floors": 2,
+      "door": [
+        72,
+        40,
+        0
+      ],
+      "ticks": {
+        "face": "south",
+        "at": 0.58,
+        "length": 10
+      }
+    },
+    {
+      "id": "diot",
+      "footprint": [
+        116,
+        4,
+        136,
+        22
+      ],
+      "height": 24,
+      "floors": 3,
+      "door": null,
+      "ticks": {
+        "face": "south",
+        "at": 0.5,
+        "length": 8
+      }
+    },
+    {
+      "id": "nampyeonghwa",
+      "footprint": [
+        136,
+        64,
+        160,
+        80
+      ],
+      "height": 12,
+      "floors": 2,
+      "door": null,
+      "ticks": {
+        "face": "south",
+        "at": 0.5,
+        "length": 9
+      }
+    }
+  ],
+  "stream": [
+    [
+      [
+        -40,
+        50
+      ],
+      [
+        240,
+        50
+      ]
+    ],
+    [
+      [
+        -40,
+        55
+      ],
+      [
+        240,
+        55
+      ]
+    ]
+  ],
+  "roads": {
+    "avenue": [
+      [
+        46,
+        -128
+      ],
+      [
+        46,
+        140
+      ]
+    ],
+    "north": [
+      [
+        -60,
+        0
+      ],
+      [
+        220,
+        0
+      ]
+    ]
+  },
+  "route": {
+    "points": [
+      [
+        46,
+        0
+      ],
+      [
+        46,
+        75
+      ],
+      [
+        38,
+        75
+      ],
+      [
+        46,
+        75
+      ],
+      [
+        46,
+        46
+      ],
+      [
+        72,
+        46
+      ],
+      [
+        72,
+        40
+      ]
+    ],
+    "stops": [
+      {
+        "id": "start",
+        "vertex": 0
+      },
+      {
+        "id": "apm",
+        "vertex": 2
+      },
+      {
+        "id": "cheongpyeonghwa",
+        "vertex": 6
+      }
+    ]
+  },
+  "anchors": {
+    "uncle": [
+      46,
+      0,
+      0
+    ]
+  },
+  "views": {
+    "hero-desktop": {
+      "viewBox": [
+        1200,
+        760
+      ],
+      "camera": {
+        "az": 45,
+        "k": 0.5
+      },
+      "fill": {
+        "buildings": [
+          "apm",
+          "cheongpyeonghwa",
+          "diot",
+          "nampyeonghwa"
+        ],
+        "width": 0.7
+      },
+      "focus": {
+        "building": "cheongpyeonghwa",
+        "at": [
+          0.44,
+          0.46
+        ]
+      }
+    },
+    "hero-mobile": {
+      "viewBox": [
+        400,
+        360
+      ],
+      "camera": {
+        "az": 45,
+        "k": 0.5
+      },
+      "fill": {
+        "buildings": [
+          "apm",
+          "cheongpyeonghwa"
+        ],
+        "width": 0.84
+      },
+      "center": [
+        0.5,
+        0.5
+      ],
+      "focus": {
+        "building": "cheongpyeonghwa"
+      }
+    }
+  }
+}

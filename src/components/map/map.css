@@ -1,0 +1,145 @@
+/*
+ * Market map strokes (spec 4.8). One hairline grammar with the S4 cart:
+ * plates filled with the ground for honest occlusion, 1px strokes at any
+ * scale (vector-effect: non-scaling-stroke on every visible path), bright
+ * outside and dim inside.
+ *
+ * Layers (data-map-layer):
+ * - base: dim silhouettes, dimmer creases and floor ticks, the faint stream
+ *   and roads.
+ * - record: mint silhouettes, floor ticks and door marks over the same plates
+ *   (the S1 lens reveals it through a mask). No faint group.
+ *
+ * Hooks for sections:
+ * - --map-scale: set it on the map's wrapper to the CSS scale you apply to
+ *   that wrapper (the S1 dive scales 1 to 1.6, S3 eases 1.6 to 1). Non-scaling
+ *   strokes only cancel the viewBox scale, not a CSS transform on an HTML
+ *   ancestor, so stroke widths and the route's dashes divide by it to stay
+ *   1px (1.5px for the route) on screen.
+ * - --map-plate: the plate fill; set it to the section ground when the map
+ *   sits on #093A32 or similar.
+ * - [data-lit] (or .is-lit) on any path: the bright stroke, with the 700ms
+ *   record transition (S3 lights APM 4층 and 청평화 1층 on arrival).
+ * - html.js-draw (set by the inline head script in layout.tsx on desktop
+ *   motion, not on low-power devices): paths marked data-drawable start
+ *   undrawn and data-draw-fade paths start transparent, until the hero's
+ *   DrawSVG tween (inline styles win) draws them. Only maps rendered with
+ *   `draw` carry those attributes.
+ */
+
+.market-map {
+  --map-hi: #f2ffe8;
+  --map-stroke: calc(1px / var(--map-scale, 1));
+  --map-plate: var(--night-0);
+  --map-faint-stroke: var(--map-faint);
+  --map-route: var(--map-hi);
+
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.market-map[data-map-layer="base"] {
+  --map-sil: var(--map-dim);
+  --map-crease: var(--map-faint);
+  --map-floor: color-mix(in srgb, var(--map-dim) 78%, transparent);
+  --map-door: var(--map-dim);
+}
+
+.market-map[data-map-layer="record"] {
+  --map-sil: var(--map-hi);
+  --map-crease: rgb(242 255 232 / 0.4);
+  --map-floor: var(--map-hi);
+  --map-door: var(--map-hi);
+}
+
+.market-map path {
+  fill: none;
+  stroke-width: var(--map-stroke);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.market-map .map-sil {
+  fill: var(--map-plate);
+  stroke: var(--map-sil);
+}
+
+.market-map .map-crease {
+  stroke: var(--map-crease);
+}
+
+.market-map .map-floor {
+  stroke: var(--map-floor);
+}
+
+.market-map .map-door {
+  stroke: var(--map-door);
+}
+
+.market-map .map-stream,
+.market-map .map-road {
+  stroke: var(--map-faint-stroke);
+}
+
+/* S3 round: a dashed mint line (1.5px, dash 2 6) revealed through its mask. */
+.market-map .map-route {
+  stroke: var(--map-route);
+  stroke-width: calc(1.5px / var(--map-scale, 1));
+  stroke-dasharray: calc(2px / var(--map-scale, 1)) calc(6px / var(--map-scale, 1));
+  stroke-linecap: butt;
+}
+
+/* Mask path: drawn in user units (no non-scaling stroke) so DrawSVG measures it directly. */
+.market-map .map-route-mask {
+  stroke: #fff;
+  stroke-width: 16;
+}
+
+.market-map .map-sil,
+.market-map .map-crease,
+.market-map .map-floor,
+.market-map .map-door {
+  transition: stroke var(--duration-record) var(--ease-snap);
+}
+
+.market-map [data-lit],
+.market-map .is-lit {
+  stroke: var(--map-hi);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /*
+   * Hidden until drawn. With non-scaling strokes the dash pattern is measured
+   * in screen pixels, so the gap is 8x the user-unit length: the stroke stays
+   * hidden at any map scale below 8 (the dive stops at 1.6).
+   */
+  html.js-draw .market-map [data-drawable] {
+    stroke-dasharray: var(--len) calc(var(--len) * 8);
+    stroke-dashoffset: var(--len);
+  }
+
+  html.js-draw .market-map [data-draw-fade] {
+    opacity: 0;
+  }
+}
+
+/* DOM label slots over the map box (MapLabels). */
+.map-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-label-slot {
+  position: absolute;
+  translate: -50% calc(-100% - 12px);
+  pointer-events: auto;
+  white-space: nowrap;
+}
+
+.map-label-slot[data-anchor="base"],
+.map-label-slot[data-anchor="door"],
+.map-label-slot[data-anchor="floor"] {
+  translate: -50% -50%;
+}
