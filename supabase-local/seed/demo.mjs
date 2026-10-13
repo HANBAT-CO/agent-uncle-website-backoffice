@@ -107,18 +107,20 @@ function scenario(name, build) {
   for (const st of local) steps.push({ ...st, seq: stepSeq++, name });
 }
 let simCursor = 0;
-const tick = () => {
+/** Simulated time for the next command; reading notices/chats takes seconds, real work a minute or so. */
+const tick = (quick = false) => {
   const t = simCursor;
-  simCursor += 15e3 + Math.floor(rand() * 60e3);
+  simCursor += quick ? 1e3 + Math.floor(rand() * 3e3) : 15e3 + Math.floor(rand() * 60e3);
   return t;
 };
+const QUICK = new Set(["readNotice", "markChatRead", "refreshReminders", "saveDraft"]);
 
 // ---------------------------------------------------------------- RPC plumbing (always as the acting user)
 const plan = []; // [operation_id, simulated ISO time]
 let opSeq = 0;
 async function cmd(user, command, args = {}, opId) {
   const id = opId ?? `seed-${String(++opSeq).padStart(5, "0")}`;
-  const sim = tick();
+  const sim = tick(QUICK.has(command));
   const { data, error } = await user.client.rpc("saip_command", { command, args, operation_id: id });
   if (error) throw new Error(`[${user.label}] ${command} failed: ${error.message}\n  args=${JSON.stringify(args).slice(0, 400)}`);
   plan.push([id, new Date(sim).toISOString()]);
@@ -314,8 +316,9 @@ async function receive(s, index, actual, reason = "") {
   const id = s.deliveries[index];
   await cmd(s.r, "receive", { id, actual, reason, version: await version(s.r, "deliveries", id) });
 }
+// Same shape the app's proposal form sends (requests.dart): counts, uncleId, photos, plus overrides.
 const proposalValues = (r, extra) => ({
-  quantity: r.quantity - (r.cancelled ?? 0),
+  quantity: r.quantity,
   acquired: r.acquired ?? 0,
   received: r.received ?? 0,
   acquiredCancelled: 0,
@@ -842,7 +845,7 @@ function buildTimeline() {
     [17, 11, { role: "retailer", name: "이민아", business_name: "온라인몰 민아샵", contact: "minashop@naver.com", market: "동대문", message: null, utm: naver, user_agent: ua.mac }],
     [15, 16, { role: "other", name: "박서윤", business_name: "패션 커머스 스타트업", contact: "kakao: seoyun_p", market: null, message: "물류 연동 제휴 문의드립니다.", utm: null, user_agent: ua.mac }],
     [13, 10, { role: "retailer", name: "최유리", business_name: "대구 유리옷장", contact: "010-9932-1180", market: "남대문", message: "지방이라 택배 발송도 되는지 궁금해요.", utm: kakaoCh, user_agent: ua.kakao }],
-    [11, 23, { role: "uncle", name: "오세훈", business_name: "남대문 오삼촌", contact: "010-2209-4471", market: "남대문", message: "남대문 아동복 전문입니다. 사전 신청합니다.", utm: null, user_agent: ui(ua.android) }],
+    [11, 23, { role: "uncle", name: "오세훈", business_name: "남대문 오삼촌", contact: "010-2209-4471", market: "남대문", message: "남대문 아동복 전문입니다. 사전 신청합니다.", utm: null, user_agent: ua.android }],
     [10, 13, { role: "retailer", name: "한소희", business_name: "망원 소소", contact: "sohee.han@gmail.com", market: "동대문", message: "거래 중인 삼촌도 같이 가입해야 하나요?", utm: insta, user_agent: ua.iphone }],
     [8, 9, { role: "retailer", name: "윤재민", business_name: "재민 셀렉트", contact: "010-4410-2983", market: "기타", message: "광희시장 위주로 사입해요.", utm: naver, user_agent: ua.android }],
     [7, 15, { role: "other", name: "강다현", business_name: "패션 유튜버", contact: "dahyun.kang@daum.net", market: null, message: "촬영 협업 문의예요.", utm: null, user_agent: ua.iphone }],
@@ -853,7 +856,6 @@ function buildTimeline() {
     [1, 20, { role: "uncle", name: "장민석", business_name: "제일평화 장삼촌", contact: "010-5530-1172", market: "동대문", message: "야간에만 활동해요. 알림이 잘 오면 좋겠어요.", utm: naver, user_agent: ua.android }],
     [0.2, null, { role: "other", name: "E2E 점검", business_name: null, contact: "e2e-check@invalid", market: null, message: "자동 점검 행", utm: null, user_agent: "Playwright", e2e: true }],
   ];
-  function ui(x) { return x; }
   LEADS.forEach(([d, hh, lead], i) => {
     scenario(`lead ${i + 1}`, (at) =>
       at(hh === null ? hoursAgo(d * 24) : T(d, hh, Math.floor(rand() * 59)), async () => {
