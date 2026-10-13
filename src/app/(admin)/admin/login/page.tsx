@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { AuthCard } from "@/components/admin/auth/AuthCard";
 import { AuthNotice } from "@/components/admin/auth/AuthNotice";
 import { PasswordSignInForm } from "@/components/admin/auth/PasswordSignInForm";
+import { ADMIN_PANEL_NAME } from "@/lib/admin/brand";
 import { getAdminGate, gateRedirectPath, type AdminGate } from "@/lib/admin/dal";
 import { getBackofficeEnv } from "@/lib/admin/env";
 import { safeNext } from "@/lib/admin/session";
@@ -41,7 +42,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Search
 
   return (
     <AuthCard
-      title="사입삼춘 운영"
+      title={ADMIN_PANEL_NAME}
       description="운영 계정으로 로그인해 주세요."
       footer="운영 화면의 열람과 변경은 모두 기록돼요."
     >

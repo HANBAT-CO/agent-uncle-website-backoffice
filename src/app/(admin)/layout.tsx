@@ -3,6 +3,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { Toaster } from "@/components/admin/ui/sonner";
 import { TooltipProvider } from "@/components/admin/ui/tooltip";
+import { ADMIN_PANEL_NAME } from "@/lib/admin/brand";
 
 import { paperlogy } from "./fonts";
 import "./admin.css";
@@ -15,7 +16,7 @@ import "./admin.css";
  * proxy.
  */
 export const metadata: Metadata = {
-  title: { default: "사입삼춘 운영", template: "%s | 사입삼춘 운영" },
+  title: { default: ADMIN_PANEL_NAME, template: `%s | ${ADMIN_PANEL_NAME}` },
   robots: { index: false, follow: false },
 };
 

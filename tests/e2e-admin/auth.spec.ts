@@ -24,13 +24,13 @@ test.describe("signed out", () => {
   test("the login page shows the ID and password form only", async ({ page }) => {
     const response = await page.goto("/admin/login");
     expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
-    await expect(page.getByRole("heading", { level: 1, name: "사입삼춘 운영" })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1, name: "한밭만물상 사입삼춘 관리자 패널" })).toBeVisible();
     await expect(page.getByText("운영 계정으로 로그인해 주세요.")).toBeVisible();
     await expect(page.getByLabel("아이디")).toBeVisible();
     await expect(page.getByLabel("비밀번호")).toBeVisible();
     await expect(page.getByText("운영 화면의 열람과 변경은 모두 기록돼요.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Google 계정으로 로그인" })).toHaveCount(0);
-    await expect(page).toHaveTitle("로그인 | 사입삼춘 운영");
+    await expect(page).toHaveTitle("로그인 | 한밭만물상 사입삼춘 관리자 패널");
   });
 
   test("expired sessions and sign-in failures explain themselves", async ({ page }) => {

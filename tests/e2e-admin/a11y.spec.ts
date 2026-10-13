@@ -64,7 +64,7 @@ test("operator: the request Sheet over the list passes axe", async ({ asRole }) 
 
 test("signed out: the login page passes axe", async ({ page }) => {
   await page.goto("/admin/login");
-  await expect(page.getByRole("heading", { level: 1, name: "사입삼춘 운영" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "한밭만물상 사입삼춘 관리자 패널" })).toBeVisible();
   await waitForHydration(page);
   expect(await seriousViolations(page)).toEqual([]);
 });

@@ -2,6 +2,7 @@ import { CompassIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 
 import { Button } from "@/components/admin/ui/button";
+import { ADMIN_PANEL_NAME } from "@/lib/admin/brand";
 
 /** Unknown console paths and notFound() inside the shell (tasks appendix WP-04). */
 export default function ConsoleNotFound() {
@@ -11,7 +12,7 @@ export default function ConsoleNotFound() {
       data-testid="admin-not-found"
       className="flex min-h-[60vh] flex-col items-center justify-center gap-4 rounded-xl border border-dashed bg-card/60 px-6 py-12 text-center"
     >
-      <title>찾는 화면이 없어요 | 사입삼춘 운영</title>
+      <title>{`찾는 화면이 없어요 | ${ADMIN_PANEL_NAME}`}</title>
       <span className="grid size-10 place-items-center rounded-lg bg-secondary text-secondary-foreground">
         <CompassIcon aria-hidden weight="bold" className="size-5" />
       </span>
