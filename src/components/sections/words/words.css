@@ -1,0 +1,810 @@
+/*
+ * S2 words, 23:30 (spec S2). Night ground #07231C.
+ *
+ * Layouts:
+ * - default (no JS, reduced motion, phones before hydration): a stacked page.
+ *   Heading, the pit with the pills resting in the static heap, the caption,
+ *   the ledger list, the closing line.
+ * - [data-words-mode="desktop"]: one 100vh stage (pinned +=120% by
+ *   WordsMotion). The pit and the ledger share the arena under the heading:
+ *   pills fall into a narrow, deep bin at the arena's left (26rem x pill
+ *   scale, so twelve pills stack four rows high), then fly into the ledger's
+ *   token slots. The pit clips both axes: pills slide in under the lede line
+ *   and the vocabulary pills fall out through the floor.
+ * - [data-words-mode="mobile"]: the stacked page with a pit that runs once
+ *   (a narrow bin, about 70% of the column, so the eight pills stack; the
+ *   heap frame plus 6rem of fall, so the pile rests close under the lede,
+ *   never under a void); the ledger list reveals with line masks.
+ *
+ * Pill materials (app styles):
+ * - bubble: the app's 'theirs' bubble, #D7D7D7 with ink 15px, radius 20,
+ *   padding 10px 14px. Scaled with --pill-scale on desktop so twelve bodies
+ *   form a heap in a ~900px pit.
+ * - vocabulary pill: 1.5px mint outline, mint 700 text, full radius, filled
+ *   with the ground for honest occlusion in the pile.
+ * - token: action = mint fill with #07231C 700 text; record = 1.5px mint
+ *   outline with mint text. The flying bubble takes the token skin at 70% of
+ *   its flight, so it lands as an exact twin of the ledger token.
+ */
+
+.words {
+  --pill-scale: 1;
+  --token-size: 0.9375rem;
+  /* Heap frame: the floor-anchored box the heap spots are percentages of. */
+  --heap-h: calc(13.25rem * var(--pill-scale));
+  --heap-w: min(100%, 26rem);
+  --words-dim: rgb(182 215 194 / 0.72);
+  --words-hair: rgb(242 255 232 / 0.12);
+}
+
+@media (min-width: 768px) {
+  .words {
+    --token-size: 1rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .words {
+    --pill-scale: 1.3;
+    --token-size: 1.125rem;
+    --heap-h: calc(12.5rem * var(--pill-scale));
+    --heap-w: 100%;
+  }
+}
+
+@media (min-width: 1440px) {
+  .words {
+    --pill-scale: 1.5;
+    --token-size: 1.25rem;
+  }
+}
+
+@media (min-width: 1800px) {
+  .words {
+    --pill-scale: 1.75;
+    --token-size: 1.375rem;
+  }
+}
+
+/* ---------- Stage ---------- */
+
+/* No overflow clip here: the pit clips its own pills (both axes in live mode) and the map clips itself. */
+.words-stage {
+  position: relative;
+  padding-block: 5rem;
+}
+
+@media (min-width: 1024px) {
+  .words-stage {
+    padding-block: 8rem;
+  }
+}
+
+.words-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container-content);
+  margin-inline: auto;
+  padding-inline: var(--spacing-gutter);
+}
+
+.words-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+.words-copy {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.words-h2 {
+  color: var(--night-ink);
+}
+
+.words-lede {
+  max-width: 34em;
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--night-ink-2);
+}
+
+@media (min-width: 1024px) {
+  .words-lede {
+    font-size: 1.0625rem;
+  }
+}
+
+/* ---------- Map (desktop): the hero's end state at 25% ---------- */
+
+/*
+ * Paint containment clips the scaled map, not overflow: with overflow clip
+ * (or hidden) Chrome's layout-shift tracker reads the map as jumping from
+ * off-screen to the full viewport when the pin turns the stage fixed (a
+ * shift of 1.0 at the pin start, though nothing moves on screen).
+ */
+.words-map {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 0;
+  display: none;
+  height: 100vh;
+  contain: paint;
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+@media (min-width: 1024px) {
+  .words-map {
+    display: block;
+  }
+}
+
+/* The stage area: the viewport minus the record column from 1280px (spec S1). */
+.words-map-stage {
+  position: absolute;
+  inset: 0;
+}
+
+@media (min-width: 1280px) {
+  .words-map-stage {
+    right: calc(var(--record-col) + var(--spacing-gutter));
+  }
+}
+
+/* Cover the stage area with 청평화 at the view's focus point, then the dive's end transform about it. */
+.words-map-box {
+  position: absolute;
+  left: var(--focus-x);
+  top: var(--focus-y);
+  width: max(100%, calc(100vh * var(--map-aspect)));
+  translate: calc(var(--focus-x) * -1) calc(var(--focus-y) * -1);
+  transform-origin: var(--focus-x) var(--focus-y);
+  transform: perspective(1200px) rotateX(10deg) scale(1.6);
+}
+
+/* Low-power devices never get the map's rotateX (spec 6.6). */
+.words-root[data-low-power] .words-map-box {
+  transform: scale(1.6);
+}
+
+.words-map-box [data-building]:not([data-building="cheongpyeonghwa"]) {
+  opacity: 0.35;
+}
+
+/* ---------- Pit ---------- */
+
+/*
+ * Static layout: clip sideways only, so hidden glossary captions never widen
+ * the page. Live (desktop, mobile): clip both axes, so the pills enter from
+ * under the pit's top edge (never across the copy) and the vocabulary pills
+ * leave through the floor.
+ */
+.words-pit {
+  position: relative;
+  z-index: 2;
+  height: calc(var(--heap-h) + 1.5rem);
+  margin-top: 2.5rem;
+  overflow-x: clip;
+}
+
+.words-root[data-words-mode="desktop"] .words-pit,
+.words-root[data-words-mode="mobile"] .words-pit {
+  overflow: clip;
+}
+
+/* While the pills fall in, the clipped top edge is soft: they surface under the lede, not out of a cut. */
+.words-root[data-words-mode="desktop"] .words-pit[data-pit-state="falling"],
+.words-root[data-words-mode="mobile"] .words-pit[data-pit-state="falling"] {
+  mask-image: linear-gradient(to bottom, transparent, #000 2.5rem);
+}
+
+/* The floor the pile rests on, as wide as the heap frame (desktop: fades as the fourth bubble flies to the ledger). */
+.words-pit-floor {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--heap-w);
+  height: 1px;
+  background: var(--words-hair);
+  pointer-events: none;
+}
+
+/* Desktop bin: the floor plus two side hairlines that fade out upward, so the stacked pile reads as held. */
+.words-root[data-words-mode="desktop"] .words-pit-floor {
+  height: 100%;
+  background:
+    linear-gradient(to top, var(--words-hair), transparent 62%) left bottom / 1px 100% no-repeat,
+    linear-gradient(to top, var(--words-hair), transparent 62%) right bottom / 1px 100% no-repeat,
+    linear-gradient(var(--words-hair), var(--words-hair)) left bottom / 100% 1px no-repeat;
+}
+
+.words-pit-frame {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: var(--heap-w);
+  height: var(--heap-h);
+  pointer-events: none;
+}
+
+.pit-body {
+  position: absolute;
+  left: calc(var(--mhx, 50) * var(--heap-w) / 100);
+  top: calc(100% - var(--heap-h) + var(--mhy, 50) * var(--heap-h) / 100);
+  translate: -50% -50%;
+}
+
+.pit-rotor {
+  rotate: calc(var(--mhr, 0) * 1deg);
+}
+
+@media (max-width: 1023px) {
+  .pit-body[data-desktop-only] {
+    display: none;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pit-body {
+    left: calc(var(--hx, 50) * var(--heap-w) / 100);
+    top: calc(100% - var(--heap-h) + var(--hy, 50) * var(--heap-h) / 100);
+  }
+
+  .pit-rotor {
+    rotate: calc(var(--hr, 0) * 1deg);
+  }
+
+  /* Desktop motion before the fall: the bin's own four-row heap. */
+  .words-root[data-words-mode="desktop"] .pit-body {
+    left: calc(var(--bx, 50) * var(--heap-w) / 100);
+    top: calc(100% - var(--heap-h) + var(--by, 50) * var(--heap-h) / 100);
+  }
+
+  .words-root[data-words-mode="desktop"] .pit-rotor {
+    rotate: calc(var(--br, 0) * 1deg);
+  }
+}
+
+/*
+ * Motion modes, before the fall: the pills arrive by falling, so the heap
+ * waits unseen. A heap glimpsed at the fold, then whisked off to the spawn
+ * line, read as a jump (and Chrome scored it as a layout shift). Opacity, not
+ * visibility: keyboard focus can still land on a vocabulary pill, which brings
+ * the pile in at once. WordsMotion sets data-pit-heap="shown" where the heap
+ * is the pile the reader sees (keyboard focus before matter-js arrived, or
+ * matter-js not arriving).
+ */
+.words-root[data-words-mode="desktop"] .words-pit[data-pit-mode="heap"]:not([data-pit-heap="shown"]) .pit-body,
+.words-root[data-words-mode="mobile"] .words-pit[data-pit-mode="heap"]:not([data-pit-heap="shown"]) .pit-body {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/*
+ * Live: the writers own the transforms. Bodies start just above the pit and
+ * slide in under its clipped top edge.
+ */
+.words-pit[data-pit-mode="live"] .pit-body {
+  left: 0;
+  top: 0;
+  translate: none;
+  will-change: transform;
+}
+
+.words-pit[data-pit-mode="live"] .pit-rotor {
+  rotate: none;
+}
+
+.pit-body[data-pit-hidden],
+.pit-body[data-pit-skip],
+.pit-body[data-landed] {
+  visibility: hidden;
+}
+
+/*
+ * A bubble flying to the ledger paints over the pills still resting in the
+ * pile, and an earlier flight (further along) over a later one: WordsMotion
+ * sets --flight-order (6 for the first bubble, 1 for the last).
+ */
+.pit-body[data-flying] {
+  z-index: calc(1 + var(--flight-order, 1));
+}
+
+/* Physics with a fine pointer: grab and throw (native cursors only). */
+.words-pit[data-pit-grab] .pit-body {
+  cursor: grab;
+}
+
+.words-pit[data-pit-grab]:active .pit-body {
+  cursor: grabbing;
+}
+
+/*
+ * After the freeze nothing in the pit takes input; the ledger underneath stays
+ * selectable. Scrubbed back under the freeze the pile thaws (live again); a
+ * pile that cannot thaw (laid out before matter-js arrived) still takes
+ * presses on its vocabulary pills, so their captions open (data-pit-rest).
+ */
+.words-pit[data-pit-state="frozen"] {
+  pointer-events: none;
+}
+
+.words-pit[data-pit-state="frozen"][data-pit-rest] [data-vocab] {
+  pointer-events: auto;
+}
+
+.pit-lift {
+  position: relative;
+}
+
+.pit-skin {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid transparent;
+  line-height: 1.4;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.pit-bubble {
+  border-color: var(--bubble);
+  border-radius: calc(1.25rem * var(--pill-scale));
+  padding: calc(0.625rem * var(--pill-scale) - 1.5px) calc(0.875rem * var(--pill-scale) - 1.5px);
+  background-color: var(--bubble);
+  color: var(--record-fg);
+  font-size: calc(0.9375rem * var(--pill-scale));
+  font-weight: 400;
+  transition-property: background-color, border-color, color, font-size, padding, border-radius;
+  transition-duration: 400ms;
+  transition-timing-function: var(--ease-snap);
+}
+
+.pit-bubble[data-skin-instant] {
+  transition: none;
+}
+
+.pit-vocab {
+  border-color: var(--color-mint);
+  border-radius: 9999px;
+  padding: calc(0.625rem * var(--pill-scale) - 1.5px) calc(1.125rem * var(--pill-scale) - 1.5px);
+  background-color: var(--night-0);
+  color: var(--color-mint);
+  font: inherit;
+  font-size: calc(1rem * var(--pill-scale));
+  font-weight: 700;
+  line-height: 1.4;
+  cursor: inherit;
+}
+
+.pit-vocab {
+  /* A focused pill never scrolls in under the floating nav or the phone record pill. */
+  scroll-margin-block: 7rem;
+}
+
+/* Desktop: nothing fixed sits over the bin's floor, and a larger bottom margin would push focus into the pin. */
+@media (min-width: 1024px) {
+  .pit-vocab {
+    scroll-margin-block: 7rem 1.5rem;
+  }
+}
+
+.pit-vocab:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+/* Glossary caption: a paper slip, shown while the pill is held or focused, hidden 300ms after release. */
+.pit-gloss {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 1rem);
+  z-index: 3;
+  width: max-content;
+  max-width: min(21rem, calc(100vw - 2 * var(--spacing-gutter)));
+  border-radius: 1rem;
+  padding: 0.5rem 0.875rem;
+  background: var(--record-bg);
+  box-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+  color: var(--record-fg);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: 1.5;
+  white-space: normal;
+  /* Closed captions leave the accessibility tree (the button's description still reads them). */
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 160ms var(--ease-snap) 300ms,
+    visibility 0s linear 460ms;
+}
+
+.pit-body[data-gloss-open] .pit-gloss {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+/*
+ * No JS (WordsMotion never set a mode): the caption still shows while the
+ * pill is pressed or keyboard-focused. With JS, data-gloss-open drives it, so
+ * Escape can dismiss it (WCAG 1.4.13).
+ */
+.words-root:not([data-words-mode]) .pit-lift:has(.pit-vocab:focus-visible) .pit-gloss,
+.words-root:not([data-words-mode]) .pit-lift:has(.pit-vocab:active) .pit-gloss {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0ms;
+}
+
+.pit-body[data-gloss-open],
+.pit-body:has(.pit-vocab:focus-visible) {
+  z-index: 3;
+}
+
+.words-caption {
+  margin-top: 0.75rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+/* ---------- Ledger ---------- */
+
+.words-recut {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 3.5rem;
+}
+
+.words-ledger {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.words-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: 0.5rem;
+}
+
+.words-phrase-cell {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.words-phrase {
+  font-size: var(--token-size);
+  line-height: 1.4;
+  color: var(--words-dim);
+  white-space: nowrap;
+}
+
+.words-connector {
+  display: none;
+}
+
+.words-token-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.words-token-mask {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.words-token,
+.pit-bubble[data-skin-state="action"],
+.pit-bubble[data-skin-state="record"] {
+  border-radius: 9999px;
+  padding: calc(0.6em - 1.5px) calc(1.1em - 1.5px);
+  font-size: var(--token-size);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.words-token {
+  display: inline-flex;
+  align-items: center;
+  border: 1.5px solid var(--color-mint);
+  white-space: nowrap;
+}
+
+.words-token[data-kind="action"],
+.pit-bubble[data-skin-state="action"] {
+  border-color: var(--color-mint);
+  background-color: var(--color-mint);
+  color: var(--night-0);
+}
+
+.words-token[data-kind="record"],
+.pit-bubble[data-skin-state="record"] {
+  border-color: var(--color-mint);
+  background-color: var(--night-0);
+  color: var(--color-mint);
+}
+
+.words-note {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+.words-ledger-wrap {
+  position: relative;
+}
+
+/* The caption again, under the phrase column, for the desktop end state (aria-hidden duplicate). */
+.words-caption-echo {
+  display: none;
+}
+
+.words-closing {
+  max-width: 34em;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--night-ink);
+}
+
+@media (min-width: 768px) {
+  .words-row {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .words-phrase-cell {
+    min-height: calc(var(--token-size) * 2.6);
+  }
+
+  /* 1px mint connector from the phrase to the token (draws left to right in the re-cut). */
+  .words-connector {
+    display: block;
+    flex: 1 1 auto;
+    min-width: 1.5rem;
+    height: 1px;
+    margin-inline: 1.25rem;
+    background: rgb(242 255 232 / 0.55);
+    transform-origin: 0 50%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .words-closing {
+    font-size: 1.375rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) {
+    --heap-w: min(100%, calc(26rem * var(--pill-scale)));
+  }
+
+  html.js-motion .words-pin-spacer:not(.pin-spacer) > .words-stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding-block: 0;
+  }
+
+  html.js-motion .words-pin-spacer:not(.pin-spacer)::after {
+    content: "";
+    display: block;
+    height: 120vh;
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-frame {
+    height: 100%;
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-inner {
+    display: grid;
+    height: 100%;
+    grid-template-rows: auto minmax(0, 1fr);
+    grid-template-areas:
+      "copy"
+      "arena";
+    row-gap: clamp(1.25rem, 3.4vh, 2.25rem);
+    padding-top: clamp(6rem, 13vh, 8rem);
+    padding-bottom: clamp(1.75rem, 4.4vh, 2.75rem);
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-copy {
+    grid-area: copy;
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-pit {
+    grid-area: arena;
+    height: auto;
+    margin-top: 0;
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-caption {
+    grid-area: arena;
+    z-index: 2;
+    align-self: end;
+    justify-self: start;
+    margin: 0 0 0 calc(var(--heap-w) + 1rem);
+    translate: 0 50%;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-recut {
+    grid-area: arena;
+    z-index: 1;
+    align-self: start;
+    gap: clamp(1.25rem, 3.2vh, 2.25rem);
+    margin-top: clamp(0.25rem, 1.2vh, 0.75rem);
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-ledger {
+    gap: clamp(0.5rem, 1.5vh, 0.875rem);
+  }
+
+  html.js-motion .words-root:has(.words-pin-spacer:not(.pin-spacer)) .words-caption-echo {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: block;
+    margin: 0;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--night-ink-2);
+    pointer-events: none;
+  }
+}
+
+/* ---------- Desktop motion: one pinned 100vh stage ---------- */
+
+.words-root[data-words-mode="desktop"] {
+  /* The bin: narrow and deep, so twelve pills stack about four rows high. */
+  --heap-w: min(100%, calc(26rem * var(--pill-scale)));
+}
+
+.words-root[data-words-mode="desktop"] .words-stage {
+  height: 100vh;
+  padding-block: 0;
+}
+
+.words-root[data-words-mode="desktop"] .words-frame {
+  height: 100%;
+}
+
+.words-root[data-words-mode="desktop"] .words-inner {
+  display: grid;
+  height: 100%;
+  grid-template-rows: auto minmax(0, 1fr);
+  grid-template-areas:
+    "copy"
+    "arena";
+  row-gap: clamp(1.25rem, 3.4vh, 2.25rem);
+  padding-top: clamp(6rem, 13vh, 8rem);
+  padding-bottom: clamp(1.75rem, 4.4vh, 2.75rem);
+}
+
+.words-root[data-words-mode="desktop"] .words-copy {
+  grid-area: copy;
+}
+
+.words-root[data-words-mode="desktop"] .words-pit {
+  grid-area: arena;
+  height: auto;
+  margin-top: 0;
+}
+
+/* The caption labels the bin: on the floor line, just past the bin's right edge. */
+.words-root[data-words-mode="desktop"] .words-caption {
+  grid-area: arena;
+  z-index: 2;
+  align-self: end;
+  justify-self: start;
+  margin: 0 0 0 calc(var(--heap-w) + 1rem);
+  translate: 0 50%;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.words-root[data-words-mode="desktop"] .words-recut {
+  grid-area: arena;
+  z-index: 1;
+  align-self: start;
+  gap: clamp(1.25rem, 3.2vh, 2.25rem);
+  margin-top: clamp(0.25rem, 1.2vh, 0.75rem);
+}
+
+.words-root[data-words-mode="desktop"] .words-ledger {
+  gap: clamp(0.5rem, 1.5vh, 0.875rem);
+}
+
+/* Bottom-left of the ledger, level with the last row's note: under the example phrases. */
+.words-root[data-words-mode="desktop"] .words-caption-echo {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  display: block;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+  pointer-events: none;
+}
+
+/*
+ * Short laptop screens (up to 820px tall): the heading takes one line and
+ * the ledger tightens with the height, so the pinned end frame (six rows,
+ * the note and the closing line) always fits the arena.
+ */
+@media (min-width: 1024px) and (max-height: 820px) {
+  .words-root[data-words-mode="desktop"] {
+    --token-size: clamp(0.875rem, 2.25vh, 1.125rem);
+  }
+
+  .words-root[data-words-mode="desktop"] .words-h2 > span {
+    display: inline;
+  }
+
+  .words-root[data-words-mode="desktop"] .words-inner {
+    row-gap: clamp(1rem, 3vh, 1.75rem);
+  }
+
+  .words-root[data-words-mode="desktop"] .words-recut {
+    gap: clamp(0.75rem, 2vh, 1.25rem);
+  }
+
+  .words-root[data-words-mode="desktop"] .words-ledger {
+    gap: clamp(0.25rem, 0.9vh, 0.5rem);
+  }
+
+  .words-root[data-words-mode="desktop"] .words-closing {
+    font-size: 1.125rem;
+  }
+}
+
+/* ---------- Mobile motion: the pit runs once ---------- */
+
+/*
+ * A narrow bin, as on desktop: the eight pills stack about four rows high
+ * instead of lying in a strip across the column. 15rem still holds the widest
+ * bubble beside the '…'; tablets keep the 26rem frame.
+ */
+.words-root[data-words-mode="mobile"] {
+  --heap-w: min(100%, clamp(15rem, 70%, 26rem));
+}
+
+/*
+ * Sized to the heap, not the viewport: the pit is the heap frame plus room
+ * for a real fall, so the settled pile sits close under the lede and clear
+ * of the soft top edge. A viewport-tall pit left a third of a screen of bare
+ * ground there.
+ */
+.words-root[data-words-mode="mobile"] .words-pit {
+  height: min(52svh, calc(var(--heap-h) + 6rem));
+  min-height: calc(var(--heap-h) + 1.5rem);
+}
+
+/* The hand-composed heap on show (no engine yet): its own full frame, as in the static layout. */
+.words-root[data-words-mode="mobile"] .words-pit[data-pit-mode="heap"][data-pit-heap="shown"] {
+  --heap-w: min(100%, 26rem);
+}
+
+.words-root[data-words-mode="mobile"] .words-token-mask {
+  overflow: clip;
+}
