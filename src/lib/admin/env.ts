@@ -81,6 +81,11 @@ export function readBackofficeEnv(raw: Record<string, string | undefined>): Back
     });
   }
   const target = explicit;
+  // A live target with no URL or key uses the same live defaults as above.
+  if (target === "live" && (!env.BACKOFFICE_SUPABASE_URL || !env.BACKOFFICE_SUPABASE_PUBLISHABLE_KEY)) {
+    env.BACKOFFICE_SUPABASE_URL ||= env.NEXT_PUBLIC_SUPABASE_URL || LIVE_SUPABASE_URL;
+    env.BACKOFFICE_SUPABASE_PUBLISHABLE_KEY ||= env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || LIVE_SUPABASE_PUBLISHABLE_KEY;
+  }
   if (!target) {
     return { enabled: false, reason: "disabled", detail: "BACKOFFICE_SUPABASE_TARGET is not set" };
   }

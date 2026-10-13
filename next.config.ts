@@ -42,7 +42,8 @@ function originOf(url: string | undefined): string | null {
  */
 function adminSupabaseUrl(): string | undefined {
   if (process.env.BACKOFFICE_SUPABASE_URL) return process.env.BACKOFFICE_SUPABASE_URL;
-  if (!process.env.BACKOFFICE_SUPABASE_TARGET && process.env.VERCEL_ENV === "production") {
+  const target = process.env.BACKOFFICE_SUPABASE_TARGET?.trim().replace(/^["']|["']$/g, "");
+  if (target === "live" || (!target && process.env.VERCEL_ENV === "production")) {
     return process.env.NEXT_PUBLIC_SUPABASE_URL || "https://auicerytbhnqeakmkscs.supabase.co";
   }
   return undefined;

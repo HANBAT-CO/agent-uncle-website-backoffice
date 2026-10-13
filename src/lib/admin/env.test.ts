@@ -133,4 +133,13 @@ describe("readBackofficeEnv", () => {
       }),
     ).toEqual({ enabled: true, target: "live", url: "https://auicerytbhnqeakmkscs.supabase.co", publishableKey: "sb_publishable_abc" });
   });
+
+  it("fills a live target's missing URL and key from the live defaults", () => {
+    expect(readBackofficeEnv({ BACKOFFICE_SUPABASE_TARGET: "live" })).toEqual({
+      enabled: true,
+      target: "live",
+      url: LIVE_SUPABASE_URL,
+      publishableKey: LIVE_SUPABASE_PUBLISHABLE_KEY,
+    });
+  });
 });
