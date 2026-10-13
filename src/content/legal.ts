@@ -29,14 +29,17 @@ export const COMPANY = {
   line: "© 2026 HANBAT & CO.",
 } as const;
 
-/**
- * The 개인정보 처리방침 link renders only when this route exists. Flip to true
- * in the same change that adds src/app/privacy/page.tsx.
- */
+/** Application documents. Draft status is displayed on each document page. */
 export const PRIVACY_PAGE = {
-  exists: false,
+  exists: true,
   href: "/privacy",
   label: "개인정보 처리방침",
+} as const;
+
+export const TERMS_PAGE = {
+  exists: true,
+  href: "/terms",
+  label: "서비스 이용약관",
 } as const;
 
 export type LegalBlocker = {
@@ -58,7 +61,7 @@ export const LEGAL_BLOCKERS: readonly LegalBlocker[] = [
   },
   {
     id: "retention",
-    item: "Consent retention period text and the 개인정보 처리방침 page",
+    item: "Consent retention period text and final 개인정보 처리방침 approval",
     value: RETENTION_DEFAULT,
     question: "spec 16, client question 2",
   },

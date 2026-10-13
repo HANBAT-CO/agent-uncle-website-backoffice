@@ -2,7 +2,7 @@ import { QuantityDot } from "@/components/dot/QuantityDot";
 import { AppIcon } from "@/components/icons/AppIcon";
 import { SectionActivity } from "@/components/section/SectionActivity";
 import { footer } from "@/content/copy";
-import { COMPANY, PRIVACY_PAGE } from "@/content/legal";
+import { COMPANY, PRIVACY_PAGE, TERMS_PAGE } from "@/content/legal";
 import { brand } from "@/lib/assets";
 
 import { FooterMotionIsland } from "./FooterMotionIsland";
@@ -108,16 +108,16 @@ export function FooterSection() {
                   </a>
                 </li>
               ))}
-              {PRIVACY_PAGE.exists ? (
-                <li>
+              {[PRIVACY_PAGE, TERMS_PAGE].filter((page) => page.exists).map((page) => (
+                <li key={page.href}>
                   <a
-                    href={PRIVACY_PAGE.href}
+                    href={page.href}
                     className="-mx-2.5 inline-flex min-h-11 items-center rounded-pill px-2.5 text-[15px] text-grey-700 underline decoration-1 underline-offset-4"
                   >
-                    {PRIVACY_PAGE.label}
+                    {page.label}
                   </a>
                 </li>
-              ) : null}
+              ))}
             </ul>
           </nav>
         </div>
