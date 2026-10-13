@@ -1,9 +1,9 @@
 import { Skeleton } from "@/components/admin/ui/skeleton";
 
-/** Dashboard loading (screens 9 states): tiles, queue, summary and chart placeholders. */
+/** Dashboard loading: tiles, queue, summary and chart placeholders. */
 export function DashboardSkeleton({ label = "대시보드를 불러오는 중…" }: { label?: string }) {
   return (
-    <div role="status" aria-live="polite" data-testid="dashboard-skeleton" className="flex flex-col gap-4">
+    <div role="status" aria-live="polite" data-testid="dashboard-skeleton" className="flex flex-col gap-5">
       <span className="sr-only">{label}</span>
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6" aria-hidden>
         {Array.from({ length: 6 }, (_, index) => (
@@ -13,8 +13,9 @@ export function DashboardSkeleton({ label = "대시보드를 불러오는 중…
           </div>
         ))}
       </div>
-      <div className="grid gap-4 xl:grid-cols-3" aria-hidden>
-        <div className="flex flex-col gap-3 rounded-lg border bg-card p-4 xl:col-span-2">
+      <Skeleton className="h-[285px] w-full rounded-xl" aria-hidden />
+      <div className="dashboard-workspace grid gap-5" aria-hidden>
+        <div className="flex flex-col gap-3 rounded-lg border bg-card p-4">
           <Skeleton className="h-4 w-28" />
           {Array.from({ length: 6 }, (_, index) => (
             <Skeleton key={index} className="h-9 w-full" />
@@ -26,8 +27,8 @@ export function DashboardSkeleton({ label = "대시보드를 불러오는 중…
           ))}
         </div>
       </div>
-      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3" aria-hidden>
-        {Array.from({ length: 3 }, (_, index) => (
+      <div className="grid gap-5 lg:grid-cols-2" aria-hidden>
+        {Array.from({ length: 2 }, (_, index) => (
           <div key={index} className="flex h-60 flex-col gap-3 rounded-lg border bg-card p-4">
             <Skeleton className="h-4 w-32" />
             <Skeleton className="w-full flex-1" />

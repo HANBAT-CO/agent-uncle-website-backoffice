@@ -15,12 +15,12 @@ export function ChartCard({
   testId?: string;
 }) {
   return (
-    <section data-testid={testId} aria-label={title} className={cn("flex min-w-0 flex-col gap-3 rounded-lg border bg-card p-4", className)}>
-      <header className="flex items-baseline justify-between gap-3">
-        <h2 className="text-sm font-semibold text-foreground">{title}</h2>
+    <section data-testid={testId} aria-label={title} className={cn("console-panel flex min-w-0 flex-col gap-3", className)}>
+      <header className="console-chart-header flex items-baseline justify-between gap-3">
+        <h2 className="console-panel-title">{title}</h2>
         {aside ? <div className="text-xs text-muted-foreground">{aside}</div> : null}
       </header>
-      {children}
+      <div className="console-chart-body flex flex-1 flex-col">{children}</div>
     </section>
   );
 }

@@ -59,13 +59,13 @@ async function DashboardBody({
   return (
     <>
       <KpiTiles tiles={kpiTiles(data, { includeDemo })} />
-      <div className="grid gap-4 xl:grid-cols-3">
-        <AttentionQueue rows={data.queue.map((item) => anomalyRow(item, nameMap, now))} now={now} className="xl:col-span-2" />
-        <SideSummary lines={summaryLines(data)} maintenanceOn={Boolean(data.maintenance?.active)} />
+      <StageBar stages={[...stages]} ended={stages.ended} includeDemo={includeDemo} />
+      <div className="dashboard-workspace grid gap-5">
+        <AttentionQueue rows={data.queue.map((item) => anomalyRow(item, nameMap, now))} now={now} includeDemo={includeDemo} />
+        <SideSummary lines={summaryLines(data)} accounts={data.accounts} maintenanceOn={Boolean(data.maintenance?.active)} />
       </div>
-      <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-5 lg:grid-cols-2">
         <NewRequestsChart series={data.newRequestsByDay} />
-        <StageBar stages={[...stages]} ended={stages.ended} />
         <BackorderAgingChart aging={data.backorderAging} />
       </div>
     </>
@@ -75,7 +75,7 @@ async function DashboardBody({
 /**
  * 대시보드 /admin (screens 10.5, viewer). One backoffice_overview call for
  * the chosen range feeds the stamp, the six KPI tiles, the 지금 확인할 일
- * queue, the side summary and the three charts. Refreshes every 30 s while
+ * queue, the side summary, request flow and two charts. Refreshes every 30 s while
  * the tab is visible. Demo rows count only on live with `demo=1`.
  */
 export default async function DashboardPage({ searchParams }: { searchParams: SearchParams }) {
@@ -89,10 +89,11 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
   const names = loadAccountNames(includeDemo);
 
   return (
-    <div className="flex flex-col gap-4" data-testid="dashboard">
+    <div className="flex flex-col gap-5" data-testid="dashboard">
       <AutoRefresh />
       <PageHeader
         title="대시보드"
+        eyebrow="OPERATIONS OVERVIEW"
         meta={
           <Suspense fallback={<span aria-hidden>…</span>}>
             <Stamp overview={overview} />

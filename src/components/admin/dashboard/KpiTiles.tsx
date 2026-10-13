@@ -1,7 +1,5 @@
-import { ArrowRightIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
+import { ArrowUpRightIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
-
-import { cn } from "@/lib/admin/utils";
 
 import type { KpiTile } from "./model";
 
@@ -12,36 +10,33 @@ import type { KpiTile } from "./model";
  */
 export function KpiTiles({ tiles }: { tiles: KpiTile[] }) {
   return (
-    <ul aria-label="주요 지표" className="grid grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-6">
+    <ul aria-label="주요 지표" className="kpi-strip">
       {tiles.map((tile) => (
         <li key={tile.key}>
           <Link
             href={tile.href}
             data-kpi={tile.key}
-            className={cn(
-              "group/tile flex h-full min-h-28 flex-col justify-between gap-3 rounded-lg border bg-card p-4 transition-colors outline-none",
-              "hover:border-primary/40 hover:bg-[color-mix(in_oklab,var(--card),var(--primary)_4%)] focus-visible:ring-2 focus-visible:ring-ring/40",
-            )}
+            className="kpi-link"
           >
             <span className="flex items-start justify-between gap-2">
-              <span className="text-[0.8125rem] font-medium text-muted-foreground">{tile.label}</span>
+              <span className="text-xs font-medium text-muted-foreground">{tile.label}</span>
               {tile.attention ? (
-                <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-status-attention-bg text-status-attention">
+                <span className="flex size-4 shrink-0 items-center justify-center text-status-attention">
                   <WarningCircleIcon aria-hidden weight="bold" className="size-3.5" />
                 </span>
               ) : null}
             </span>
             <span className="flex items-end justify-between gap-2">
-              <span className="flex items-baseline gap-0.5 text-foreground">
-                <span data-kpi-value className="text-[1.75rem] leading-none font-semibold tracking-tight">
+              <span className="num flex items-baseline gap-1.5 text-foreground">
+                <span data-kpi-value>
                   {tile.value.toLocaleString("ko-KR")}
                 </span>
-                <span className="text-sm font-medium">{tile.unit}</span>
+                <span className="text-xs text-muted-foreground">{tile.unit}</span>
               </span>
-              <ArrowRightIcon
+              <ArrowUpRightIcon
                 aria-hidden
                 weight="bold"
-                className="size-4 shrink-0 text-muted-foreground transition-transform group-hover/tile:translate-x-0.5 group-hover/tile:text-primary"
+                className="kpi-arrow size-4 shrink-0 text-primary"
               />
             </span>
           </Link>

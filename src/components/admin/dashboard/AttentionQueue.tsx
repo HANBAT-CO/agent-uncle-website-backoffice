@@ -15,22 +15,24 @@ const TITLE = "지금 확인할 일";
  * (the SQL order). Each row: reason chip (운영 점검 labels), target summary,
  * relative age and "열기".
  */
-export function AttentionQueue({ rows, now, className }: { rows: AnomalyRowModel[]; now: Date; className?: string }) {
+export function AttentionQueue({ rows, now, className, includeDemo = false }: { rows: AnomalyRowModel[]; now: Date; className?: string; includeDemo?: boolean }) {
   return (
-    <section aria-labelledby="queue-title" data-testid="attention-queue" className={cn("flex min-w-0 flex-col rounded-lg border bg-card", className)}>
-      <header className="flex items-center justify-between gap-3 border-b px-4 py-3">
-        <h2 id="queue-title" className="text-sm font-semibold text-foreground">
+    <section aria-labelledby="queue-title" data-testid="attention-queue" className={cn("console-panel flex min-w-0 flex-col", className)}>
+      <header className="console-panel-header">
+        <h2 id="queue-title" className="console-panel-title flex items-center gap-2.5">
           {TITLE}
+          {rows.length > 0 ? <span className="num rounded-md bg-status-attention-bg px-1.5 py-0.5 text-[10px] text-status-attention">{rows.length.toLocaleString("ko-KR")}건</span> : null}
         </h2>
-        {rows.length > 0 ? <span className="num text-xs text-muted-foreground">{rows.length.toLocaleString("ko-KR")}건</span> : null}
+        <Link href={`/admin/checks${includeDemo ? "?demo=1" : ""}`} className="console-section-link">전체 보기 <ArrowRightIcon aria-hidden className="size-3.5" /></Link>
       </header>
       {rows.length === 0 ? (
         <EmptyState title="지금 확인할 일이 없어요" description="새로 생기면 여기에 바로 보여요." className="min-h-56 border-0 bg-transparent" />
       ) : (
-        <ol className="flex flex-col">
+        <div className="queue-scroll" tabIndex={0} role="region" aria-label="확인이 필요한 항목 목록">
+        <ol>
           {rows.map((row) => (
-            <li key={row.id} data-queue-kind={row.kind} className="flex min-h-14 items-center gap-3 border-b px-4 py-2 last:border-b-0">
-              <span className="flex w-40 shrink-0">
+            <li key={row.id} data-queue-kind={row.kind} className="queue-row">
+              <span className="flex min-w-0">
                 <ToneChip label={row.kindLabel} tone={row.severity.tone} icon={row.severity.icon} />
               </span>
               <span className="flex min-w-0 flex-1 flex-col leading-tight">
@@ -44,9 +46,9 @@ export function AttentionQueue({ rows, now, className }: { rows: AnomalyRowModel
               ) : null}
               {row.href ? (
                 <Link
-                  href={row.href}
+                  href={includeDemo ? `${row.href}${row.href.includes("?") ? "&" : "?"}demo=1` : row.href}
                   prefetch={false}
-                  className="inline-flex h-7 shrink-0 items-center gap-1 rounded-md border px-2 text-xs font-medium text-foreground transition-colors outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/40"
+                  className="queue-open"
                 >
                   열기
                   <span className="sr-only">
@@ -60,7 +62,9 @@ export function AttentionQueue({ rows, now, className }: { rows: AnomalyRowModel
             </li>
           ))}
         </ol>
+        </div>
       )}
+      {rows.length > 0 ? <p className="mt-auto border-t border-[var(--console-line)] px-[22px] py-3 text-[10px] text-muted-foreground">중요도와 대기 시간을 기준으로 정렬했어요.</p> : null}
     </section>
   );
 }
