@@ -48,8 +48,27 @@ function isPublishableKey(key: string): boolean {
   }
 }
 
+/** Trims a dashboard-pasted value and drops one pair of surrounding quotes. */
+function clean(value: string | undefined): string | undefined {
+  const v = value?.trim();
+  if (!v) return undefined;
+  const quoted = v.length >= 2 && ((v.startsWith("\"") && v.endsWith("\"")) || (v.startsWith("'") && v.endsWith("'")));
+  return (quoted ? v.slice(1, -1).trim() : v) || undefined;
+}
+
+const CLEANED = [
+  "BACKOFFICE_SUPABASE_TARGET",
+  "BACKOFFICE_SUPABASE_URL",
+  "BACKOFFICE_SUPABASE_PUBLISHABLE_KEY",
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
+  "VERCEL_ENV",
+] as const;
+
 /** Pure: validates the three backoffice variables from an env record. */
-export function readBackofficeEnv(env: Record<string, string | undefined>): BackofficeEnv {
+export function readBackofficeEnv(raw: Record<string, string | undefined>): BackofficeEnv {
+  const env: Record<string, string | undefined> = { ...raw };
+  for (const name of CLEANED) env[name] = clean(raw[name]);
   const explicit = env.BACKOFFICE_SUPABASE_TARGET?.trim();
   if (!explicit && env.VERCEL_ENV?.trim() === "production") {
     return readBackofficeEnv({

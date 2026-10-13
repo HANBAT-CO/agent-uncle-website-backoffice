@@ -123,4 +123,14 @@ describe("readBackofficeEnv", () => {
       expect(readBackofficeEnv({ VERCEL_ENV: "preview" })).toMatchObject({ enabled: false, reason: "disabled" });
     });
   });
+
+  it("tolerates quotes and spaces pasted into the hosting dashboard", () => {
+    expect(
+      readBackofficeEnv({
+        BACKOFFICE_SUPABASE_TARGET: "  \"live\" ",
+        BACKOFFICE_SUPABASE_URL: "'https://auicerytbhnqeakmkscs.supabase.co'",
+        BACKOFFICE_SUPABASE_PUBLISHABLE_KEY: "\"sb_publishable_abc\"",
+      }),
+    ).toEqual({ enabled: true, target: "live", url: "https://auicerytbhnqeakmkscs.supabase.co", publishableKey: "sb_publishable_abc" });
+  });
 });
