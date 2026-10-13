@@ -295,6 +295,9 @@ isOneToOne: true
 "saip_can_read_attachment":
 { Args: { "path": string }; Returns: boolean
                            },
+"saip_check_phone_available":
+{ Args: { "phone": string }; Returns: boolean
+                           },
 "saip_command":
 { Args: { "args"?: Json,"command": string,"operation_id"?: string }; Returns: string
                            },

@@ -358,6 +358,17 @@ async function chat(sender, peer, body, { s, photoSpec } = {}) {
   const id = randomUUID();
   const attachments = photoSpec ? [await photo(sender, photoSpec, 1)] : [];
   await cmd(sender, "sendMessage", { id, peerId: peer.id, body, attachments, requestId: s?.id ?? "" }, id);
+  return id;
+}
+// The app's message menu (202610130000): the sender edits or deletes a sent message.
+const editMessage = async (sender, id, body) => cmd(sender, "editMessage", { id, body, version: await version(sender, "messages", id) });
+const deleteMessage = async (sender, id) => cmd(sender, "deleteMessage", { id, version: await version(sender, "messages", id) });
+/** 도매처 주문서 (requestType 'wholesaler', 202610130004): 1-10 wholesalers, 수령지 from the retailer profile. */
+async function sendWholesalers(s, r, u, wholesalers) {
+  const id = randomUUID();
+  await cmd(r, "saveDraft", { id, values: { uncleId: u.id, requestType: "wholesaler", wholesalers } });
+  await cmd(r, "sendDraft", { id });
+  Object.assign(s, { id, r, u, spec: { product: wholesalers[0].wholesaler, shape: "bag", color: "#C9B79C" } });
 }
 const say = (s, who, body, opts = {}) => chat(who === "r" ? s.r : s.u, who === "r" ? s.u : s.r, body, { s, ...opts });
 async function readAll(user) {
@@ -795,6 +806,47 @@ function buildTimeline() {
     at(hoursAgo(7), () => propose(s, s.u, "cancel", { quantity: 4, acquiredCancelled: 0, reason: "다른 매장도 품절 확정이에요. 취소 확인 부탁드려요." }));
   });
 
+  // 도매처 주문서 (3): requestType 'wholesaler' (202610130004). No product or option, quantity 1,
+  // 수령지 and note copied from the retailer's profile by the server.
+  scenario("H1 주문서 확인 대기 (도매처 3곳)", (at, s) =>
+    at(hoursAgo(4), () =>
+      sendWholesalers(s, R.jamsil, U.lee, [
+        { wholesaler: "르블랑", location: "제일평화 3층 318호" },
+        { wholesaler: "라인바이", location: "제일평화 3층 305호" },
+        { wholesaler: "아뜰리에 봄", location: "제일평화 2층 211호" },
+      ]),
+    ),
+  );
+  scenario("H2 주문서 완료", (at, s) => {
+    at(T(12, 11, 5), () =>
+      sendWholesalers(s, R.mangwon, U.park, [
+        { wholesaler: "모노스튜디오", location: "디오트 2층 B-12" },
+        { wholesaler: "데이핏", location: "디오트 3층 C-07" },
+      ]),
+    );
+    at(T(12, 21, 0), () => accept(s));
+    at(T(11, 2, 30), async () => { await result(s, 1); await say(s, "u", "두 매장 주문분 모두 챙겼어요."); });
+    at(T(11, 12, 50), () => deliver([[s, 1]]));
+    at(T(11, 15, 20), () => receive(s, 0, 1));
+  });
+  scenario("H3 주문서 수령 (최근 완료, 7일 안)", (at, s) => {
+    at(T(3, 10, 30), () => sendWholesalers(s, R.yeonnam, U.kim, [{ wholesaler: "블랑쉬", location: "남대문 대도상가 E동 2층 18호" }]));
+    at(T(3, 17, 40), () => accept(s));
+    at(T(2, 9, 10), () => result(s, 1));
+    at(T(2, 14, 0), () => deliver([[s, 1]]));
+    at(T(2, 17, 30), () => receive(s, 0, 1));
+  });
+
+  // ---- chat message menu (202610130000): one edited and one deleted message
+  scenario("chat mangwon-park edit/delete", (at) => {
+    const m = {};
+    at(T(6, 15, 0), async () => (m.edit = await chat(R.mangwon, U.park, "내일 오전엔 매장이 비어요. 오후 2시 이후 전달 부탁드려요.")));
+    at(T(6, 15, 3), () => editMessage(R.mangwon, m.edit, "내일 오전엔 매장이 비어요. 오후 3시 이후 전달 부탁드려요."));
+    at(T(6, 15, 6), async () => (m.del = await chat(R.mangwon, U.park, "다른 거래처에 보낼 메시지를 잘못 보냈어요.")));
+    at(T(6, 15, 7), () => deleteMessage(R.mangwon, m.del));
+    at(T(6, 20, 10), () => chat(U.park, R.mangwon, "네 사장님, 오후 3시 이후로 맞춰 갈게요."));
+  });
+
   // ---- drafts (not sent yet)
   scenario("drafts", (at) => {
     at(hoursAgo(20), () => cmd(R.mangwon, "saveDraft", { id: randomUUID(), values: { uncleId: U.park.id, wholesaler: "누보", location: "청평화 2층 나-14", product: "롱 패딩 코트", option: "블랙 / FREE", quantity: 5, address: R.mangwon.p.address, addressDetail: R.mangwon.p.addressDetail, note: "", photos: [] } }));
@@ -902,7 +954,10 @@ $f$;
 create function pg_temp.shift_data(d jsonb) returns jsonb language plpgsql stable as $f$
 declare p text; r jsonb := d;
 begin
-  foreach p in array array['createdAt','updatedAt','correctedAt','before,createdAt','before,updatedAt','before,correctedAt','after,createdAt','after,updatedAt','after,correctedAt'] loop
+  -- receivedAt (202610130004) drives the app's 수령 / 완료 label; editedAt / deletedAt come from the message menu.
+  foreach p in array array['createdAt','updatedAt','correctedAt','receivedAt','editedAt','deletedAt',
+      'before,createdAt','before,updatedAt','before,correctedAt','before,receivedAt',
+      'after,createdAt','after,updatedAt','after,correctedAt','after,receivedAt'] loop
     if r #> string_to_array(p, ',') is not null then
       r := jsonb_set(r, string_to_array(p, ','), pg_temp.shift_json(r #> string_to_array(p, ',')));
     end if;

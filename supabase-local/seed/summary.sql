@@ -17,7 +17,9 @@ with r as (
   select *, case
     when d->>'status' = 'rejected' then '거절'
     when d->>'status' = 'cancelled' then '취소 종료'
-    when d->>'status' = 'completed' then '완료'
+    -- 수령 for 7 days after receivedAt (202610130004; older rows fall back to updatedAt), then 완료
+    when d->>'status' = 'completed' then
+      case when coalesce(nullif(d->>'receivedAt', ''), d->>'updatedAt')::timestamptz <= now() - interval '7 days' then '완료' else '수령' end
     when coalesce((d->>'openIssues')::int, 0) > 0 then '문제 확인 중'
     when coalesce(d->>'proposalId', '') <> '' then '변경·취소 협의 중'
     when d->>'status' = 'pending' then '확인 대기'
@@ -31,6 +33,10 @@ with r as (
   from r
 )
 select label, count(*) from labelled group by 1 order by 2 desc, 1;
+
+\echo '== requests per type (wholesaler = 도매처 주문서)'
+select case when data->>'requestType' = 'wholesaler' then 'wholesaler' else 'product' end as type, count(*)
+from public.saip_records where collection = 'requests' group by 1 order by 1;
 
 \echo '== invariant violations (expect 0 rows): received <= delivered <= acquired, held/cancel bounds'
 select id, d->>'status' status, q, a, dl, rc, c, ac, h from (
@@ -61,6 +67,8 @@ order by 1;
 \echo '== messages / notices'
 select case when (data->>'system')::boolean then 'message (업무 기록)' else 'message (chat)' end || case when (data->>'read')::boolean then ' read' else ' unread' end as what, count(*)
 from public.saip_records where collection = 'messages' group by 1
+union all select 'message ' || case when (data->>'deleted')::boolean then 'deleted' else 'edited' end, count(*)
+from public.saip_records where collection = 'messages' and (data ? 'editedAt' or data ? 'deletedAt') group by 1
 union all select 'notice ' || (data->>'kind') || case when (data->>'read')::boolean then ' read' else ' unread' end, count(*)
 from public.saip_records where collection = 'notices' group by 1 order by 1;
 

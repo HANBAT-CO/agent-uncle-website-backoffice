@@ -68,7 +68,7 @@ select is(public.saip_command('bootstrap', '{}', 'bo-r-init'), bo_test.id('retai
 select lives_ok($$select public.saip_command('chooseRole', '{"role":"retailer"}', 'bo-r-role')$$, 'fixture: retailer role');
 select lives_ok($$select public.saip_command('registerAttachment', '{"id":"bo-doc-r","name":"사업자등록증.pdf"}', 'bo-r-doc')$$, 'fixture: retailer document');
 select lives_ok($$select public.saip_command('registerAttachment', '{"id":"bo-photo-r","name":"상품.png"}', 'bo-r-photo')$$, 'fixture: request photo');
-select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"백오피스 테스트 소매","contact":"김담당","phone":"010-9381-7264","businessName":"테스트 상점","businessNumber":"1234567890","documentId":"bo-doc-r","address":"서울 마포구 망원로 1","addressDetail":"1층","salesChannel":"온라인","terms":true,"privacy":true}}', 'bo-r-profile')$$,
+select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"백오피스 테스트 소매","contact":"김담당","phone":"010-9381-7264","businessName":"테스트 상점","businessNumber":"1234567890","documentId":"bo-doc-r","address":"서울 마포구 망원로 1","addressDetail":"1층","deliveryNote":"문 앞 보관은 하지 말아 주세요.","salesChannel":"온라인","terms":true,"privacy":true}}', 'bo-r-profile')$$,
   'fixture: retailer signup complete');
 insert into bo_test.v select 'code', public.saip_snapshot() -> 'accounts' -> bo_test.id('retailer') ->> 'code';
 
@@ -309,6 +309,78 @@ select ok(public.saip_command('renewCode', '{}', 'bo-u-renew-3') is not null, 'w
 select ok(public.app_bootstrap_config('ios', '0.1.0+1') -> 'update' @> '{"required":true,"recommended":true}', 'update required below minimum');
 select ok(public.app_bootstrap_config('ios', '0.3.0') -> 'update' @> '{"required":false,"recommended":false}', 'no update at recommended');
 select ok(public.app_bootstrap_config('android', '0.1.0') -> 'update' @> '{"required":false}', 'other platform unaffected');
+
+-- ---------- live app schema: 도매처 주문서 (202610130004), message menu (202610130000), phone check (202610120001) ----------
+reset role;
+select bo_test.as_postgres();
+select is((select tgname::text from pg_trigger where tgrelid = 'public.saip_records'::regclass and not tgisinternal order by tgname limit 1),
+  'backoffice_guard_app_writes', 'guard is the first saip_records trigger');
+select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '1 day')), '수령',
+  'completed within 7 days reads 수령');
+select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '8 days', 'updatedAt', now())), '완료',
+  'completed 7+ days ago reads 완료');
+select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'updatedAt', now() - interval '10 days')), '완료',
+  'older rows fall back to updatedAt');
+select is(backoffice_private.request_title('{"requestType":"wholesaler","product":"","wholesalers":[{"wholesaler":"A","location":"1층"},{"wholesaler":"B","location":"2층"}]}'),
+  'A 외 1곳', 'request title of a wholesaler request mirrors the app');
+select is(backoffice_private.request_title('{"product":"셔츠","wholesaler":"A"}'), '셔츠', 'request title of a product request is the product');
+set local role authenticated;
+select bo_test.as_user(bo_test.id('retailer'));
+select is(public.saip_command('saveDraft', jsonb_build_object('id', 'bo-w-1', 'values', jsonb_build_object('uncleId', bo_test.id('uncle'),
+  'requestType', 'wholesaler', 'wholesalers', jsonb_build_array(jsonb_build_object('wholesaler', '르블랑', 'location', '제일평화 3층 318호'),
+    jsonb_build_object('wholesaler', '라인바이', 'location', '제일평화 3층 305호')))), 'bo-w-1-draft'), 'bo-w-1', 'wholesaler draft saved with the guard installed');
+select is(public.saip_command('sendDraft', '{"id":"bo-w-1"}', 'bo-w-1-send'), 'bo-w-1', 'wholesaler request sent with the guard installed');
+select is(public.saip_command('sendMessage', jsonb_build_object('id', 'bo-m-1', 'peerId', bo_test.id('uncle'), 'body', '수정 전 010-1111-2222',
+  'attachments', '[]'::jsonb), 'bo-m-1'), 'bo-m-1', 'fixture: message to edit');
+select is(public.saip_command('editMessage', '{"id":"bo-m-1","body":"수정 후 010-3333-4444","version":0}', 'bo-m-1-edit'), 'bo-m-1',
+  'editMessage with the guard installed');
+select is(public.saip_command('sendMessage', jsonb_build_object('id', 'bo-m-2', 'peerId', bo_test.id('uncle'), 'body', '지울 메시지',
+  'attachments', '[]'::jsonb), 'bo-m-2'), 'bo-m-2', 'fixture: message to delete');
+select is(public.saip_command('deleteMessage', '{"id":"bo-m-2","version":0}', 'bo-m-2-del'), 'bo-m-2', 'deleteMessage with the guard installed');
+select ok(public.saip_check_phone_available('010-0000-0000'), 'phone availability check unaffected');
+select bo_test.as_user('cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+select ok(exists (select 1 from jsonb_array_elements(public.backoffice_list_requests(p_attention => 'wholesaler', p_include_demo => true, p_limit => 200) -> 'rows') r
+  where r ->> 'id' = 'bo-w-1' and r ->> 'requestType' = 'wholesaler' and r ->> 'title' = '르블랑 외 1곳'
+    and jsonb_array_length(r -> 'wholesalers') = 2 and r ->> 'label' = '확인 대기'), 'wholesaler request listed with type, title and wholesalers');
+select ok(exists (select 1 from jsonb_array_elements(public.backoffice_search('라인바이') -> 'requests') x where x ->> 'id' = 'bo-w-1'),
+  'search finds a request by its second wholesaler');
+select ok(public.backoffice_get_request('bo-w-1') -> 'request' @> '{"masked":true,"note":"","addressDetail":"","requestType":"wholesaler"}',
+  'viewer: the copied delivery note of a wholesaler request is blank');
+select ok((select (r ->> 'edited')::int >= 1 and (r ->> 'deleted')::int >= 1
+  from jsonb_array_elements(public.backoffice_list_conversations(p_account_id => bo_test.id('retailer')::uuid, p_limit => 200) -> 'rows') r
+  where bo_test.id('uncle') in (r -> 'accountA' ->> 'id', r -> 'accountB' ->> 'id')), 'conversation list counts edited and deleted messages');
+select bo_test.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+select is(public.backoffice_get_request('bo-w-1') -> 'request' ->> 'note', '문 앞 보관은 하지 말아 주세요.', 'operator sees the copied delivery note');
+select is(public.backoffice_get_request('bo-w-1') -> 'request' ->> 'address', '서울 마포구 망원로 1', 'wholesaler request carries the profile address');
+select ok((select bool_and(case m ->> 'id' when 'bo-m-1' then m ->> 'body' = '수정 후 010-••••-4444' and m ? 'editedAt'
+                                     when 'bo-m-2' then m ->> 'body' = '' and (m ->> 'deleted')::boolean end) and count(*) = 2
+  from jsonb_array_elements(public.backoffice_get_conversation(bo_test.id('retailer')::uuid, bo_test.id('uncle')::uuid, '메시지 수정 이력 확인') -> 'messages') m
+  where m ->> 'id' in ('bo-m-1','bo-m-2')), 'transcript shows the edited body (masked) and the deleted message blank');
+select is(public.backoffice_set_account_status(bo_test.id('retailer')::uuid, 'suspended', '메시지 수정 차단 확인', '이용이 잠시 제한됐어요.', false, 'bo-s-w1') ->> 'status',
+  'suspended', 'suspended again');
+select bo_test.as_user(bo_test.id('retailer'));
+select throws_ok($$select public.saip_command('editMessage', '{"id":"bo-m-1","body":"정지 중 수정","version":1}', 'bo-m-1-edit2')$$,
+  'P0001', '이용이 잠시 제한됐어요.', 'suspended user cannot edit a message');
+select throws_ok($$select public.saip_command('deleteMessage', '{"id":"bo-m-1","version":1}', 'bo-m-1-del')$$,
+  'P0001', '이용이 잠시 제한됐어요.', 'suspended user cannot delete a message');
+select throws_ok(format('select public.saip_command(%L, %L, %L)', 'updateRequest', jsonb_build_object('id', 'bo-w-1', 'version', 0,
+  'values', jsonb_build_object('requestType', 'wholesaler', 'wholesalers', jsonb_build_array(jsonb_build_object('wholesaler', '르블랑',
+  'location', '제일평화 3층 318호'))))::text, 'bo-w-1-upd'), 'P0001', '이용이 잠시 제한됐어요.', 'suspended user cannot change a wholesaler request');
+select bo_test.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+select is(public.backoffice_set_account_status(bo_test.id('retailer')::uuid, 'active', '확인 완료, 정지 해제', p_operation_id => 'bo-s-w2') ->> 'status',
+  'active', 'restored again');
+select bo_test.as_user(bo_test.id('retailer'));
+select is(public.saip_command('editMessage', '{"id":"bo-m-1","body":"해제 후 수정","version":1}', 'bo-m-1-edit3'), 'bo-m-1', 'restored user edits again');
+reset role;
+select bo_test.as_postgres();
+insert into auth.users (id, email, aud, role) values ('99999999-9999-4999-8999-999999999999', 'bo-dup-phone@app.test', 'authenticated', 'authenticated');
+insert into public.saip_records (collection, id, data, readers) values ('accounts', '99999999-9999-4999-8999-999999999999',
+  '{"role":"retailer","complete":true,"phone":"+82 10 9381 7264"}', array['99999999-9999-4999-8999-999999999999'::uuid]);
+set local role authenticated;
+select bo_test.as_user('cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+select is((select count(*) from jsonb_array_elements(public.backoffice_ledger_anomalies(true) -> 'items') i
+  where i ->> 'kind' = 'phone_duplicate' and i ->> 'targetId' in (bo_test.id('retailer'), '99999999-9999-4999-8999-999999999999')), 2::bigint,
+  'duplicate phones listed for both accounts');
 
 -- ---------- notes, cases, idempotency with redacted payloads ----------
 select bo_test.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');

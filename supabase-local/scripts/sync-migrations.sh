@@ -4,6 +4,8 @@
 #   sync-migrations.sh --copy     copy new or changed source files in, then re-check
 # Sources (read-only):
 #   app repo    $APP_SUPABASE_DIR/migrations/*.sql  (default: the agent-uncle "lisbon" workspace)
+#               Only the migrations listed in LIVE_APP below: the stack mirrors the LIVE project, so
+#               app migrations that are not on live yet are reported as "not live" and never copied.
 #               $APP_SUPABASE_DIR/config.toml is NOT re-copied: ours carries the port/project deltas.
 #               20261013090000_* is skipped there: its source is this repo (below).
 #   this repo   supabase/migrations/20261011230000_landing_leads.sql
@@ -21,14 +23,33 @@ case "$mode" in
   *) echo "usage: $0 [--copy]" >&2; exit 2 ;;
 esac
 [[ -d "$app/migrations" ]] || { echo "app migrations not found: $app/migrations (set APP_SUPABASE_DIR)" >&2; exit 2; }
+# App migrations recorded on LIVE (supabase_migrations.schema_migrations, read 2026-10-14). Add a name
+# once it is on live; verify-schema.mjs reports a live migration that is missing here ("only live").
+LIVE_APP=(
+  202610110001_workspace.sql
+  202610110002_commands.sql
+  202610110003_snapshot_integrity.sql
+  202610110004_profile_validation_messages.sql
+  202610110005_optional_profile_details.sql
+  202610110006_signup_role_profile_validation.sql
+  202610120001_signup_phone_availability.sql
+  202610130000_chat_message_actions_hotfix.sql
+  202610130004_wholesaler_requests.sql
+)
+is_live() { local n; for n in "${LIVE_APP[@]}"; do [[ "$n" == "$1" ]] && return 0; done; return 1; }
 drift=0
 sources=()
 for f in "$app"/migrations/*.sql; do
   [[ -e "$f" ]] || continue
-  case "$(basename "$f")" in
-    20261013090000_*) echo "skip     $(basename "$f") (app copy; the source is supabase/backoffice/)" ;;
-    *) sources+=("$f") ;;
+  name="$(basename "$f")"
+  case "$name" in
+    20261013090000_*) echo "skip     $name (app copy; the source is supabase/backoffice/)" ;;
+    20261011230000_*) echo "skip     $name (app copy; the source is supabase/migrations/)" ;;
+    *) if is_live "$name"; then sources+=("$f"); else echo "not live $name (not copied)"; fi ;;
   esac
+done
+for n in "${LIVE_APP[@]}"; do
+  [[ -f "$app/migrations/$n" ]] || { echo "source missing: $app/migrations/$n" >&2; exit 2; }
 done
 sources+=("$repo/supabase/migrations/20261011230000_landing_leads.sql")
 sources+=("$repo/supabase/backoffice/20261013090000_backoffice_admin_layer.sql")

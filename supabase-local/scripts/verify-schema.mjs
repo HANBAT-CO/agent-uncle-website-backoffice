@@ -25,7 +25,7 @@ const sql = readFileSync(join(here, "schema-fingerprint.sql"), "utf8");
 const EXPECTED = {
   // landing_leads was applied to live via the SQL endpoint, outside the migration history
   // (see supabase/README.md). Locally it is a normal migration.
-  migrations: "live has the 6 app migrations; local adds 20261011230000_landing_leads",
+  migrations: "local has the live app migrations plus 20261011230000_landing_leads",
 };
 
 // The PROPOSED backoffice layer (supabase/backoffice/20261013090000_backoffice_admin_layer.sql) is applied

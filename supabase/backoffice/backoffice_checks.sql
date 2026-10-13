@@ -211,6 +211,74 @@ select t.ok(public.app_bootstrap_config('ios', '0.1.0+1') -> 'update' @> '{"requ
 select t.ok(public.app_bootstrap_config('ios', '0.3.0') -> 'update' @> '{"required":false,"recommended":false}', 'no update at recommended');
 select t.ok(public.app_bootstrap_config('android', '0.1.0') -> 'update' @> '{"required":false}', 'other platform unaffected');
 
+-- ---------- live app schema: 도매처 주문서 (202610130004), message menu (202610130000), phone check (202610120001) ----------
+reset role;
+select set_config('request.jwt.claims', '', false);
+create function t.expect_message(q text, msg text, label text) returns text language plpgsql as $f$
+begin
+  begin execute q; exception when others then
+    if sqlerrm = msg then return 'PASS ' || label || ' [' || sqlstate || '] ' || left(sqlerrm, 90); end if;
+    raise exception 'FAIL % expected "%" got % %', label, msg, sqlstate, sqlerrm;
+  end;
+  raise exception 'FAIL % expected an error but succeeded', label;
+end $f$;
+grant execute on function t.expect_message(text, text, text) to public;
+insert into t.v select 'deliveryNote', data ->> 'deliveryNote' from public.saip_records where collection = 'accounts' and id = t.id('retailer');
+select t.ok((select tgname from pg_trigger where tgrelid = 'public.saip_records'::regclass and not tgisinternal order by tgname limit 1)
+  = 'backoffice_guard_app_writes', 'guard is the first saip_records trigger');
+select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '1 day')) = '수령', 'completed within 7 days reads 수령');
+select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '8 days', 'updatedAt', now())) = '완료', 'completed 7+ days ago reads 완료');
+select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'updatedAt', now() - interval '10 days')) = '완료', 'older rows fall back to updatedAt');
+select t.ok(backoffice_private.request_title('{"requestType":"wholesaler","product":"","wholesalers":[{"wholesaler":"A","location":"1층"},{"wholesaler":"B","location":"2층"}]}') = 'A 외 1곳'
+  and backoffice_private.request_title('{"product":"셔츠","wholesaler":"A"}') = '셔츠', 'request title mirrors the app');
+set role authenticated;
+select t.as_user(t.id('retailer'));
+select t.ok(public.saip_command('saveDraft', jsonb_build_object('id', 'bo-check-w1', 'values', jsonb_build_object('uncleId', t.id('uncle'),
+  'requestType', 'wholesaler', 'wholesalers', jsonb_build_array(jsonb_build_object('wholesaler', '르블랑', 'location', '제일평화 3층 318호'),
+    jsonb_build_object('wholesaler', '라인바이', 'location', '제일평화 3층 305호')))), 'bo-check-w1-draft') = 'bo-check-w1'
+  and public.saip_command('sendDraft', '{"id":"bo-check-w1"}', 'bo-check-w1-send') = 'bo-check-w1', 'wholesaler request sent with the guard installed');
+select t.ok(public.saip_command('sendMessage', jsonb_build_object('id', 'bo-check-m1', 'peerId', t.id('uncle'), 'body', '수정 전 010-1111-2222', 'attachments', '[]'::jsonb), 'bo-check-m1') = 'bo-check-m1'
+  and public.saip_command('editMessage', '{"id":"bo-check-m1","body":"수정 후 010-3333-4444","version":0}', 'bo-check-m1-edit') = 'bo-check-m1', 'editMessage with the guard installed');
+select t.ok(public.saip_command('sendMessage', jsonb_build_object('id', 'bo-check-m2', 'peerId', t.id('uncle'), 'body', '지울 메시지', 'attachments', '[]'::jsonb), 'bo-check-m2') = 'bo-check-m2'
+  and public.saip_command('deleteMessage', '{"id":"bo-check-m2","version":0}', 'bo-check-m2-del') = 'bo-check-m2', 'deleteMessage with the guard installed');
+select t.ok(public.saip_check_phone_available('010-0000-0000'), 'phone availability check unaffected');
+select t.as_user('cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+select t.ok(exists (select 1 from jsonb_array_elements(public.backoffice_list_requests(p_attention => 'wholesaler', p_limit => 200) -> 'rows') r
+  where r ->> 'id' = 'bo-check-w1' and r ->> 'requestType' = 'wholesaler' and r ->> 'title' = '르블랑 외 1곳'
+    and jsonb_array_length(r -> 'wholesalers') = 2 and r ->> 'label' = '확인 대기'), 'wholesaler request listed with type, title and wholesalers');
+select t.ok(exists (select 1 from jsonb_array_elements(public.backoffice_search('라인바이') -> 'requests') x where x ->> 'id' = 'bo-check-w1'),
+  'search finds a request by its second wholesaler');
+select t.ok(public.backoffice_get_request('bo-check-w1') -> 'request' @> '{"masked":true,"note":"","addressDetail":""}', 'viewer: profile delivery note of a wholesaler request blank');
+select t.ok((select (r ->> 'edited')::int >= 1 and (r ->> 'deleted')::int >= 1 from jsonb_array_elements(public.backoffice_list_conversations(p_account_id => t.id('retailer')::uuid, p_limit => 200) -> 'rows') r
+  where t.id('uncle') in (r -> 'accountA' ->> 'id', r -> 'accountB' ->> 'id')), 'conversation list counts edited and deleted messages');
+select t.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+select t.ok(public.backoffice_get_request('bo-check-w1') -> 'request' ->> 'note' = t.id('deliveryNote')
+  and t.id('deliveryNote') <> '', 'operator sees the copied delivery note');
+select t.ok((select bool_and(case m ->> 'id' when 'bo-check-m1' then m ->> 'body' = '수정 후 010-••••-4444' and m ? 'editedAt'
+                                       when 'bo-check-m2' then m ->> 'body' = '' and (m ->> 'deleted')::boolean end) and count(*) = 2
+  from jsonb_array_elements(public.backoffice_get_conversation(t.id('retailer')::uuid, t.id('uncle')::uuid, '메시지 수정 이력 확인') -> 'messages') m
+  where m ->> 'id' in ('bo-check-m1','bo-check-m2')), 'transcript shows the edited body (masked) and the deleted message blank');
+select t.ok(public.backoffice_set_account_status(t.id('retailer')::uuid, 'suspended', '메시지 수정 차단 확인', '이용이 잠시 제한됐어요.', false, 's-w1') ->> 'status' = 'suspended', 'suspended again');
+select t.as_user(t.id('retailer'));
+select t.expect_message($$select public.saip_command('editMessage', '{"id":"bo-check-m1","body":"정지 중 수정","version":1}', 'bo-check-m1-edit2')$$, '이용이 잠시 제한됐어요.', 'suspended user cannot edit a message');
+select t.expect_message($$select public.saip_command('deleteMessage', '{"id":"bo-check-m1","version":1}', 'bo-check-m1-del')$$, '이용이 잠시 제한됐어요.', 'suspended user cannot delete a message');
+select t.expect_message($$select public.saip_command('updateRequest', jsonb_build_object('id', 'bo-check-w1', 'version', 0, 'values', jsonb_build_object('requestType', 'wholesaler',
+  'wholesalers', jsonb_build_array(jsonb_build_object('wholesaler', '르블랑', 'location', '제일평화 3층 318호')))), 'bo-check-w1-upd')$$, '이용이 잠시 제한됐어요.', 'suspended user cannot change a wholesaler request');
+select t.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
+select t.ok(public.backoffice_set_account_status(t.id('retailer')::uuid, 'active', '확인 완료, 정지 해제', p_operation_id => 's-w2') ->> 'status' = 'active', 'restored again');
+select t.as_user(t.id('retailer'));
+select t.ok(public.saip_command('editMessage', '{"id":"bo-check-m1","body":"해제 후 수정","version":1}', 'bo-check-m1-edit3') = 'bo-check-m1', 'restored user edits again');
+reset role;
+select set_config('request.jwt.claims', '', false);
+insert into auth.users (id, email, aud, role) values ('99999999-9999-4999-8999-999999999999', 'dup-phone@app.test', 'authenticated', 'authenticated');
+insert into public.saip_records (collection, id, data, readers) values ('accounts', '99999999-9999-4999-8999-999999999999',
+  jsonb_build_object('role', 'retailer', 'complete', true, 'phone', '+82 ' || substr(regexp_replace((select data ->> 'phone' from public.saip_records
+    where collection = 'accounts' and id = t.id('retailer')), '\D', '', 'g'), 2)), array['99999999-9999-4999-8999-999999999999'::uuid]);
+set role authenticated;
+select t.as_user('cccccccc-cccc-4ccc-8ccc-cccccccccccc');
+select t.ok((select count(*) from jsonb_array_elements(public.backoffice_ledger_anomalies(true) -> 'items') i
+  where i ->> 'kind' = 'phone_duplicate' and i ->> 'targetId' in (t.id('retailer'), '99999999-9999-4999-8999-999999999999')) = 2, 'duplicate phones listed for both accounts');
+
 -- ---------- notes, cases, idempotency with redacted payloads ----------
 select t.as_user('bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb');
 select t.ok((public.backoffice_add_note('request', t.id('req'), '고객과 통화함', 'n-1') ->> 'noteId')

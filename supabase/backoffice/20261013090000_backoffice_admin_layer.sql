@@ -6,7 +6,16 @@
 -- supabase_migrations.schema_migrations: copy -> `supabase test db` -> app
 -- team review -> `supabase db push`. Never run it from the website repo
 -- against the live project.
--- Requires: 202610110001..202610110006 (saip_*) and 20261011230000_landing_leads.
+-- Requires the live app schema (supabase_migrations on 2026-10-14):
+--   202610110001..202610110006, 202610120001_signup_phone_availability,
+--   202610130000_chat_message_actions_hotfix, 202610130004_wholesaler_requests,
+--   and 20261011230000_landing_leads (applied outside the history).
+-- Forward compatible with 202610130001_partner_directory,
+--   202610130002_chat_message_actions and 202610130003_chat_content_filter
+--   applied AFTER this file (verified locally): it reads only keys and
+--   helpers those migrations keep (saip_private.s/n/b/pick/remaining/available/
+--   valid_*/normalize_korean_phone), never redefines a saip_* object, and the
+--   guard below bypasses migrations (auth.uid() is null there).
 --
 -- Guarantees
 --  1. App users' access is unchanged. No new policy or grant on saip_records,
@@ -16,7 +25,11 @@
 --       a) trigger backoffice_guard_app_writes + one RESTRICTIVE storage
 --          INSERT policy: a suspended account (or everyone, during a
 --          maintenance write freeze) cannot write. The command aborts as a
---          whole with a P0001 carrying the operator's message;
+--          whole with a P0001 carrying the operator's message. This covers
+--          every saip_command write, including editMessage / deleteMessage
+--          and wholesaler (도매처 주문서) requests; the guard fires before
+--          saip_keep_participants / saip_prepare_wholesaler_record (trigger
+--          name order) and changes no row;
 --       b) the read-only RPC app_bootstrap_config() (anon + authenticated).
 --  2. Staff never appear in saip_records.readers. Every staff read and write
 --     goes through a SECURITY DEFINER RPC that starts with require_admin().
@@ -403,6 +416,8 @@ language sql immutable set search_path = '' as $$
 $$;
 
 -- Account projection. Never the invite code; viewer gets masked contact data.
+-- nickname / publicCode / fee are the partner-directory fields every app user
+-- can see (saip_private.directory_public_profile, 202610130001); absent before it.
 create or replace function backoffice_private.account_json(p_id text, d jsonb, p_full boolean) returns jsonb
 language sql stable set search_path = '' as $$
   select jsonb_build_object('id', p_id, 'verification', backoffice_private.verification_state(d))
@@ -410,7 +425,7 @@ language sql stable set search_path = '' as $$
          'documentId','documentStatus','verificationStatus','verificationNote','verifiedDocumentId',
          'verificationReviewedAt','pickupArea','deliveryArea','deadline','holiday','intro','salesChannel','markets',
          'transport','activityHours','activityStart','activityEnd','activityDays','terms','privacy',
-         'notificationSettings','provider','codeExpires','version','demoBatch'])
+         'notificationSettings','provider','codeExpires','version','demoBatch','nickname','publicCode','fee'])
     || case when p_full then saip_private.pick(coalesce(d, '{}'::jsonb), array['contact','phone','email','businessName',
          'businessNumber','verifiedBusinessNumber','address','addressDetail','deliveryNote'])
        else jsonb_build_object(
@@ -434,17 +449,20 @@ language sql stable set search_path = '' as $$
 $$;
 
 -- Mirrors RequestRecord.statusLabel in lib/local/domain/models.dart (first match wins).
+-- 완료 vs 수령: a completed request reads 수령 for 7 days after receivedAt
+-- (202610130004; older rows fall back to updatedAt), then 완료.
 create or replace function backoffice_private.request_label(d jsonb) returns text
 language sql stable set search_path = '' as $$
   with v as (
     select d ->> 'status' as st, saip_private.n(d, 'openIssues') as oi, saip_private.s(d, 'proposalId') as pid,
       saip_private.b(d, 'needsReply') as nr, saip_private.n(d, 'delivered') as dl, saip_private.n(d, 'received') as rc,
       case when saip_private.b(d, 'resultShared') then greatest(saip_private.remaining(d), 0) else 0 end as bo,
-      greatest(saip_private.available(d), 0) as av, saip_private.s(d, 'recheck') as rk)
+      greatest(saip_private.available(d), 0) as av, saip_private.s(d, 'recheck') as rk,
+      coalesce(backoffice_private.ts(d ->> 'receivedAt'), backoffice_private.ts(d ->> 'updatedAt')) as received_at)
   select case
     when st = 'rejected' then '거절'
     when st = 'cancelled' then '취소 종료'
-    when st = 'completed' then '완료'
+    when st = 'completed' then case when received_at <= now() - interval '7 days' then '완료' else '수령' end
     when oi > 0 then '문제 확인 중'
     when pid <> '' then '변경·취소 협의 중'
     when st = 'pending' then '확인 대기'
@@ -455,6 +473,48 @@ language sql stable set search_path = '' as $$
     when av > 0 then '픽업 완료'
     else '진행 중' end
   from v
+$$;
+
+-- 도매처 주문서 (requestType 'wholesaler', 202610130004): up to 10 wholesalers,
+-- no product / option, quantity 1, 수령지 copied from the retailer's profile.
+-- request_type: 'wholesaler' or 'product' (상품별 요청, no requestType key).
+create or replace function backoffice_private.request_type(d jsonb) returns text
+language sql immutable set search_path = '' as $$
+  select case when d ->> 'requestType' = 'wholesaler' then 'wholesaler' else 'product' end
+$$;
+
+-- Mirrors requestWholesalers() in models.dart: a single-wholesaler request
+-- reads as a one-entry list.
+create or replace function backoffice_private.request_wholesalers(d jsonb) returns jsonb
+language sql immutable set search_path = '' as $$
+  select case when jsonb_typeof(d -> 'wholesalers') = 'array' then coalesce((
+      select jsonb_agg(jsonb_build_object(
+               'wholesaler', case when jsonb_typeof(e -> 'wholesaler') = 'string' then btrim(e ->> 'wholesaler') else '' end,
+               'location', case when jsonb_typeof(e -> 'location') = 'string' then btrim(e ->> 'location') else '' end) order by o)
+      from jsonb_array_elements(d -> 'wholesalers') with ordinality x(e, o) where jsonb_typeof(e) = 'object'), '[]'::jsonb)
+    else jsonb_build_array(jsonb_build_object('wholesaler', btrim(saip_private.s(d, 'wholesaler')),
+           'location', btrim(saip_private.s(d, 'location')))) end
+$$;
+
+-- Mirrors requestTitle() in models.dart: the product, or the wholesaler names
+-- ("A 외 2곳") for a 도매처 주문서.
+create or replace function backoffice_private.request_title(d jsonb) returns text
+language sql immutable set search_path = '' as $$
+  select case
+    when backoffice_private.request_type(d) = 'product' and btrim(saip_private.s(d, 'product')) <> '' then btrim(saip_private.s(d, 'product'))
+    when n.names is null or cardinality(n.names) = 0 then '새 사입 요청'
+    when cardinality(n.names) = 1 then n.names[1]
+    else n.names[1] || ' 외 ' || (cardinality(n.names) - 1) || '곳' end
+  from (select array_agg(e ->> 'wholesaler' order by o) filter (where e ->> 'wholesaler' <> '') names
+        from jsonb_array_elements(backoffice_private.request_wholesalers(d)) with ordinality x(e, o)) n
+$$;
+
+-- Search text of a request: id, product, option and every wholesaler + location.
+create or replace function backoffice_private.request_search_text(p_id text, d jsonb) returns text
+language sql immutable set search_path = '' as $$
+  select concat_ws(' ', p_id, d ->> 'product', d ->> 'option', d ->> 'wholesaler', d ->> 'location',
+    (select string_agg(concat_ws(' ', e ->> 'wholesaler', e ->> 'location'), ' ')
+     from jsonb_array_elements(backoffice_private.request_wholesalers(d)) e))
 $$;
 
 create or replace function backoffice_private.ledger(d jsonb) returns jsonb
@@ -681,7 +741,8 @@ language sql stable set search_path = '' as $$
       jsonb_build_object('violations', backoffice_private.request_checks(r.id, r.d) -> 'violations') detail, r.updated_at since
     from r where r.c = 'requests' and jsonb_array_length(backoffice_private.request_checks(r.id, r.d) -> 'violations') > 0
     union all
-    select 'recheck_overdue', 'high', 'request', r.id, jsonb_build_object('recheck', r.d ->> 'recheck', 'product', r.d ->> 'product'),
+    select 'recheck_overdue', 'high', 'request', r.id, jsonb_build_object('recheck', r.d ->> 'recheck', 'product', r.d ->> 'product',
+      'title', backoffice_private.request_title(r.d)),
       backoffice_private.kst_start(backoffice_private.day(r.d ->> 'recheck'))
     from r where r.c = 'requests' and backoffice_private.request_label(r.d) = '미송 재확인'
     union all
@@ -692,7 +753,7 @@ language sql stable set search_path = '' as $$
       jsonb_build_object('requestId', r.d ->> 'requestId', 'status', r.d ->> 'status', 'held', r.d -> 'held'), r.created_at
     from r where r.c = 'issues' and r.d ->> 'status' <> 'resolved' and r.created_at < now() - interval '3 days'
     union all
-    select 'pending_request_stale', 'normal', 'request', r.id, jsonb_build_object('product', r.d ->> 'product'), r.created_at
+    select 'pending_request_stale', 'normal', 'request', r.id, jsonb_build_object('product', r.d ->> 'product', 'title', backoffice_private.request_title(r.d)), r.created_at
     from r where r.c = 'requests' and r.d ->> 'status' = 'pending' and r.created_at < now() - interval '24 hours'
     union all
     select 'proposal_stale', 'normal', 'proposal', r.id, jsonb_build_object('requestId', r.d ->> 'requestId', 'kind', r.d ->> 'kind'), r.created_at
@@ -706,6 +767,17 @@ language sql stable set search_path = '' as $$
     union all
     select 'signup_stalled', 'low', 'account', r.id, jsonb_build_object('stage', r.d ->> 'stage'), r.updated_at
     from r where r.c = 'signupProgress' and coalesce(r.d ->> 'stage', '') <> 'completed' and r.updated_at < now() - interval '3 days'
+    union all
+    -- Completed accounts sharing one phone (same normalization as
+    -- saip_check_phone_available, 202610120001). Older signups were never checked.
+    select 'phone_duplicate', 'low', 'account', p.id,
+      jsonb_build_object('accounts', p.n, 'others', to_jsonb(array_remove(p.ids, p.id))), p.updated_at
+    from (select x.id, x.updated_at, count(*) over w n, array_agg(x.id) over w ids
+          from (select r.id, r.updated_at, saip_private.normalize_korean_phone(r.d ->> 'phone') phone from r
+                where r.c = 'accounts' and r.d ->> 'complete' = 'true') x
+          where x.phone <> ''
+          window w as (partition by x.phone order by x.id rows between unbounded preceding and unbounded following)) p
+    where p.n > 1
     union all
     select 'attachment_object_missing', 'high', 'attachment', r.id, jsonb_build_object('ownerId', r.d ->> 'ownerId'), r.updated_at
     from r where r.c = 'attachments'
@@ -848,6 +920,9 @@ begin
     'requestStatus', coalesce((select jsonb_object_agg(k, n) from (select coalesce(d ->> 'status', 'unknown') k, count(*) n
       from req group by 1) s), '{}'::jsonb),
     'requestLabels', coalesce((select jsonb_object_agg(label, n) from (select label, count(*) n from req group by 1) s), '{}'::jsonb),
+    -- 'product' = 상품별 요청 (no requestType), 'wholesaler' = 도매처 주문서
+    'requestTypes', coalesce((select jsonb_object_agg(k, n) from (select backoffice_private.request_type(d) k, count(*) n
+      from req group by 1) s), '{}'::jsonb),
     'newRequestsByDay', (select jsonb_agg(jsonb_build_object('day', g.day, 'count',
         (select count(*) from req where (req.created_at at time zone 'Asia/Seoul')::date = g.day)) order by g.day)
       from (select (today - i) as day from generate_series(0, 13) i) g),
@@ -899,6 +974,7 @@ begin
       and (p_role is null or (p_role = 'none' and coalesce(acc.data ->> 'role', '') not in ('retailer','uncle'))
            or acc.data ->> 'role' = p_role)
       and (coalesce(btrim(p_search), '') = '' or concat_ws(' ', u.id::text, acc.data ->> 'name', acc.data ->> 'label',
+            acc.data ->> 'nickname', acc.data ->> 'publicCode',
             case when full_access then concat_ws(' ', u.email, acc.data ->> 'contact', acc.data ->> 'phone',
               regexp_replace(coalesce(acc.data ->> 'phone', ''), '\D', '', 'g'), acc.data ->> 'businessName',
               acc.data ->> 'businessNumber', regexp_replace(coalesce(acc.data ->> 'businessNumber', ''), '\D', '', 'g')) end) ilike pat)),
@@ -1000,6 +1076,7 @@ begin
             from public.saip_records q where q.collection = 'requests' and q.readers @> array[p_account_id] group by 1, 2) s),
     'recentRequests', coalesce((select jsonb_agg(x.j order by x.updated_at desc) from (
         select q.updated_at, jsonb_build_object('id', q.id, 'product', q.data ->> 'product', 'option', q.data ->> 'option',
+          'requestType', backoffice_private.request_type(q.data), 'title', backoffice_private.request_title(q.data),
           'label', backoffice_private.request_label(q.data), 'ledger', backoffice_private.ledger(q.data),
           'partner', backoffice_private.account_brief(case when q.data ->> 'retailerId' = uid then q.data ->> 'uncleId' else q.data ->> 'retailerId' end),
           'createdAt', q.data ->> 'createdAt', 'updatedAt', q.updated_at) j
@@ -1052,8 +1129,7 @@ begin
       and (p_account_id is null or r.readers @> array[p_account_id])
       and (p_from is null or backoffice_private.ts(r.data ->> 'createdAt') >= p_from)
       and (p_to is null or backoffice_private.ts(r.data ->> 'createdAt') < p_to)
-      and (coalesce(btrim(p_search), '') = '' or concat_ws(' ', r.id, r.data ->> 'product', r.data ->> 'option',
-            r.data ->> 'wholesaler', r.data ->> 'location') ilike pat)),
+      and (coalesce(btrim(p_search), '') = '' or backoffice_private.request_search_text(r.id, r.data) ilike pat)),
   scoped as (
     select * from base b where p_attention is null or case p_attention
       when 'needs_reply' then b.label = '답변 필요'
@@ -1067,6 +1143,7 @@ begin
       when 'pending_stale' then b.d ->> 'status' = 'pending' and b.created_at < now() - interval '24 hours'
       when 'violation' then cardinality(backoffice_private.ledger_violations(b.d)) > 0
       when 'has_photos' then jsonb_typeof(b.d -> 'photos') = 'array' and jsonb_array_length(b.d -> 'photos') > 0
+      when 'wholesaler' then backoffice_private.request_type(b.d) = 'wholesaler'
       else false end),
   filtered as (select * from scoped s where p_labels is null or s.label = any(p_labels)),
   page as (
@@ -1086,6 +1163,8 @@ begin
     'rows', coalesce((select jsonb_agg(jsonb_build_object(
         'id', p.id, 'status', p.d ->> 'status', 'label', p.label,
         'product', p.d ->> 'product', 'option', p.d ->> 'option', 'wholesaler', p.d ->> 'wholesaler', 'location', p.d ->> 'location',
+        'requestType', backoffice_private.request_type(p.d), 'title', backoffice_private.request_title(p.d),
+        'wholesalers', backoffice_private.request_wholesalers(p.d),
         'retailer', backoffice_private.account_brief(p.d ->> 'retailerId'), 'uncle', backoffice_private.account_brief(p.d ->> 'uncleId'),
         'ledger', backoffice_private.ledger(p.d), 'recheck', nullif(p.d ->> 'recheck', ''), 'recheckDays', p.recheck - today,
         'needsReply', saip_private.b(p.d, 'needsReply'), 'proposalId', saip_private.s(p.d, 'proposalId'),
@@ -1112,9 +1191,14 @@ begin
   select * into r from public.saip_records where collection = 'requests' and id = p_request_id;
   if r.id is null then raise exception '요청을 찾을 수 없어요.'; end if;
   return jsonb_build_object(
+    -- A 도매처 주문서 copies the retailer's deliveryNote into note (202610130004):
+    -- contact data, so viewers get it blank like the account's deliveryNote.
     'request', (case when full_access then r.data else r.data || jsonb_build_object(
-                  'address', backoffice_private.mask_address(r.data ->> 'address'), 'addressDetail', '', 'masked', true) end)
+                  'address', backoffice_private.mask_address(r.data ->> 'address'), 'addressDetail', '', 'masked', true)
+                  || case when backoffice_private.request_type(r.data) = 'wholesaler' then '{"note":""}'::jsonb else '{}'::jsonb end end)
                || jsonb_build_object('id', r.id, 'label', backoffice_private.request_label(r.data),
+                    'requestType', backoffice_private.request_type(r.data), 'title', backoffice_private.request_title(r.data),
+                    'wholesalers', backoffice_private.request_wholesalers(r.data),
                     'ledger', backoffice_private.ledger(r.data), 'updatedAt', r.updated_at, 'participants', to_jsonb(r.readers)),
     'retailer', backoffice_private.account_brief(r.data ->> 'retailerId'),
     'uncle', backoffice_private.account_brief(r.data ->> 'uncleId'),
@@ -1127,7 +1211,8 @@ begin
     'receipts', coalesce((select jsonb_agg(x.data || jsonb_build_object('id', x.id) order by backoffice_private.ts(x.data ->> 'createdAt'), x.id)
       from public.saip_records x where x.collection = 'receipts' and x.data ->> 'requestId' = r.id), '[]'::jsonb),
     'proposals', coalesce((select jsonb_agg((case when full_access then x.data else x.data || jsonb_build_object('values',
-          coalesce(x.data -> 'values', '{}'::jsonb) - 'address' - 'addressDetail') end) || jsonb_build_object('id', x.id)
+          coalesce(x.data -> 'values', '{}'::jsonb) - 'address' - 'addressDetail'
+            - case when backoffice_private.request_type(r.data) = 'wholesaler' then 'note' else '' end) end) || jsonb_build_object('id', x.id)
         order by backoffice_private.ts(x.data ->> 'createdAt'), x.id)
       from public.saip_records x where x.collection = 'proposals' and x.data ->> 'requestId' = r.id), '[]'::jsonb),
     'issues', coalesce((select jsonb_agg(x.data || jsonb_build_object('id', x.id) order by backoffice_private.ts(x.data ->> 'createdAt'), x.id)
@@ -1142,7 +1227,9 @@ begin
       from public.saip_records x where x.collection = 'events' and x.data ->> 'requestId' = r.id), '[]'::jsonb),
     'messages', (select jsonb_build_object('system', count(*) filter (where saip_private.b(x.data, 'system')),
         'user', count(*) filter (where not saip_private.b(x.data, 'system')),
-        'unread', count(*) filter (where not saip_private.b(x.data, 'read')))
+        'unread', count(*) filter (where not saip_private.b(x.data, 'read')),
+        -- deleteMessage clears requestId, so deleted messages leave this count.
+        'edited', count(*) filter (where x.data ? 'editedAt' and not saip_private.b(x.data, 'deleted')))
       from public.saip_records x where x.collection = 'messages' and x.data ->> 'requestId' = r.id),
     'recheckNotices', coalesce((select jsonb_agg(jsonb_build_object('id', n.id, 'createdAt', n.data ->> 'createdAt', 'read', saip_private.b(n.data, 'read'))
         order by n.id) from public.saip_records n where n.collection = 'notices' and n.data ->> 'requestId' = r.id and n.id like 'recheck-%'), '[]'::jsonb),
@@ -1209,7 +1296,9 @@ begin
           when full_access then p.d - 'path'
           when p_collection = 'attachments' then p.d - 'path' - 'name'
           when p_collection = 'deliveries' then p.d || jsonb_build_object('address', backoffice_private.mask_address(p.d ->> 'address'), 'addressDetail', '')
-          when p_collection = 'proposals' then p.d || jsonb_build_object('values', coalesce(p.d -> 'values', '{}'::jsonb) - 'address' - 'addressDetail')
+          when p_collection = 'proposals' then p.d || jsonb_build_object('values', coalesce(p.d -> 'values', '{}'::jsonb) - 'address' - 'addressDetail'
+            - case when exists (select 1 from public.saip_records q where q.collection = 'requests' and q.id = p.d ->> 'requestId'
+                                  and backoffice_private.request_type(q.data) = 'wholesaler') then 'note' else '' end)
           when p_collection = 'events' then jsonb_build_object('requestId', p.d ->> 'requestId', 'deliveryId', p.d ->> 'deliveryId',
             'actorId', p.d ->> 'actorId', 'title', p.d ->> 'title', 'createdAt', p.d ->> 'createdAt',
             'status', p.d -> 'after' ->> 'status', 'ledger', backoffice_private.ledger(p.d -> 'after'))
@@ -1217,7 +1306,8 @@ begin
         || jsonb_build_object('id', p.id, 'updatedAt', p.updated_at, 'participants', to_jsonb(p.readers),
              'parties', (select coalesce(jsonb_agg(backoffice_private.account_brief(x::text)), '[]'::jsonb) from unnest(p.readers) x),
              'request', case when p.d ? 'requestId' then (select jsonb_build_object('id', q.id, 'product', q.data ->> 'product',
-                 'option', q.data ->> 'option', 'status', q.data ->> 'status', 'label', backoffice_private.request_label(q.data))
+                 'option', q.data ->> 'option', 'status', q.data ->> 'status', 'label', backoffice_private.request_label(q.data),
+                 'requestType', backoffice_private.request_type(q.data), 'title', backoffice_private.request_title(q.data))
                from public.saip_records q where q.collection = 'requests' and q.id = p.d ->> 'requestId') end,
              'round', case when p_collection = 'deliveries' then (select count(*) from public.saip_records x
                where x.collection = 'deliveries' and x.data ->> 'requestId' = p.d ->> 'requestId'
@@ -1248,7 +1338,10 @@ begin
       count(*) filter (where saip_private.b(d, 'system')) system_messages,
       count(distinct nullif(d ->> 'requestId', '')) linked_requests,
       count(*) filter (where not saip_private.b(d, 'read') and not saip_private.b(d, 'system')) unread,
-      count(*) filter (where jsonb_typeof(d -> 'attachments') = 'array' and jsonb_array_length(d -> 'attachments') > 0) with_attachments
+      count(*) filter (where jsonb_typeof(d -> 'attachments') = 'array' and jsonb_array_length(d -> 'attachments') > 0) with_attachments,
+      -- editMessage / deleteMessage (202610130000): the row stays, deleted ones with an empty body.
+      count(*) filter (where d ? 'editedAt' and not saip_private.b(d, 'deleted')) edited,
+      count(*) filter (where saip_private.b(d, 'deleted')) deleted
     from m group by a, b),
   page as (select p.*, row_number() over (order by p.last_at desc nulls last, p.a, p.b) rn from pairs p)
   select jsonb_build_object('total', (select count(*) from pairs), 'limit', lim, 'offset', off,
@@ -1256,6 +1349,7 @@ begin
         'accountA', backoffice_private.account_brief(p.a::text), 'accountB', backoffice_private.account_brief(p.b::text),
         'lastAt', p.last_at, 'userMessages', p.user_messages, 'systemMessages', p.system_messages,
         'linkedRequests', p.linked_requests, 'unread', p.unread, 'withAttachments', p.with_attachments,
+        'edited', p.edited, 'deleted', p.deleted,
         'connection', (select c.data ->> 'status' from public.saip_records c where c.collection = 'connections'
                        and c.readers @> array[p.a, p.b] order by backoffice_private.ts(c.data ->> 'createdAt') desc nulls last limit 1))
         order by p.rn)
@@ -1338,17 +1432,18 @@ begin
           'businessName', case when full_access then acc.data ->> 'businessName' else backoffice_private.mask_name(acc.data ->> 'businessName') end,
           'phoneTail', case when full_access then right(regexp_replace(coalesce(acc.data ->> 'phone', ''), '\D', '', 'g'), 4) end) j
         from public.saip_records acc where acc.collection = 'accounts'
-          and (concat_ws(' ', acc.id, acc.data ->> 'name', acc.data ->> 'label',
+          and (concat_ws(' ', acc.id, acc.data ->> 'name', acc.data ->> 'label', acc.data ->> 'nickname', acc.data ->> 'publicCode',
                  case when full_access then concat_ws(' ', acc.data ->> 'businessName', acc.data ->> 'contact') end) ilike pat
                or (full_access and char_length(digits) >= 4
                    and regexp_replace(coalesce(acc.data ->> 'phone', ''), '\D', '', 'g') like '%' || digits))
         order by acc.updated_at desc limit lim) x), '[]'::jsonb),
     'requests', coalesce((select jsonb_agg(x.j) from (
         select jsonb_build_object('id', r.id, 'product', r.data ->> 'product', 'option', r.data ->> 'option',
+          'requestType', backoffice_private.request_type(r.data), 'title', backoffice_private.request_title(r.data),
           'label', backoffice_private.request_label(r.data), 'retailer', backoffice_private.account_brief(r.data ->> 'retailerId') ->> 'name',
           'uncle', backoffice_private.account_brief(r.data ->> 'uncleId') ->> 'name') j
         from public.saip_records r where r.collection = 'requests'
-          and concat_ws(' ', r.id, r.data ->> 'product', r.data ->> 'option', r.data ->> 'wholesaler') ilike pat
+          and backoffice_private.request_search_text(r.id, r.data) ilike pat
         order by r.updated_at desc limit lim) x), '[]'::jsonb),
     'leads', coalesce((select jsonb_agg(x.j) from (
         select jsonb_build_object('id', l.id, 'name', case when full_access then l.name else backoffice_private.mask_name(l.name) end,
@@ -1500,7 +1595,10 @@ begin
         'retailerId', r.data ->> 'retailerId', 'retailerName', backoffice_private.account_brief(r.data ->> 'retailerId') ->> 'name',
         'uncleId', r.data ->> 'uncleId', 'uncleName', backoffice_private.account_brief(r.data ->> 'uncleId') ->> 'name',
         'wholesaler', r.data ->> 'wholesaler', 'location', r.data ->> 'location', 'product', r.data ->> 'product',
-        'option', r.data ->> 'option', 'recheck', r.data ->> 'recheck') || backoffice_private.ledger(r.data)
+        'option', r.data ->> 'option', 'recheck', r.data ->> 'recheck',
+        'requestType', backoffice_private.request_type(r.data), 'title', backoffice_private.request_title(r.data),
+        'wholesalers', (select string_agg(concat_ws(' / ', nullif(e ->> 'wholesaler', ''), nullif(e ->> 'location', '')), ' · ')
+                        from jsonb_array_elements(backoffice_private.request_wholesalers(r.data)) e)) || backoffice_private.ledger(r.data)
       order by r.ord), '[]'::jsonb) into v_rows
     from (select x.*, backoffice_private.ts(x.data ->> 'createdAt') ord from public.saip_records x where x.collection = 'requests'
             and (p_include_demo or not (x.data ? 'demoBatch'))
