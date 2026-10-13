@@ -15,7 +15,7 @@ export const STATE_DIR = path.join(REPO_ROOT, ".context/playwright/admin-state")
 export async function loginThroughUi(page: Page, role: StaffRole, next?: string): Promise<void> {
   const query = next === undefined ? "" : `?next=${encodeURIComponent(next)}`;
   await page.goto(`/admin/login${query}`);
-  await page.getByLabel("이메일").fill(STAFF[role].email);
+  await page.getByLabel("아이디").fill(STAFF[role].email);
   await page.getByLabel("비밀번호").fill(STAFF[role].password);
   await page.getByRole("button", { name: "로그인", exact: true }).click();
   await page.waitForURL((url) => !url.pathname.startsWith("/admin/login"));

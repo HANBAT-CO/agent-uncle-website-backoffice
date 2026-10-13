@@ -21,34 +21,33 @@ test.describe("signed out", () => {
     expect(deep.headers()["location"]).toBe("/admin/login?next=%2Fadmin%2Frequests%3Fview%3Dattention");
   });
 
-  test("the login page shows the local form with the spec copy", async ({ page }) => {
+  test("the login page shows the ID and password form only", async ({ page }) => {
     const response = await page.goto("/admin/login");
     expect(response?.headers()["x-robots-tag"]).toBe("noindex, nofollow");
     await expect(page.getByRole("heading", { level: 1, name: "사입삼춘 운영" })).toBeVisible();
     await expect(page.getByText("운영 계정으로 로그인해 주세요.")).toBeVisible();
-    await expect(page.getByLabel("이메일")).toBeVisible();
+    await expect(page.getByLabel("아이디")).toBeVisible();
     await expect(page.getByLabel("비밀번호")).toBeVisible();
-    await expect(page.getByText("로컬 테스트 계정만 쓸 수 있어요.")).toBeVisible();
     await expect(page.getByText("운영 화면의 열람과 변경은 모두 기록돼요.")).toBeVisible();
     await expect(page.getByRole("button", { name: "Google 계정으로 로그인" })).toHaveCount(0);
     await expect(page).toHaveTitle("로그인 | 사입삼춘 운영");
   });
 
-  test("expired and OAuth failures explain themselves", async ({ page }) => {
+  test("expired sessions and sign-in failures explain themselves", async ({ page }) => {
     await page.goto("/admin/login?reason=expired");
     await expect(page.getByRole("main").getByRole("status")).toHaveText("보안을 위해 다시 로그인해 주세요.");
     await page.goto("/admin/login?error=oauth");
     await expect(page.getByRole("main").getByRole("alert")).toHaveText("로그인하지 못했어요. 다시 시도해 주세요.");
   });
 
-  test("a wrong password shows the exact error and keeps the email", async ({ page }) => {
+  test("a wrong password shows the exact error and keeps the ID", async ({ page }) => {
     await page.goto("/admin/login");
-    await page.getByLabel("이메일").fill(STAFF.viewer.email);
+    await page.getByLabel("아이디").fill(STAFF.viewer.email);
     await page.getByLabel("비밀번호").fill("not-the-password");
     await page.getByRole("button", { name: "로그인", exact: true }).click();
-    await expect(page.getByText("이메일 또는 비밀번호를 확인해 주세요.")).toBeVisible();
+    await expect(page.getByText("아이디 또는 비밀번호를 확인해 주세요.")).toBeVisible();
     await expect(page).toHaveURL(/\/admin\/login$/);
-    await expect(page.getByLabel("이메일")).toHaveValue(STAFF.viewer.email);
+    await expect(page.getByLabel("아이디")).toHaveValue(STAFF.viewer.email);
     expect((await page.context().cookies()).filter((c) => SB_COOKIE.test(c.name))).toHaveLength(0);
   });
 
@@ -59,14 +58,6 @@ test.describe("signed out", () => {
     ).toBeVisible();
     await page.goto("/admin/unavailable?reason=nonsense");
     await expect(page.getByText("운영 화면 설정을 확인해 주세요.")).toBeVisible();
-  });
-
-  test("the callback without a code goes back to login with the OAuth error", async ({ request }) => {
-    const response = await request.get("/admin/auth/callback?next=%2F%2Fevil.com", { maxRedirects: 0 });
-    expect(response.status()).toBe(307);
-    expect(new URL(response.headers()["location"]).pathname + new URL(response.headers()["location"]).search).toBe(
-      "/admin/login?error=oauth",
-    );
   });
 });
 
@@ -163,15 +154,22 @@ test.describe("권한 없음", () => {
     await expect(page).toHaveURL(/\/admin\/login\?next=%2Fadmin%2Fno-access$/);
   });
 
-  test("an app user is told to use a separate staff account", async ({ page }) => {
+  test("an app account cannot sign in through the staff ID form", async ({ page }) => {
     await page.goto("/admin/login");
-    await page.getByLabel("이메일").fill("mangwon.select@demo.agentuncle.local");
+    await page.getByLabel("아이디").fill("mangwon.select@demo.agentuncle.local");
     await page.getByLabel("비밀번호").fill("agentuncle-demo-local");
     await page.getByRole("button", { name: "로그인", exact: true }).click();
-    await expect(page).toHaveURL(/\/admin\/no-access$/);
-    await expect(
-      page.getByText("앱에서 쓰는 계정은 운영 계정으로 쓸 수 없어요. 운영용 Google 계정으로 다시 로그인해 주세요."),
-    ).toBeVisible();
+    await expect(page.getByText("아이디 또는 비밀번호를 확인해 주세요.")).toBeVisible();
+    await expect(page).toHaveURL(/\/admin\/login$/);
+    expect((await page.context().cookies()).filter((c) => SB_COOKIE.test(c.name))).toHaveLength(0);
+  });
+
+  test("a staff ID without the domain signs in", async ({ page }) => {
+    await page.goto("/admin/login");
+    await page.getByLabel("아이디").fill("viewer");
+    await page.getByLabel("비밀번호").fill(STAFF.viewer.password);
+    await page.getByRole("button", { name: "로그인", exact: true }).click();
+    await expect(page).toHaveURL(/\/admin(\/|$)/);
   });
 
   test("a demo app user gets 403 from a backoffice RPC", async () => {

@@ -170,7 +170,7 @@ test.describe("session expiry mid-action", () => {
     await noteForm.getByRole("button", { name: "메모 남기기" }).click();
 
     const expired = noteForm.getByText("로그인이 만료됐어요. 다시 로그인해 주세요.");
-    await expect(expired.or(page.getByLabel("이메일"))).toBeVisible();
+    await expect(expired.or(page.getByLabel("아이디"))).toBeVisible();
     if (new URL(page.url()).pathname === "/admin/login") {
       expect(new URL(page.url()).searchParams.get("next")).toBe(`/admin/requests/${id}`);
     } else {
