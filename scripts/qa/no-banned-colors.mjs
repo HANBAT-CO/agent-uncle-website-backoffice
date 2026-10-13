@@ -16,6 +16,12 @@
 //    near-whites such as the mint #F2FFE8 are not mistaken for lime.
 // scripts/media is out of scope on purpose: its audit vocabulary must name
 // the banned colours. Exit 1 on any finding.
+//
+// Admin exemption (backoffice spec D13): inside the console folders
+// (ADMIN_PATHS) the attention tone may use the app reds #D22030 and #E42939
+// and the attention text #B3192A. Rule 2 is skipped there and the red family
+// passes for exactly those three values; any other red, every orange, lime and
+// purple, the banned hexes and the banned words still fail.
 
 import { resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -29,6 +35,17 @@ const BANNED_WORDS = /\b(?:orange|amber|lime)\b/i;
 const APP_REDS = /#(?:e42939|d22030)(?![0-9a-f])/i;
 const HEX_LITERAL = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3})(?![0-9a-z_-])/gi;
 const RGB_LITERAL = /rgba?\(\s*(\d{1,3})[\s,_]+(\d{1,3})[\s,_]+(\d{1,3})/gi;
+
+/** Repo-relative folders of the console (spec D13), the only place red is allowed. */
+export const ADMIN_PATHS = ["src/app/(admin)/", "src/components/admin/", "src/lib/admin/"];
+/** The app reds and the attention text, as rrggbb hex digits (a-f) without "#". */
+export const ADMIN_REDS = new Set(["d22030", "e42939", "b3192a"]);
+
+/** True for a repo-relative path inside the console folders. */
+export function isAdminPath(path) {
+  const normalized = path.replaceAll("\\", "/");
+  return ADMIN_PATHS.some((prefix) => normalized.startsWith(prefix));
+}
 
 /** HSV of an sRGB triple (0-255): hue in degrees, saturation and value 0-1. */
 export function hsv(r, g, b) {
@@ -58,9 +75,38 @@ export function bannedFamily(r, g, b) {
 }
 
 function parseHex(literal) {
-  let hex = literal.slice(1);
+  let hex = literal.replace(/^#/, "");
   if (hex.length === 3) hex = [...hex].map((c) => c + c).join("");
   return [0, 2, 4].map((i) => Number.parseInt(hex.slice(i, i + 2), 16));
+}
+
+/** The banned family of a hex literal (#rgb, #rrggbb, #rrggbbaa; alpha ignored), or null. */
+export function hueFamily(hex) {
+  return bannedFamily(...parseHex(hex));
+}
+
+const toHex = (rgb) => rgb.map((channel) => channel.toString(16).padStart(2, "0")).join("");
+
+/**
+ * Every banned-colour finding in `text`, with the admin exemption applied
+ * when `path` (repo-relative) is inside the console folders.
+ * @returns {{ hit: ReturnType<typeof findLines>[number], why: string }[]}
+ */
+export function colourFindings(text, path) {
+  const admin = isAdminPath(path);
+  const findings = [];
+  const colour = (hit, rgb) => {
+    const family = bannedFamily(...rgb);
+    if (!family) return;
+    if (admin && family === "red" && ADMIN_REDS.has(toHex(rgb))) return;
+    findings.push({ hit, why: `${family} colour` });
+  };
+  for (const hit of findLines(text, BANNED_HEX)) findings.push({ hit, why: "banned hex" });
+  for (const hit of findLines(text, BANNED_WORDS)) findings.push({ hit, why: "banned colour word" });
+  if (!admin) for (const hit of findLines(text, APP_REDS)) findings.push({ hit, why: "app red outside real media" });
+  for (const hit of findLines(text, HEX_LITERAL)) colour(hit, parseHex(hit.match));
+  for (const hit of findLines(text, RGB_LITERAL)) colour(hit, hit.match.match(/\d{1,3}/g).map(Number));
+  return findings;
 }
 
 const isMain = process.argv[1] !== undefined && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
@@ -74,19 +120,7 @@ if (isMain) {
   };
 
   for (const file of files) {
-    const text = read(file);
-    for (const hit of findLines(text, BANNED_HEX)) report(file, hit, "banned hex");
-    for (const hit of findLines(text, BANNED_WORDS)) report(file, hit, "banned colour word");
-    for (const hit of findLines(text, APP_REDS)) report(file, hit, "app red outside real media");
-    for (const hit of findLines(text, HEX_LITERAL)) {
-      const family = bannedFamily(...parseHex(hit.match));
-      if (family) report(file, hit, `${family} colour`);
-    }
-    for (const hit of findLines(text, RGB_LITERAL)) {
-      const [r, g, b] = hit.match.match(/\d{1,3}/g).map(Number);
-      const family = bannedFamily(r, g, b);
-      if (family) report(file, hit, `${family} colour`);
-    }
+    for (const { hit, why } of colourFindings(read(file), rel(file))) report(file, hit, why);
   }
 
   if (findings === 0) pass(TAG, `${files.length} files in src/ and public/, no banned colours`);
