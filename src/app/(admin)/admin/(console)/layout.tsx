@@ -49,7 +49,7 @@ export default async function ConsoleLayout({ children, sheet }: { children: Rea
   const sidebarOpen = cookieStore.get("sidebar_state")?.value !== "false";
 
   return (
-    <SidebarProvider defaultOpen={sidebarOpen} style={{ "--sidebar-width": "14.75rem" } as React.CSSProperties}>
+    <SidebarProvider defaultOpen={sidebarOpen} style={{ "--sidebar-width": "17.5rem" } as React.CSSProperties}>
       <SkipLink />
       <LiveRule />
       <AppSidebar role={session.role} badges={badges} />
