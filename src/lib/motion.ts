@@ -1,6 +1,6 @@
 /**
  * Motion tokens shared by CSS, GSAP and `motion` (spec 6.2). Mirrors the
- * `--ease-*` and `--duration-*` custom properties in src/app/globals.css;
+ * `--ease-*` and `--duration-*` custom properties in src/app/(site)/globals.css;
  * change both together.
  *
  * - record: any discrete state change (captions, badges, entries, label

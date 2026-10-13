@@ -7,7 +7,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
  *
  * lowPower: no ogl sky (CSS gradient), physics bodies halved, map rotateX
  * removed, no video autoplay (posters with play). The inline JS_DRAW script in
- * src/app/layout.tsx mirrors isLowPower(); change both together.
+ * src/app/(site)/layout.tsx mirrors isLowPower(); change both together.
  */
 
 export type DeviceHints = {

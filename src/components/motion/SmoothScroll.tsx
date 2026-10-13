@@ -21,7 +21,7 @@ import { requestScrollRefresh } from "@/lib/scroll-refresh";
  * is never created: the page uses native scrolling and ScrollTrigger keeps
  * working off native scroll events.
  *
- * Mount once, high in the tree (src/app/layout.tsx). Children stay Server
+ * Mount once, high in the tree (src/app/(site)/layout.tsx). Children stay Server
  * Components. Read it with useSmoothScroll() or useLenis().
  */
 

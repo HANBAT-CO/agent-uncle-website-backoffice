@@ -1,5 +1,5 @@
 /**
- * z-index scale. Mirrors the `--z-*` custom properties in src/app/globals.css;
+ * z-index scale. Mirrors the `--z-*` custom properties in src/app/(site)/globals.css;
  * change both together.
  *
  * In class names prefer the CSS variable: `z-(--z-header)`.
