@@ -26,7 +26,7 @@ If any other copy of the migration differs from the repo file, the repo file win
 | D1 | The console is a second root layout, `src/app/(admin)`. The landing moves unchanged into `src/app/(site)`. CSS, fonts and providers never mix, and moving between `/` and `/admin` is a full page load. |
 | D2 | There is no service-role or secret key anywhere in the web app: not in code, env, build or runtime. Every staff call uses the staff member's own JWT (publishable key plus an `@supabase/ssr` cookie session) against `SECURITY DEFINER` RPCs that start with `require_admin()`. |
 | D3 | Staff are separate auth users listed in `public.backoffice_admins`, with one of three roles: `owner` (관리자), `operator` (운영자), `viewer` (열람자). `app_metadata` flags are ignored. Granting refuses users with an app account or an unconfirmed email. |
-| D4 | Sign-in uses Google OAuth (PKCE) in production. Local development uses email and password for seeded staff, and the form only exists when `BACKOFFICE_SUPABASE_TARGET=local`. TOTP MFA (aal2) is enforced per staff member through `require_mfa`. A staff session lasts at most 12 hours after sign-in. |
+| D4 | (Changed 2026-10-14 at the owner's request.) Sign-in is staff ID and password only, on every target; Google sign-in was removed. A staff ID maps to the Auth email `<id>@staff.agentuncle.invalid` on live (a reserved domain no app user can have) and `<id>@agentuncle.local` locally; the form refuses any other domain, so app accounts can never sign in. Staff Auth users are created by an owner with the Auth admin API (they cannot sign up). TOTP MFA (aal2) is enforced per staff member through `require_mfa`. A staff session lasts at most 12 hours after sign-in. |
 | D5 | Staff can only read trade records. No RPC edits counters, status, readers, events, receipts, deliveries, messages, proposals or issues, and none acts on behalf of a party. Corrections stay two-party inside the app (finish() and the proposal rules). |
 | D6 | Staff writes are narrow: document-review projection, suspension, notes, cases, lead status, in-app notices, remote config, staff management. Each write is idempotent (`p_operation_id`) and appends an immutable, sha256 hash-chained audit row in the same transaction. |
 | D7 | Sensitive reads are audited: unmasked dossiers, chat transcripts, files, lead lists, user lookups and exports. Chats and files also need a typed reason. Identical views are throttled to 1 audit row per 10 minutes. |
@@ -162,9 +162,9 @@ The proxy redirects optimistically only. Every page, Server Action and Route Han
 ## 5. Authentication and session
 
 **Production sign-in:**
-1. The 로그인 page has one button: "Google 계정으로 로그인".
-2. The server action calls `signInWithOAuth({ provider: 'google', options: { redirectTo: <origin>/admin/auth/callback?next=…, queryParams: { prompt: 'select_account' } } })`.
-3. The callback runs `exchangeCodeForSession` and redirects to `safeNext(next)`. Only `/admin…` paths are allowed, never `//`.
+1. The 로그인 page has 아이디 and 비밀번호 fields only.
+2. The server action maps the ID with `staffEmailFromId` and calls `signInWithPassword`.
+3. On success it redirects to `safeNext(next)`. Only `/admin…` paths are allowed, never `//`.
 4. `verifyAdmin()` calls `backoffice_whoami()` once per request (React `cache`) and routes on the result:
 
 | Result | Destination |
@@ -190,7 +190,7 @@ The proxy redirects optimistically only. Every page, Server Action and Route Han
 **Sign out.** "로그아웃" uses `scope: 'local'`. "모든 기기에서 로그아웃" in 내 계정 uses `scope: 'global'`.
 
 **Staff onboarding:**
-1. The new staff member signs in once with a separate Google account and lands on 권한 없음, which shows their email.
+1. An owner creates the staff Auth user `<id>@staff.agentuncle.invalid` with a password through the Auth admin API (email confirmed).
 2. The owner opens 운영 계정 → 운영 계정 추가 and looks the user up (`backoffice_lookup_user`: providers, email confirmed, app account).
 3. The owner grants a role (`backoffice_grant_admin`, `require_mfa` on).
 4. The staff member enrols TOTP at the next sign-in.

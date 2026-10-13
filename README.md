@@ -68,8 +68,9 @@ supabase-local/scripts/reset.sh   # DB 초기화 → 마이그레이션 → 데�
 LEAD_DRY_RUN=1 npx next dev -p 3100
 ```
 
-[http://localhost:3100/admin](http://localhost:3100/admin)에서 로그인해요. 로컬에서는 이메일과
-비밀번호 폼이 보이고, 라이브에서는 Google 로그인만 있어요.
+[http://localhost:3100/admin](http://localhost:3100/admin)에서 로그인해요. 로컬과 라이브 모두
+아이디와 비밀번호로만 로그인해요(로컬 아이디: admin, operator, viewer). 라이브 아이디는
+`<아이디>@staff.agentuncle.invalid` Auth 계정으로 연결돼요.
 
 | 역할 | 이메일 | 비밀번호 |
 |---|---|---|
