@@ -1,0 +1,1081 @@
+/*
+ * S1 hero (spec S1, 4.1, 4.4, 4.6, 4.8). Layout, lens, readout, proxies and
+ * the draw-in start states. Motion lives in HeroMotion / HeroLens; this file
+ * only holds rest states and the 700ms record transitions.
+ *
+ * Map box: each map sits in a box with its view's aspect ratio (--ratio),
+ * cover-fitted to the frame with container units (the frame's .hero-viewport
+ * is a size container). Desktop pins the box to the left edge (APM is never
+ * cut; the spare width falls on the empty east side), phones centre it.
+ * --lx/--ly (lens centre) and --rx/--ry (readout anchor) start on 청평화's
+ * roof here and are rewritten in pixels by HeroLens.
+ */
+
+.hero {
+  --hero-inset: 12px;
+  --hero-radius: 20px;
+  --hero-line: rgb(242 255 232 / 0.12);
+}
+
+/* ---------------- Phones first (below 768px) ---------------- */
+
+.hero-pin {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+  padding: var(--hero-inset) var(--hero-inset) calc(24px + env(safe-area-inset-bottom, 0px));
+}
+
+.hero-frame {
+  position: relative;
+  order: 0;
+  flex: none;
+  height: 46dvh;
+  min-height: 280px;
+  overflow: hidden;
+  border-radius: var(--hero-radius);
+  background-color: var(--night-0);
+}
+
+.hero-viewport {
+  position: absolute;
+  inset: 0;
+  container-type: size;
+}
+
+.hero-frame-line {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--hero-line);
+  border-radius: var(--hero-radius);
+  pointer-events: none;
+}
+
+.hero-figure {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+}
+
+.hero-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/*
+ * A ground-coloured backing (invisible on the ground itself) stops the map's
+ * strokes short of the line, so a building panned under it never runs
+ * through the glyphs. The padding is taken back from the offsets: the text
+ * stays where it was.
+ */
+.hero-honesty {
+  position: absolute;
+  left: 10px;
+  bottom: 8px;
+  padding: 2px 6px;
+  border-radius: var(--radius-pill);
+  background-color: rgb(7 35 28 / 0.88);
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+/* ---------------- Map box ---------------- */
+
+.hero-map-box {
+  --box-w: max(100cqw, 100cqh * var(--ratio));
+  --box-h: calc(var(--box-w) / var(--ratio));
+  --lx: calc(var(--box-w) * var(--focus-x));
+  --ly: calc(var(--box-h) * var(--focus-y));
+  --rx: calc(var(--lx) - var(--lens-r) - 24px - 260px);
+  --ry: calc(var(--ly) - 66px);
+
+  position: absolute;
+  left: calc((100cqw - var(--box-w)) * var(--align-x, 0));
+  top: calc((100cqh - var(--box-h)) * 0.5);
+  width: var(--box-w);
+  height: var(--box-h);
+}
+
+/*
+ * Desktop placement.
+ * - Width: a cover fit, capped at 1.6x the frame width and so that the
+ *   APM and 디오트 labels (--west-x, --east-x: their roofs) both fit across
+ *   the frame with 48px to spare (portrait tablets would otherwise cut APM
+ *   off and put its button out of reach). From 1280px it is also capped so
+ *   디오트's east wall (--east-edge) stays left of the record column: on 4:3
+ *   and 5:4 screens the cover fit followed the height and slid 디오트 under
+ *   the rail.
+ * - Horizontal: 청평화 as near the frame's centre as the cover fit allows,
+ *   within those same 48px for APM and 디오트, so wide frames keep the box
+ *   flush left (the spare width on the empty east side, under the record
+ *   column) and portrait tablets still frame 청평화.
+ * - Vertical: centred, but lifted just enough that the resting lens and the
+ *   dot stay 16px above the text block (--copy-top: 64px bottom offset, two
+ *   H1 lines at line-height 1.14, then --copy-rest: the sub, the 52px CTA row
+ *   and the gaps). The lens rests between 청평화's roof and the dot when there
+ *   is room (--roof-drop; HeroLens drops it the same way), but that extra
+ *   lift never pushes APM's label under the nav pill (--roof-nav) or 디오트's
+ *   label under the record cards held at --nav-clear on short screens
+ *   (--roof-cards); the plain clearance (--roof-hard) always holds. Short, wide laptops (1366x768) lift
+ *   the most. The SVG overflows its box, so the stream and roads still run off
+ *   the frame's edges where the lifted box leaves a band at the bottom.
+ */
+.hero-map-box[data-hero-map-box="desktop"] {
+  --box-w: max(100cqw, min(100cqh * var(--ratio), 100cqw * 1.6, (100cqw - 148px) / (var(--east-x) - var(--west-x))));
+  --copy-top: calc(100cqh - 64px - 2.28 * clamp(40px, 4.4vw, 68px) - var(--copy-rest, 136px));
+  --dot-px: calc(var(--box-h) * var(--dot-drop));
+  --roof-hard: calc(var(--copy-top) - 16px - max(var(--lens-r), var(--dot-px) + 12px));
+  --roof-drop: calc(var(--copy-top) - 16px - max(var(--lens-r) + var(--dot-px) * 0.5, var(--dot-px) + 12px));
+  --roof-nav: calc(var(--nav-clear) - var(--hero-inset) + 38px + var(--box-h) * (var(--focus-y) - var(--top-y)));
+  --roof-cards: calc(var(--nav-clear) - var(--hero-inset) + 153px + 8px + 38px + var(--box-h) * (var(--focus-y) - var(--east-y)));
+  --roof-max: min(var(--roof-hard), max(var(--roof-drop), var(--roof-nav), var(--roof-cards)));
+  --box-left: clamp(
+    calc(100cqw - var(--box-w)),
+    min(
+      max(calc(100cqw * 0.5 - var(--box-w) * var(--focus-x)), calc(48px - var(--box-w) * var(--west-x))),
+      calc(100cqw - 48px - var(--box-w) * var(--east-x))
+    ),
+    0px
+  );
+  --box-top: min(calc((100cqh - var(--box-h)) * 0.5), 0px, calc(var(--roof-max) - var(--box-h) * var(--focus-y)));
+
+  display: none;
+  left: var(--box-left);
+  top: var(--box-top);
+}
+
+@media (min-width: 1280px) {
+  .hero-map-box[data-hero-map-box="desktop"] {
+    --stage-w: calc(100cqw - var(--record-col) - var(--spacing-gutter) - 16px + var(--hero-inset));
+    --box-w: max(100cqw, min(100cqh * var(--ratio), 100cqw * 1.6, var(--stage-w) / var(--east-edge)));
+  }
+}
+
+/*
+ * Tall desktop frames (4:3, 5:4: 1366x1024, 1280x1024, 1440x1080): the map
+ * box no longer fills the height, so 남평화's roof (--south-y) landed inside
+ * the H1's first line, its label on the glyphs and its lens through them. The
+ * box lifts until that roof sits 40px above the H1 (a lens nudged at most
+ * 64px then clears the text), but never so far that APM's label goes under
+ * the nav pill or 디오트's under the record cards (as --roof-nav and
+ * --roof-cards above).
+ */
+@media (min-width: 1024px) and (max-aspect-ratio: 7/5) {
+  .hero-map-box[data-hero-map-box="desktop"] {
+    --south-top: max(
+      calc(var(--copy-top) - 40px - var(--box-h) * var(--south-y)),
+      calc(var(--nav-clear) - var(--hero-inset) + 38px - var(--box-h) * var(--top-y)),
+      calc(var(--nav-clear) - var(--hero-inset) + 153px + 8px + 38px - var(--box-h) * var(--east-y))
+    );
+    --box-top: min(
+      calc((100cqh - var(--box-h)) * 0.5),
+      0px,
+      calc(var(--roof-max) - var(--box-h) * var(--focus-y)),
+      var(--south-top)
+    );
+  }
+}
+
+.hero-map-box[data-hero-map-box="desktop"] .market-map {
+  overflow: visible;
+}
+
+/*
+ * Phones: lifted by 6% of the frame so 청평화, its lens and the dot clear the
+ * docked readout; the SVG overflows its box so the stream still reaches the
+ * frame's bottom edge. The dot always stays 12px above the docked readout
+ * (--dock-safe: the card 30px up and 86px tall); within that, where the frame
+ * is short enough that APM's label would slide under the nav pill, the box
+ * comes down to clear it (--nav-safe: the label 38px above APM's roof, 8px
+ * under the pill). HeroLens pans the box (--pan-x, --pan-y) when a chip
+ * chooses a building outside the frame (디오트), under the nav or behind the
+ * docked readout.
+ */
+.hero-map-box[data-hero-map-box="mobile"] {
+  --align-x: 0.62;
+  --nav-safe: calc(var(--nav-clear) - var(--hero-inset) + 38px - var(--box-h) * var(--top-y));
+  --dock-safe: calc(100cqh - 30px - 86px - 12px - 8px - var(--box-h) * var(--dot-y));
+
+  top: min(var(--dock-safe), max(calc((100cqh - var(--box-h)) * 0.5 - 6cqh), var(--nav-safe)));
+  translate: var(--pan-x, 0px) var(--pan-y, 0px);
+  transition: translate var(--duration-record) var(--ease-snap);
+}
+
+.hero-map-box[data-hero-map-box="mobile"] .market-map {
+  overflow: visible;
+}
+
+/*
+ * Phones: a label or the uncle chip that the frame's edge or the nav floor
+ * would cut where the pan lands (HeroLens [data-clipped]) fades out at once;
+ * one that comes back into the frame fades in as the pan lands, never sliding
+ * in half cut.
+ */
+.hero-map-box[data-hero-map-box="mobile"] :is(.hero-building, .hero-uncle) {
+  transition:
+    color var(--duration-record) var(--ease-snap),
+    opacity var(--duration-fast) var(--ease-snap) calc(var(--duration-record) - var(--duration-fast));
+}
+
+.hero-map-box[data-hero-map-box="mobile"] :is(.hero-building, .hero-uncle)[data-clipped] {
+  opacity: 0;
+  transition:
+    color var(--duration-record) var(--ease-snap),
+    opacity var(--duration-fast) var(--ease-snap);
+}
+
+.hero-map-shift,
+.hero-map {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-map .market-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* The record layer shows only under the lens. */
+.hero-record {
+  position: absolute;
+  inset: 0;
+  -webkit-mask-image: radial-gradient(circle var(--lens-r) at var(--lx) var(--ly), #000 98%, transparent 100%);
+  mask-image: radial-gradient(circle var(--lens-r) at var(--lx) var(--ly), #000 98%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-lens {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  width: calc(var(--lens-r) * 2);
+  height: calc(var(--lens-r) * 2);
+  translate: calc(var(--lx) - var(--lens-r)) calc(var(--ly) - var(--lens-r));
+  border: 1px solid rgb(242 255 232 / 0.5);
+  border-radius: 50%;
+  background-image:
+    repeating-linear-gradient(0deg, rgb(242 255 232 / 0.06) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, rgb(242 255 232 / 0.06) 0 1px, transparent 1px 8px);
+  background-position: center;
+  pointer-events: none;
+}
+
+/* The lamp dot on 청평화 1층 (spec 4.6). It never idles. */
+.hero-dot {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  pointer-events: none;
+}
+
+.hero-dot > [data-dot] {
+  display: block;
+}
+
+/* 동대문 박삼촌 at the avenue's north end (app status line 업무 중 · 요청 마감 23:30). */
+.hero-uncle {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.hero-uncle-mark {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--color-mint);
+  border-radius: 50%;
+  background-color: var(--night-0);
+}
+
+.hero-uncle-label {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.hero-uncle-name {
+  padding: 0 4px;
+  border-radius: 6px;
+  background-color: var(--night-0);
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: 700;
+  color: var(--night-ink);
+}
+
+.hero-uncle-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid rgb(242 255 232 / 0.28);
+  border-radius: var(--radius-pill);
+  background-color: var(--night-0);
+  font-size: 12px;
+  line-height: 1;
+  color: var(--night-ink-2);
+}
+
+.hero-uncle[data-variant="mobile"] .hero-uncle-chip {
+  display: none;
+}
+
+/* Building labels: buttons on the desktop map (click or focus moves the lens). */
+.hero-labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-building {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 26px;
+  padding: 0 9px;
+  border-radius: var(--radius-pill);
+  background-color: var(--night-0);
+  font-size: 13px;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--night-ink-2);
+  transition: color var(--duration-record) var(--ease-snap);
+}
+
+button.hero-building {
+  cursor: pointer;
+}
+
+/* 44px hit area around the small label. */
+button.hero-building::after {
+  content: "";
+  position: absolute;
+  inset: -9px -4px;
+}
+
+.hero-building[data-active],
+button.hero-building:hover {
+  color: var(--color-mint);
+}
+
+/*
+ * A chip, label or the dot that the readout card still overlaps (no side was
+ * clear of it; HeroLens) fades out under the paper instead of peeking out as
+ * a clipped sliver. filter, not opacity: the draw-in and the dive own the
+ * opacity of these elements.
+ */
+.hero-uncle-label,
+.hero-dot,
+.hero-labels .map-label-slot {
+  transition: filter var(--duration-record) var(--ease-snap);
+}
+
+.hero [data-readout-covered] {
+  filter: opacity(0);
+}
+
+/* ---------------- Readout (paper, never changes colour) ---------------- */
+
+.hero-readout {
+  z-index: 2;
+  pointer-events: none;
+}
+
+.hero-readout-card {
+  border-radius: var(--radius-card);
+  background-color: var(--record-bg);
+  color: var(--record-fg);
+  box-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+}
+
+.hero-readout-stack {
+  display: grid;
+}
+
+/*
+ * A swap on the record token, in sequence: the old record fades out on the
+ * fast token while it slides up, and the new one fades in only after it,
+ * within the same 700ms, so two records never print over each other (a lens
+ * sweeping across the map swaps them quickly).
+ */
+.hero-readout-item {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  translate: 0 8px;
+  transition:
+    opacity var(--duration-fast) linear,
+    translate var(--duration-record) var(--ease-snap);
+}
+
+.hero-readout-item[data-state="active"] {
+  opacity: 1;
+  translate: 0 0;
+  transition:
+    opacity calc(var(--duration-record) - var(--duration-fast)) var(--ease-snap) var(--duration-fast),
+    translate var(--duration-record) var(--ease-snap);
+}
+
+.hero-readout-item[data-state="leaving"] {
+  translate: 0 -8px;
+}
+
+.hero-readout-place {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--record-meta);
+}
+
+.hero-readout-title {
+  margin-top: 2px;
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.hero-readout-request {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-grey-800);
+}
+
+.hero-readout-status {
+  margin-top: 10px;
+  display: flex;
+}
+
+.hero-readout-status > span {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding: 0 10px;
+  border: 1px solid var(--record-fg);
+  border-radius: var(--radius-pill);
+  font-size: 12px;
+  line-height: 1;
+  font-weight: 700;
+}
+
+/*
+ * Desktop: 24px beside the lens. HeroLens places the card's top-left corner
+ * (--rx, --ry) west, east, above or below the ring, never over the text block
+ * or the record cards (lens-geometry.ts placeReadout). Before hydration it
+ * sits west of 청평화.
+ */
+.hero-readout[data-variant="float"] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: var(--rx) var(--ry);
+}
+
+.hero-readout[data-variant="float"] .hero-readout-card {
+  width: 260px;
+  padding: 16px 18px 18px;
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+/* Over empty ground the lens shows no record. */
+.hero-readout[data-variant="float"][data-shown="none"] .hero-readout-card {
+  opacity: 0;
+}
+
+/*
+ * A card whose straight way to its next spot would cross the text block or
+ * the record cards fades out where it is, jumps, and fades back in on the
+ * record token above (HeroLens): it never slides across the text.
+ */
+.hero-readout[data-variant="float"][data-flip] .hero-readout-card {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-snap);
+}
+
+/* Phones: docked in the frame's lower left, above the honesty line; status beside the place. */
+.hero-readout[data-variant="dock"] {
+  position: absolute;
+  left: 12px;
+  bottom: 30px;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-card {
+  width: min(256px, calc(100cqw - 24px));
+  padding: 10px 14px 12px;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 8px;
+  align-items: center;
+}
+
+/* The place wraps rather than clips (it fits one line at 320px; wider letter spacing takes two). */
+.hero-readout[data-variant="dock"] .hero-readout-place {
+  grid-area: 1 / 1;
+  min-width: 0;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-status {
+  grid-area: 1 / 2;
+  margin-top: 0;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-status > span {
+  height: 22px;
+  padding: 0 8px;
+  font-size: 11px;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-title {
+  grid-column: 1 / -1;
+  margin-top: 2px;
+  font-size: 14px;
+}
+
+.hero-readout[data-variant="dock"] .hero-readout-request {
+  grid-column: 1 / -1;
+  font-size: 13px;
+}
+
+/* ---------------- Record card proxies (desktop only) ---------------- */
+
+/*
+ * Above-right of 청평화's roof: 56px over it, east of the lens ring, west of
+ * 디오트. On short screens, where the map lifts to clear the text block, the
+ * stack never rises above 16px under the nav pill (top 16 + 56 tall), even if
+ * that brings it down beside the roof. --proxy-stack: two 72.5px record cards
+ * and the 8px gap.
+ */
+.hero-proxies {
+  --proxy-stack: 153px;
+
+  position: absolute;
+  left: calc(var(--box-w) * var(--focus-x) + 112px);
+  top: max(
+    calc(var(--box-h) * var(--focus-y) - 56px - var(--proxy-stack)),
+    calc(var(--nav-clear) - var(--hero-inset) - var(--box-top, 0px))
+  );
+  z-index: 3;
+  display: none;
+  width: var(--record-col);
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.hero-proxy {
+  width: 100%;
+}
+
+/* Same box as the rail's record card (spec 5.2): padding 14px 16px, gap 8px. */
+.hero-proxy-card {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: var(--radius-card);
+  background-color: var(--record-bg);
+  color: var(--record-fg);
+  box-shadow: 0 0 0 1px rgb(242 255 232 / 0.08);
+}
+
+.hero-proxy-body {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hero-proxy-meta {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--record-meta);
+}
+
+.hero-proxy-title {
+  font-size: 15px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.hero-proxy-chevron {
+  flex: none;
+  color: var(--color-grey-500);
+}
+
+/* ---------------- Text block ---------------- */
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  order: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 12px 0;
+}
+
+.hero-h1 {
+  font-size: 30px;
+  line-height: 1.14;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--night-ink);
+}
+
+
+.hero-sub {
+  margin-top: 12px;
+  max-width: 34em;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--night-ink-2);
+}
+
+.hero-ctas {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.hero-cta-primary {
+  width: 100%;
+}
+
+/* ---------------- Mobile chips ---------------- */
+
+.hero-chips {
+  order: 1;
+  display: flex;
+  gap: 8px;
+  padding: 12px 12px 0;
+}
+
+.hero-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 44px;
+  padding: 0 8px;
+  border: 1px solid rgb(242 255 232 / 0.24);
+  border-radius: var(--radius-pill);
+  font-size: 15px;
+  line-height: 1;
+  font-weight: 700;
+  color: var(--night-ink);
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color var(--duration-record) var(--ease-snap),
+    color var(--duration-record) var(--ease-snap),
+    border-color var(--duration-record) var(--ease-snap),
+    scale var(--duration-fast) var(--ease-snap);
+}
+
+.hero-chip[aria-checked="true"] {
+  border-color: var(--color-mint);
+  background-color: var(--color-mint);
+  color: var(--night-0);
+}
+
+.hero-chip:active {
+  scale: 0.98;
+}
+
+/*
+ * S2's stage area (words.css .words-map-stage: the viewport minus the record
+ * column and one gutter from 1280px, 100vh tall), as an invisible box in the
+ * pinned element. HeroMotion measures it so the dive ends with 청평화 where
+ * S2's dimmed map holds it: the cut from S1 to S2 (and on to S3) is continuous.
+ * Keep the two definitions equal.
+ */
+.hero-stage-probe {
+  display: none;
+}
+
+/* Only the desktop dive (min 1024px, motion allowed) reads it. */
+@media (min-width: 1024px) {
+  .hero-stage-probe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100vh;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-stage-probe {
+    width: calc(100% - var(--record-col) - var(--spacing-gutter));
+  }
+}
+
+/* ---------------- Desktop (768px up) ---------------- */
+
+@media (min-width: 768px) {
+  .hero {
+    --hero-inset: 20px;
+    --hero-radius: 24px;
+  }
+
+  .hero-pin {
+    display: block;
+    height: 100dvh;
+    min-height: 600px;
+    padding: 0;
+  }
+
+  .hero-frame {
+    position: absolute;
+    inset: 0;
+    height: auto;
+    min-height: 0;
+    /*
+     * clip-path draws the frame; overflow: clip (not hidden: no scroll
+     * container) keeps the map, scaled up to 1.6 in the dive, from widening
+     * the document once the pin releases (it reached 2047px at 1440).
+     */
+    overflow: clip;
+    border-radius: 0;
+    clip-path: inset(var(--hero-inset) round var(--hero-radius));
+  }
+
+  .hero-viewport,
+  .hero-frame-line {
+    inset: var(--hero-inset);
+  }
+
+  .hero-map-box[data-hero-map-box="desktop"] {
+    display: block;
+  }
+
+  .hero-map-box[data-hero-map-box="mobile"],
+  .hero-readout[data-variant="dock"],
+  .hero-chips {
+    display: none;
+  }
+
+  .hero-honesty {
+    left: auto;
+    right: 18px;
+    bottom: 16px;
+    font-size: 12px;
+  }
+
+  /* The text block floats over the frame; only its own text and controls take the pointer. */
+  .hero-copy {
+    position: absolute;
+    left: calc(var(--hero-inset) + 64px);
+    bottom: calc(var(--hero-inset) + 64px);
+    padding: 0;
+    pointer-events: none;
+  }
+
+  /*
+   * The H1 is as wide as its nowrap first line, so its empty right half on
+   * line 2 lay over the 남평화 label: only its glyph runs take the pointer.
+   */
+  .hero-copy > :not(.hero-h1),
+  .hero-h1-line {
+    pointer-events: auto;
+  }
+
+  /*
+   * The dive fades the text block with opacity only, so the H1 stays the
+   * page's heading for assistive technology; once it is gone (20%), the
+   * invisible text stops taking the pointer. The CTAs stay in the focus
+   * order: keyboard focus on one scrolls back to the top of the pin, where
+   * it shows again (HeroMotion).
+   */
+  .hero[data-hero-dived] .hero-copy * {
+    pointer-events: none;
+  }
+
+  /*
+   * A ground-coloured halo (invisible on the ground) keeps the map's strokes
+   * a few px short of the glyphs, as the labels' pills do: 남평화's roof apex
+   * rests just under 까지 on wide frames.
+   */
+  .hero-h1 {
+    font-size: clamp(40px, 4.4vw, 68px);
+    text-shadow:
+      0 0 2px var(--night-0),
+      0 0 6px var(--night-0);
+  }
+
+  /* Two lines from 768px: the phone break goes, the first line never wraps. */
+  .hero-h1-break-phone {
+    display: none;
+  }
+
+  .hero-h1-line:first-child {
+    white-space: nowrap;
+  }
+
+  /* Boxes as wide as their text: the lens readout keeps clear of exactly these. */
+  .hero-sub,
+  .hero-ctas {
+    width: fit-content;
+  }
+
+  .hero-sub {
+    margin-top: 24px;
+    font-size: 17px;
+    line-height: 1.65;
+  }
+
+  .hero-ctas {
+    margin-top: 32px;
+    flex-direction: row;
+    align-items: center;
+    gap: 28px;
+  }
+
+  .hero-cta-primary {
+    width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  html.js-motion .hero-pin-spacer:not(.pin-spacer) > .hero-pin {
+    position: sticky;
+    top: 0;
+  }
+
+  html.js-motion .hero-pin-spacer:not(.pin-spacer)::after {
+    content: "";
+    display: block;
+    height: 100vh;
+  }
+}
+
+/*
+ * 768-1365px: the sub breaks into two even lines (after 전달을), so it ends
+ * well west of 남평화 instead of running into its walls; --copy-rest grows by
+ * the extra 28px line so the map lifts with it. From 1366px it clears 남평화
+ * on one line; below 761px of height the lift would push APM's label out of
+ * the frame and 디오트's under the record cards, so short screens keep one.
+ */
+@media (min-width: 768px) and (max-width: 1365.98px) and (min-height: 761px) {
+  .hero-sub {
+    max-width: 18.4em;
+  }
+
+  .hero-map-box[data-hero-map-box="desktop"] {
+    --copy-rest: 164px;
+  }
+}
+
+/* Phones under reduced motion: a chip moves the map at once, and cut labels go at once. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-map-box[data-hero-map-box="mobile"],
+  .hero-map-box[data-hero-map-box="mobile"] :is(.hero-building, .hero-uncle),
+  .hero-map-box[data-hero-map-box="mobile"] :is(.hero-building, .hero-uncle)[data-clipped] {
+    transition: none;
+  }
+}
+
+/*
+ * 1024-1279px: the record column's compact plate (280x69, 24px from the
+ * bottom) sits where the honesty line would; the line moves 12px above it,
+ * still bottom-right, so the seeded numbers never show without it.
+ */
+@media (min-width: 1024px) and (max-width: 1279.98px) {
+  .hero-honesty {
+    bottom: calc(24px + 69px + 10px - var(--hero-inset));
+  }
+}
+
+/* Record proxies: from 1024px. Under reduced motion the rail (1280px up) already shows them. */
+@media (min-width: 1024px) {
+  .hero-proxies {
+    display: flex;
+  }
+}
+
+@media (min-width: 1280px) and (prefers-reduced-motion: reduce) {
+  .hero-proxies {
+    display: none;
+  }
+}
+
+/* The stage leaves the record column free (spec 4.3); the proxies stay 16px short of it. */
+@media (min-width: 1280px) {
+  .hero-stage {
+    right: calc(var(--record-col) + var(--spacing-gutter) + 16px - var(--hero-inset));
+  }
+
+  .hero-proxies {
+    left: min(
+      calc(var(--box-w) * var(--focus-x) + 112px),
+      calc(100cqw + var(--hero-inset) - var(--spacing-gutter) - 2 * var(--record-col) - 16px - var(--box-left, 0px))
+    );
+  }
+}
+
+/*
+ * ---------------- Draw-in and dive fades (desktop map) ----------------
+ * Two owners, one opacity: the draw-in animates --intro-* and the dive
+ * animates --dive-* on the map box (HeroMotion), and each element shows their
+ * product. Neither can overwrite the other, so a ScrollTrigger refresh during
+ * the draw-in never flashes the lens on early.
+ * - lens, record layer, readout: the draw-in fades them in last; the dive
+ *   fades them out over its first 10% (sooner where the text block fades
+ *   sooner).
+ * - labels and the uncle chip: the draw-in fades them in with the floor
+ *   ticks; the dive fades all but 청평화's over its first 15% (or sooner),
+ *   after which (from 20%, data-hero-dived) the labels stop taking the
+ *   pointer.
+ * - 청평화's label and the dot: they hold through the pin (the dive's
+ *   payoff) and fade as S2's heading comes up after it (--dive-focus); once
+ *   the map has settled into S2's first frame (data-hero-settled) the label
+ *   stops taking the pointer too.
+ * The faded building buttons stay in the focus order (a keyboard reader
+ * coming back from S2 reaches them; focus scrolls back to the top of the
+ * pin, HeroMotion). Only what nobody can focus is hidden outright.
+ */
+[data-hero-map-box="desktop"] :is(.hero-lens, .hero-record, .hero-readout) {
+  opacity: calc(var(--intro-lens, 1) * var(--dive-lens, 1));
+}
+
+[data-hero-map-box="desktop"][data-lens-pending] :is(.hero-lens, .hero-record, .hero-readout) {
+  opacity: 0;
+}
+
+[data-hero-map-box="desktop"] .hero-labels .map-label-slot {
+  opacity: calc(var(--intro-labels, 1) * var(--dive-focus, 1));
+}
+
+[data-hero-map-box="desktop"] .hero-labels .map-label-slot:not([data-building="cheongpyeonghwa"]),
+[data-hero-map-box="desktop"] .hero-uncle {
+  opacity: calc(var(--intro-labels, 1) * var(--dive-labels, 1));
+}
+
+/* The draw-in scales and fades the dot's wrapper itself; the dive fades its face. */
+[data-hero-map-box="desktop"] .hero-dot > [data-dot] {
+  opacity: var(--dive-focus, 1);
+}
+
+.hero[data-hero-dived] [data-hero-map-box="desktop"] :is(.hero-lens, .hero-record, .hero-readout, .hero-uncle),
+.hero[data-hero-settled] [data-hero-map-box="desktop"] .hero-dot {
+  visibility: hidden;
+}
+
+.hero[data-hero-dived] [data-hero-map-box="desktop"] .hero-labels .map-label-slot:not([data-building="cheongpyeonghwa"]),
+.hero[data-hero-settled] [data-hero-map-box="desktop"] .hero-labels .map-label-slot {
+  pointer-events: none;
+}
+
+/*
+ * The frame's bottom edge at the end of the dive: a 160px fade to the ground
+ * (HeroMotion takes it from 0 to 1 over the pin's last 40%), so the map runs
+ * out into S2 instead of stopping on a hard line when the pin releases.
+ */
+.hero-frame-fade {
+  position: absolute;
+  inset: auto 0 0;
+  z-index: 1;
+  display: none;
+  height: 160px;
+  background-image: linear-gradient(to bottom, rgb(7 35 28 / 0), var(--night-0));
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .hero-frame-fade {
+    display: block;
+  }
+}
+
+/*
+ * ---------------- Map strokes (hero scope) ----------------
+ * The shared dim value (rgba(182,215,194,0.30), spec 4.1) reads as an empty
+ * field on the hero, the one place the whole map is the picture: silhouettes
+ * at 0.30 are about 2.2:1 on #07231C, below the 3:1 non-text contrast. The
+ * hero raises silhouettes and door marks to 0.46 (about 3.3:1), floor ticks to
+ * 78% of that and creases to 0.26; the stream and roads stay at 0.16 and the
+ * mint record layer under the lens stays far brighter. --map-boost (1 here)
+ * scales the raise: the settle after the pin eases it to 0 as S2's heading
+ * comes up, so the hero hands over on the shared values S2 draws its dimmed
+ * copy with. prefers-contrast: more
+ * keeps the shared 0.60.
+ */
+@media not all and (prefers-contrast: more) {
+  .hero [data-hero-map-box] .market-map[data-map-layer="base"] {
+    --hero-sil: rgb(182 215 194 / calc(0.3 + 0.16 * var(--map-boost, 1)));
+    --map-sil: var(--hero-sil);
+    --map-door: var(--hero-sil);
+    --map-floor: color-mix(in srgb, var(--hero-sil) 78%, transparent);
+    --map-crease: rgb(182 215 194 / calc(0.16 + 0.1 * var(--map-boost, 1)));
+  }
+}
+
+/* Start states while the draw-in is pending (desktop motion, html.js-draw). */
+@media (prefers-reduced-motion: no-preference) {
+  html.js-draw .hero [data-hero-map-box="desktop"] {
+    --intro-lens: 0;
+    --intro-labels: 0;
+  }
+
+  html.js-draw .hero [data-hero-map-box="desktop"] [data-hero-dot],
+  html.js-draw .hero .hero-proxy-card {
+    opacity: 0;
+  }
+
+  /*
+   * Failsafe: if the hero's motion never runs (a script error, a hydration far
+   * slower than LATE_INTRO_MS), the map, labels, lens and cards show
+   * themselves at 8s. HeroMotion removes html.js-draw long before this.
+   */
+  html.js-draw .hero [data-drawable],
+  html.js-draw .hero [data-draw-fade],
+  html.js-draw .hero [data-hero-map-box="desktop"] [data-hero-dot],
+  html.js-draw .hero .hero-proxy-card {
+    animation: hero-draw-failsafe 0s linear 8s forwards;
+  }
+
+  html.js-draw .hero [data-hero-map-box="desktop"] {
+    animation: hero-intro-failsafe 0s linear 8s forwards;
+  }
+}
+
+@keyframes hero-draw-failsafe {
+  to {
+    stroke-dashoffset: 0;
+    stroke-dasharray: none;
+    opacity: 1;
+  }
+}
+
+@keyframes hero-intro-failsafe {
+  to {
+    --intro-lens: 1;
+    --intro-labels: 1;
+  }
+}
