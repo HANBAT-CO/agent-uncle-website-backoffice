@@ -34,6 +34,12 @@ export default async function UnavailablePage({ searchParams }: { searchParams: 
       <p className="text-sm/relaxed text-foreground" data-reason={reason}>
         {COPY[reason]}
       </p>
+      {/* Which variable failed (names and rules only, never a key value). */}
+      {!env.enabled && env.reason === "misconfigured" ? (
+        <p className="mt-3 font-mono text-xs/relaxed text-muted-foreground" data-detail>
+          확인할 항목: {env.detail}
+        </p>
+      ) : null}
     </AuthCard>
   );
 }
