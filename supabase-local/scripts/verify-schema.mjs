@@ -28,6 +28,62 @@ const EXPECTED = {
   migrations: "live has the 6 app migrations; local adds 20261011230000_landing_leads",
 };
 
+// The PROPOSED backoffice layer (supabase/backoffice/20261013090000_backoffice_admin_layer.sql) is applied
+// locally but not on live yet. Its objects are a known pending delta: listed, never a mismatch, as long as
+// they exist only locally. Once one also exists on live it is compared like everything else.
+const PENDING_MIGRATION = "20261013090000_backoffice_admin_layer";
+const PENDING = {
+  tables: /^public\.(backoffice_[a-z_]+|app_remote_config|app_notices)$/,
+  functions: /^public\.(backoffice_[a-z_]+|is_backoffice_admin|app_write_blocked|app_bootstrap_config)\(/,
+  policies: /^storage\.objects\.(backoffice_attachment_read|app_attachment_write_guard)$/,
+  // Added to the existing public.saip_records table.
+  trigger: /^CREATE TRIGGER backoffice_guard_app_writes /,
+  index: "saip_records_collection_updated",
+};
+
+/** Removes local-only pending objects from the LOCAL fingerprint (in place) and returns them. */
+function splitPending(l, r) {
+  const pending = { schema: [], tables: [], functions: [], trigger: [], policies: [], index: [], migration: [] };
+  for (const kind of ["tables", "functions", "policies"]) {
+    for (const key of Object.keys(l[kind] ?? {})) {
+      if (PENDING[kind].test(key) && !(key in (r[kind] ?? {}))) {
+        delete l[kind][key];
+        pending[kind].push(key.replace(/^public\./, "").replace(/\(.*$/, ""));
+      }
+    }
+  }
+  const lt = l.tables?.["public.saip_records"];
+  const rt = r.tables?.["public.saip_records"];
+  if (lt && rt) {
+    const liveTriggers = new Set(rt.triggers ?? []);
+    lt.triggers = (lt.triggers ?? []).filter((t) => {
+      const local = PENDING.trigger.test(t) && !liveTriggers.has(t);
+      if (local) pending.trigger.push("backoffice_guard_app_writes on public.saip_records");
+      return !local;
+    });
+    const liveIndexes = new Set((rt.indexes ?? []).map(([name]) => name));
+    lt.indexes = (lt.indexes ?? []).filter(([name]) => {
+      const local = name === PENDING.index && !liveIndexes.has(name);
+      if (local) pending.index.push(`${name} on public.saip_records`);
+      return !local;
+    });
+  }
+  const liveMigrations = r.migrations ?? [];
+  if ((l.migrations ?? []).includes(PENDING_MIGRATION) && !liveMigrations.includes(PENDING_MIGRATION)) {
+    l.migrations = l.migrations.filter((m) => m !== PENDING_MIGRATION);
+    pending.migration.push(PENDING_MIGRATION);
+  }
+  // backoffice_private is outside the fingerprint (public and saip_private only); report it when present.
+  const hasSchema = execFileSync(
+    "docker",
+    ["exec", "-i", LOCAL_DB_CONTAINER, "psql", "-U", "postgres", "-d", "postgres", "-At", "-v", "ON_ERROR_STOP=1",
+      "-c", "select exists (select 1 from pg_namespace where nspname = 'backoffice_private')"],
+    { encoding: "utf8" },
+  ).trim();
+  if (hasSchema === "t") pending.schema.push("backoffice_private (local check only, outside the fingerprint)");
+  return pending;
+}
+
 function token() {
   if (process.env.SUPABASE_ACCESS_TOKEN) return process.env.SUPABASE_ACCESS_TOKEN.trim();
   const file = join(homedir(), ".supabase", "access-token");
@@ -89,6 +145,7 @@ if (jsonDir) {
   writeFileSync(join(jsonDir, "fingerprint-live.json"), JSON.stringify(stable(R), null, 2));
 }
 
+const pending = splitPending(L, R);
 const problems = [];
 const summary = {
   server_version: `${L.server_version} local / ${R.server_version} live`,
@@ -115,11 +172,25 @@ const extDiff = Object.keys({ ...L.extensions, ...R.extensions }).filter((k) => 
 console.log("Schema check: LOCAL supabase-local vs LIVE", LIVE_REF, "(read-only)");
 for (const [k, v] of Object.entries(summary)) console.log(`  ${k.padEnd(15)} ${typeof v === "string" ? v : `${v.matched}/${v.total} identical`}`);
 console.log(`  realtime pub    ${JSON.stringify(R.realtime_publication)}`);
-console.log(`  migrations      live ${liveMig.length}, local ${localMig.length}${migrationsOk ? ` (expected: ${EXPECTED.migrations})` : ""}`);
+console.log(`  migrations      live ${liveMig.length}, local ${localMig.length}${pending.migration.length ? ` + ${pending.migration.length} pending` : ""}${migrationsOk ? ` (expected: ${EXPECTED.migrations})` : ""}`);
 if (extDiff.length) console.log(`  extensions      info only, differ: ${extDiff.map((k) => `${k} ${L.extensions?.[k] ?? "-"}/${R.extensions?.[k] ?? "-"}`).join(", ")}`);
+const pendingKinds = Object.entries(pending).filter(([, names]) => names.length);
+if (pendingKinds.length) {
+  const n = pendingKinds.reduce((s, [, names]) => s + names.length, 0);
+  console.log(`\npending, not on live (proposed backoffice layer ${PENDING_MIGRATION}, local only): ${n} objects`);
+  for (const [kind, names] of pendingKinds) {
+    const lines = [];
+    for (const name of [...names].sort()) {
+      if (lines.length && lines[lines.length - 1].length + name.length > 96) lines[lines.length - 1] += ",";
+      if (!lines.length || lines[lines.length - 1].endsWith(",")) lines.push(name);
+      else lines[lines.length - 1] += `, ${name}`;
+    }
+    lines.forEach((line, i) => console.log(`  ${(i ? "" : `${kind} (${names.length})`).padEnd(15)} ${line}`));
+  }
+}
 if (problems.length) {
   console.log("\nMISMATCHES:");
   for (const p of problems) console.log("  - " + p);
   process.exit(1);
 }
-console.log("\nOK: tables, columns, constraints, indexes, grants, RLS, triggers, functions (definition md5 + EXECUTE grants), policies, bucket, event triggers and realtime publication match.");
+console.log(`\nOK: tables, columns, constraints, indexes, grants, RLS, triggers, functions (definition md5 + EXECUTE grants), policies, bucket, event triggers and realtime publication match${pendingKinds.length ? " (apart from the pending layer above)" : ""}.`);

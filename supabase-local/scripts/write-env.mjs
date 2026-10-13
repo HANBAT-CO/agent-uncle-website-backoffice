@@ -44,8 +44,6 @@ const block = `${BEGIN}
 BACKOFFICE_SUPABASE_TARGET=local
 BACKOFFICE_SUPABASE_URL=${url}
 BACKOFFICE_SUPABASE_PUBLISHABLE_KEY=${status.PUBLISHABLE_KEY}
-NEXT_PUBLIC_BACKOFFICE_SUPABASE_URL=${url}
-NEXT_PUBLIC_BACKOFFICE_SUPABASE_PUBLISHABLE_KEY=${status.PUBLISHABLE_KEY}
 ${END}`;
 const devFile = join(repoRoot, ".env.development.local");
 let dev = existsSync(devFile) ? readFileSync(devFile, "utf8") : "";

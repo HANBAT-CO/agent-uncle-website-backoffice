@@ -245,7 +245,8 @@ async function signup(user, role, profile) {
       ? await upload(user, await productPng({ shape: "scarf", color: "#E9E4D6" }, 1), "image/png", "사업자등록증.png")
       : await upload(user, demoPdf(["DEMO ONLY - sample business registration", `No. ${profile.businessNumber}`, `Account: ${user.email}`]), "application/pdf", "사업자등록증.pdf");
   }
-  const { slug, provider, docAsPng, ...fields } = profile;
+  // Seed-only keys (slug, provider, docAsPng) are not profile fields.
+  const fields = Object.fromEntries(Object.entries(profile).filter(([k]) => !["slug", "provider", "docAsPng"].includes(k)));
   const values = { ...fields, terms: true, privacy: true, documentId, photoId: "" };
   if (role === "uncle") values.name = profile.contact; // the app always sends name = 담당자명 for 사입삼촌
   if (role === "retailer") Object.assign(values, { pickupArea: "", deliveryArea: "", deadline: "" });

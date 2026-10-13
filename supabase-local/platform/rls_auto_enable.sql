@@ -6,6 +6,8 @@
 -- byte-for-byte (function text copied from pg_get_functiondef on live, read-only, 2026-10-13)
 -- so local DDL behaves like live and verify-schema.mjs matches 34/34 functions.
 -- Idempotent.
+set client_min_messages = warning;
+
 CREATE OR REPLACE FUNCTION public.rls_auto_enable()
  RETURNS event_trigger
  LANGUAGE plpgsql

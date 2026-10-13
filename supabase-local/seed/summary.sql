@@ -69,9 +69,14 @@ select coalesce(role, '-') role, coalesce(source, '-') source, count(*), min(cre
 from public.landing_leads group by 1, 2 order by 1, 2;
 
 \echo '== auth users'
-select case when raw_app_meta_data->>'backoffice_role' is not null then 'backoffice ' || (raw_app_meta_data->>'backoffice_role')
-            else 'app user (' || coalesce(raw_app_meta_data->>'provider', '?') || ')' end as kind, count(*)
-from auth.users group by 1 order by 1;
+-- Staff come from public.backoffice_admins (spec D3: app_metadata is ignored).
+select case when a.user_id is not null and a.revoked_at is null then 'staff ' || a.role
+            when a.user_id is not null then 'staff (revoked)'
+            when exists (select 1 from public.saip_records r where r.collection = 'accounts' and r.id = u.id::text)
+              then 'app user (' || coalesce(u.raw_app_meta_data->>'provider', '?') || ')'
+            else 'auth user, not staff' end as kind, count(*)
+from auth.users u left join public.backoffice_admins a on a.user_id = u.id
+group by 1 order by 1;
 
 \echo '== simulated time range'
 select min((data->>'createdAt')::timestamptz) at time zone 'Asia/Seoul' as first_kst, max((data->>'createdAt')::timestamptz) at time zone 'Asia/Seoul' as last_kst
