@@ -1,0 +1,857 @@
+/*
+ * S9 film (WP-18). Day canvas; colours are the morning tokens of spec 4.1
+ * only: paper #EDECE3, sheet #F5F4EE, ink #101010, greys, deep green
+ * #0C483E (the loop's field, the play button, the dot), weak green
+ * rgb(12 72 62 / 0.12), mint #F2FFE8 inside the play button's circle.
+ *
+ * Layout (every mode): one centred column as wide as the card. The heading,
+ * the chapter ticks, the controls and the details align with the frame's
+ * edge (6px inside the shell).
+ * - below 768px: a 9:16 frame, min(86vw, 420px) wide and at most 86dvh tall
+ * - from 768px: a 16:9 frame, min(86vw, 1200px) with its shell, never taller
+ *   than the viewport leaves room for (phones in landscape)
+ * - desktop motion (FilmMotion pins the scene): the scene is one viewport
+ *   tall, the heading is one line, and the card is sized so the heading,
+ *   card, ticks and controls fit in it (--film-fit is everything but the card)
+ *
+ * Variables FilmMotion writes on the scene while it scrubs (both 1 at rest):
+ * --film-ring (the shell's ring, 0.3 before the card lands) and --film-land
+ * (the play mark, the loop's pause, the core's highlight). Text never takes a
+ * scroll-linked opacity (WCAG AA contrast in every scrolled state): the scene's
+ * data-film-chrome-away (the heading and the controls, away while the circle
+ * passes them) and data-film-ticks-away (until the card has landed) switch
+ * them, and each switch is a timed wipe (clip-path) at full colour.
+ *
+ * The frame (.film-media) never moves in layout: FilmMotion animates only
+ * its transform and clip-path, so the settled card is the layout itself.
+ */
+
+.film {
+  /* Double-bezel tray (spec 4.4): 6px around a 24px core, 30px outside. */
+  --film-tray: 6px;
+  --film-ring: 1;
+  --film-land: 1;
+  --film-core-w: min(
+    calc(86vw - 2 * var(--film-tray)),
+    calc(1200px - 2 * var(--film-tray)),
+    calc((100dvh - 160px) * 16 / 9)
+  );
+  --film-aspect: 16 / 9;
+  /*
+   * A jump to #film (hash, hero CTA, footer) lands on the section's top: the
+   * scene's own padding clears the nav. In desktop motion FilmMotion sets a
+   * negative margin inline, so the jump lands on the settled card (and the
+   * desktop-motion block below sets the same margin before JS runs).
+   */
+  scroll-margin-top: 0;
+}
+
+@media (max-width: 767px) {
+  .film {
+    --film-core-w: min(
+      86vw,
+      420px,
+      calc(86dvh * 9 / 16),
+      calc(100vw - 2 * var(--spacing-gutter) - 2 * var(--film-tray))
+    );
+    --film-aspect: 9 / 16;
+  }
+}
+
+/* ---------- Scene and column ---------- */
+
+.film-scene {
+  position: relative;
+  padding-top: var(--nav-clear);
+}
+
+.film-column {
+  width: calc(var(--film-core-w) + 2 * var(--film-tray));
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.film-title {
+  margin-bottom: 32px;
+  padding-inline: var(--film-tray);
+  color: var(--color-ink);
+}
+
+@media (max-width: 767px) {
+  .film-column {
+    width: auto;
+    margin-inline: var(--spacing-gutter);
+  }
+}
+
+@media (min-width: 1024px) {
+  .film-scene {
+    padding-top: 128px;
+  }
+}
+
+/* ---------- Stage: shell, core, dot, frame ---------- */
+
+.film-stage {
+  position: relative;
+}
+
+.film-shell {
+  position: relative;
+  width: calc(var(--film-core-w) + 2 * var(--film-tray));
+  padding: var(--film-tray);
+}
+
+/* Outer shell: a 4% ink tray with a 1px 6% ring and the floating-paper shadow. */
+.film-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-shell);
+  background-color: rgb(16 16 16 / 0.04);
+  box-shadow:
+    0 0 0 1px rgb(16 16 16 / 0.06),
+    var(--shadow-float);
+  opacity: var(--film-ring);
+  pointer-events: none;
+}
+
+/* Inner core: the paper sheet the frame sits in. */
+.film-core {
+  position: relative;
+  aspect-ratio: var(--film-aspect);
+  border-radius: var(--radius-card);
+  background-color: var(--color-surface);
+}
+
+/* The core's top highlight, drawn over the frame like a machined edge (only once the card has landed). */
+.film-core::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.6);
+  /* Only in the last tenth of the landing: earlier the scaled frame still overhangs the core's edge. */
+  opacity: clamp(0, (var(--film-land) - 0.9) * 10, 1);
+  pointer-events: none;
+}
+
+/* While the dot opens there is no sheet yet: only the dot, then the frame. */
+[data-film-motion] .film-core {
+  background-color: transparent;
+}
+
+/*
+ * Phones: the frame sits at scale 1 in its core while the dot waits for the
+ * reader and then opens. The core is a faint green slot meanwhile (the weak
+ * green), so the shell reads as the film's place, not an empty frame, and the
+ * frame keeps the core's rounded corners while the circle grows past them
+ * (the inline circle() replaces the CSS inset clip).
+ */
+[data-film-motion="mobile"] .film-core {
+  background-color: var(--accent-weak);
+}
+
+[data-film-motion="mobile"] .film-media {
+  border-radius: var(--radius-card);
+}
+
+/* The page's dot (spec 4.6): the film's mask origin, under the frame. */
+.film-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  translate: -50% -50%;
+  visibility: hidden;
+}
+
+[data-film-motion] .film-dot,
+.film-dot-static {
+  visibility: visible;
+}
+
+/* The frame: the loop's #0C483E field under three layers. */
+.film-media {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  clip-path: inset(0 round var(--radius-card));
+  background-color: var(--color-green-800);
+  transform-origin: 50% 50%;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/*
+ * Layers crossfade without a gap: the shown layer rises over the others
+ * (700ms, snap); a layer that stops showing stays opaque underneath until the
+ * new one has landed, then drops. Back to the field, everything fades out.
+ * The loop's poster waits for the dot to open (data-reveal): until then the
+ * circle is the page's dot on the plain #0C483E field, never a crop of a cube.
+ * It stands in only while the loop video has no frame of its own (the field
+ * display: still decoding, or Save-Data). The poster files are another frame
+ * than the loop's first one, so the two never fade in together (no double
+ * exposure); a still that decodes later crossfades over the poster as above.
+ */
+.film-layer {
+  position: absolute;
+  /* 1px of overscan: a fractional frame width never shows a seam of the field at the edges. */
+  inset: -1px;
+  z-index: 1;
+  width: calc(100% + 2px);
+  /* Preflight caps video at max-width: 100%, which would undo the overscan. */
+  max-width: none;
+  height: calc(100% + 2px);
+  opacity: 0;
+  transition: opacity 0s var(--duration-record);
+}
+
+.film-media[data-display="poster"] .film-poster,
+.film-media[data-master="idle"][data-reveal="true"][data-display="field"] .film-loop-poster,
+.film-media[data-display="loop"] [data-film-video="loop"],
+.film-media[data-display="master"] [data-film-video="master"] {
+  z-index: 2;
+  opacity: 1;
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+.film-media[data-display="field"] .film-layer {
+  transition: opacity var(--duration-record) var(--ease-snap);
+}
+
+.film-poster img,
+.film-loop-poster img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* No size here: the layer's 1px overscan (calc(100% + 2px)) must hold, or the field shows at the right and bottom. */
+.film-video {
+  display: block;
+  object-fit: cover;
+}
+
+/*
+ * The play mark: the page's dot grown into a disc, a 1px halo ring 4px out
+ * (spec 4.6). Mint on the green frame, ink green on the light end poster.
+ * Shown while nothing is requested and the dot has opened; in desktop motion
+ * it lands with the card.
+ */
+.film-mark {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  opacity: var(--film-land);
+  pointer-events: none;
+}
+
+.film-mark-disc {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-mint);
+  color: var(--color-green-800);
+  outline: 1px solid rgb(242 255 232 / 0.3);
+  outline-offset: 4px;
+  opacity: 0;
+  scale: 0.92;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    scale var(--duration-record) var(--ease-snap),
+    background-color var(--duration-record) var(--ease-snap),
+    color var(--duration-record) var(--ease-snap);
+}
+
+.film-mark-disc > svg {
+  /* The triangle's optical centre sits left of its box. */
+  translate: 1px 0;
+}
+
+.film-media[data-master="idle"][data-reveal="true"] .film-mark-disc {
+  opacity: 1;
+  scale: 1;
+}
+
+.film-media[data-display="poster"] .film-mark-disc {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .film-media[data-master="idle"][data-reveal="true"]:hover .film-mark-disc {
+    scale: 1.06;
+  }
+}
+
+@media (max-width: 767px) {
+  .film-mark-disc {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/*
+ * The loop's own pause (WCAG 2.2.2): a small night-green disc on the frame's
+ * lower right corner, clear of the loop's tag and ledger. Hidden (and inert)
+ * whenever there is nothing to pause or resume; in desktop motion it lands
+ * with the card and takes no pointer while the frame still covers the scene.
+ */
+.film-loop-toggle {
+  --focus: var(--color-mint);
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-pill);
+  background-color: rgb(7 35 28 / 0.46);
+  color: var(--color-mint);
+  box-shadow: inset 0 0 0 1px rgb(242 255 232 / 0.16);
+  backdrop-filter: blur(8px);
+  opacity: var(--film-land);
+  cursor: pointer;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    visibility 0s,
+    background-color var(--duration-base) var(--ease-snap),
+    scale var(--duration-fast) var(--ease-snap);
+}
+
+.film-loop-toggle:active {
+  scale: 0.96;
+}
+
+@media (hover: hover) {
+  .film-loop-toggle:hover {
+    background-color: rgb(7 35 28 / 0.7);
+  }
+}
+
+.film-loop-toggle[data-shown="false"] {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    visibility 0s var(--duration-record);
+}
+
+[data-film-covered] .film-loop-toggle:not(:focus-visible) {
+  pointer-events: none;
+}
+
+/* Focus shows even mid-landing (FilmMotion lands the card on focus as well). */
+.film-loop-toggle:focus-visible {
+  opacity: 1;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .film-loop-toggle {
+    background-color: var(--color-green-950);
+    backdrop-filter: none;
+  }
+}
+
+.film-core-empty {
+  background-color: var(--color-surface);
+}
+
+/* ---------- Chapter ticks (16:9 frame only) ---------- */
+
+.film-chapters {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .film-chapters {
+    position: relative;
+    z-index: 3;
+    display: block;
+    margin-top: 12px;
+    padding-inline: var(--film-tray);
+    container-type: inline-size;
+  }
+}
+
+
+/* While the frame covers the scene, the ticks stay under it, unless they hold focus (WCAG 2.4.11 backstop: FilmMotion also lands the card). */
+[data-film-covered] .film-chapters {
+  z-index: auto;
+}
+
+[data-film-covered] .film-chapters:focus-within,
+[data-film-covered] .film-bar:focus-within {
+  position: relative;
+  z-index: 4;
+}
+
+.film-track {
+  position: relative;
+  height: 1px;
+  background-color: var(--color-grey-200);
+}
+
+.film-track-fill {
+  position: absolute;
+  top: -0.5px;
+  right: 0;
+  left: 0;
+  height: 2px;
+  background-color: var(--color-green-800);
+  transform: scaleX(var(--film-playhead, 0));
+  transform-origin: 0 50%;
+}
+
+.film-ticks {
+  position: relative;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.film-tick > button {
+  position: absolute;
+  top: 0;
+  left: calc(var(--tick-p) * 1%);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 44px;
+  height: 44px;
+  padding: 0 10px 0 0;
+  border-radius: 8px;
+  color: var(--color-grey-600);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.film-tick > button:hover,
+.film-tick > button:focus-visible {
+  z-index: 1;
+  color: var(--color-ink);
+}
+
+.film-tick-mark {
+  width: 1px;
+  height: 10px;
+  background-color: var(--color-grey-300);
+  transition: background-color var(--duration-base) var(--ease-snap);
+}
+
+.film-tick > button:hover .film-tick-mark {
+  background-color: var(--color-grey-700);
+}
+
+.film-tick > button[aria-current] {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.film-tick > button[aria-current] .film-tick-mark {
+  width: 2px;
+  height: 12px;
+  background-color: var(--color-green-800);
+}
+
+/* The chapter's still floats above its tick, kept inside the track. */
+.film-tick-preview {
+  position: absolute;
+  bottom: calc(100% + 22px);
+  left: clamp(calc(var(--tick-p) * -1cqw), -96px, calc(100cqw - var(--tick-p) * 1cqw - 192px));
+  width: 192px;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: var(--radius-input);
+  background-color: var(--color-green-800);
+  box-shadow:
+    0 0 0 1px rgb(16 16 16 / 0.06),
+    var(--shadow-float);
+  opacity: 0;
+  translate: 0 8px;
+  pointer-events: none;
+  transition:
+    opacity var(--duration-base) var(--ease-snap),
+    translate var(--duration-base) var(--ease-snap);
+}
+
+.film-tick-preview img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.film-tick > button:hover .film-tick-preview,
+.film-tick > button:focus-visible .film-tick-preview {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------- Controls and caption ---------- */
+
+.film-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 24px;
+  margin-top: 20px;
+  padding-inline: var(--film-tray);
+}
+
+.film-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.film-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 9.75rem;
+  height: 52px;
+  padding: 0 8px 0 24px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-green-800);
+  color: var(--color-surface);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition: scale var(--duration-fast) var(--ease-snap);
+}
+
+.film-play:active {
+  scale: 0.98;
+}
+
+.film-play-circle {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background-color: var(--color-mint);
+  color: var(--color-green-800);
+  transition: scale 300ms var(--ease-snap);
+}
+
+.film-play:hover .film-play-circle {
+  scale: 1.06;
+}
+
+.film-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 16px 0 12px;
+  border-radius: var(--radius-pill);
+  background-color: var(--accent-weak);
+  color: var(--color-green-800);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    visibility 0s,
+    scale var(--duration-fast) var(--ease-snap);
+}
+
+.film-chip:active {
+  scale: 0.98;
+}
+
+/* Hidden until the film runs; its space is kept so nothing shifts. */
+.film-chip[data-shown="false"] {
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity var(--duration-record) var(--ease-snap),
+    visibility 0s var(--duration-record);
+}
+
+.film-caption {
+  max-width: 30em;
+  color: var(--color-grey-600);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Phones: icon chips (the label stays the accessible name), the caption below. */
+@media (max-width: 767px) {
+  .film-bar {
+    margin-top: 16px;
+  }
+
+  .film-chip {
+    justify-content: center;
+    width: 44px;
+    padding: 0;
+  }
+
+  .film-chip > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 768px) {
+  .film-bar {
+    flex-wrap: nowrap;
+    margin-top: 8px;
+  }
+
+  .film-caption {
+    text-align: right;
+  }
+}
+
+/* ---------- The film's text equivalent ---------- */
+
+.film-after {
+  padding: 24px 0 80px;
+}
+
+@media (min-width: 1024px) {
+  .film-after {
+    padding-bottom: 128px;
+  }
+}
+
+.film-details,
+.film-details-note {
+  padding-inline: var(--film-tray);
+}
+
+.film-details-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  color: var(--color-grey-700);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  list-style: none;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--ease-snap);
+}
+
+.film-details-summary::-webkit-details-marker {
+  display: none;
+}
+
+.film-details-summary:hover {
+  color: var(--color-ink);
+}
+
+.film-details-chevron {
+  color: var(--color-grey-500);
+  rotate: 90deg;
+  transition: rotate 300ms var(--ease-snap);
+}
+
+.film-details[open] .film-details-chevron {
+  rotate: -90deg;
+}
+
+.film-details-body {
+  max-width: 34em;
+  margin-top: 4px;
+  color: var(--color-grey-800);
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.film-nowrap {
+  white-space: nowrap;
+}
+
+.film-details-note {
+  display: none;
+}
+
+.film-details-note-title {
+  padding-block: 12px 4px;
+  color: var(--color-grey-700);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* Reduced motion (spec S9): the text equivalent is open by default, without JS. */
+@media (prefers-reduced-motion: reduce) {
+  .film-details {
+    display: none;
+  }
+
+  .film-details-note {
+    display: block;
+  }
+}
+
+/* ---------- Desktop motion: the pinned scene ---------- */
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .film {
+    --film-top: var(--nav-clear);
+    --film-bottom: 32px;
+    /* One H2 line at the spec scale (SectionHeading: clamp(30px, 3.4vw, 52px), line-height 1.18). */
+    --film-h2: calc(1.18 * clamp(1.875rem, 3.4vw, 3.25rem));
+    /* Heading + gap, the tray, ticks (12 + 44), controls (8 + 52) and the scene's padding. */
+    --film-fit: calc(var(--film-top) + var(--film-h2) + 24px + 2 * var(--film-tray) + 56px + 60px + var(--film-bottom));
+    --film-core-w: min(
+      calc(86vw - 2 * var(--film-tray)),
+      calc(1200px - 2 * var(--film-tray)),
+      calc((100dvh - var(--film-fit)) * 16 / 9)
+    );
+    /*
+     * The scaled frame never paints over trust or signup. The clip lives here,
+     * never on the pinned scene: overflow on the pin target makes every pin
+     * on/off a layout shift of about 1.0 (CLS).
+     */
+    overflow: clip;
+  }
+
+  /* One line, so the card gets the height (the copy's two lines join with their space). */
+  .film-title {
+    white-space: nowrap;
+  }
+
+  .film-title > span {
+    display: inline;
+  }
+
+  /*
+   * The spacer is a flex column of its own. The pin copies the scene's display (flex) onto it and every
+   * refresh strips that again for a moment; a spacer that flipped between block and flex rebuilt the
+   * scene's boxes, and Chrome counted the visible part of the scene as a layout shift on each refresh
+   * (0.15 to 0.8, a lazy island mounting below was enough) although nothing moved on screen.
+   */
+  .film-pin-spacer {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .film-scene {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* As the spacer's flex item the scene must still span the viewport. */
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    padding: var(--film-top) 0 var(--film-bottom);
+    background-color: var(--color-paper);
+  }
+
+  .film-title {
+    margin-bottom: 24px;
+  }
+
+  .film-after {
+    padding-top: 8px;
+  }
+
+  /*
+   * The heading, the controls and the ticks leave and land as wipes, never at a
+   * partial opacity, so their text keeps its full contrast in every scrolled
+   * state. Once wiped out they also drop to opacity 0 (so nothing reads them
+   * against the frame passing behind), and they are back at full opacity, still
+   * clipped, before the wipe in starts. At rest the clip clears focus rings and
+   * the chapter stills (above the ticks). The heading folds up away from the
+   * circle below it, the controls fold down away from it, and the timeline
+   * draws in from its start. Anything that holds focus stays in (FilmMotion
+   * lands the card on focus).
+   */
+  .film-title,
+  .film-bar {
+    clip-path: inset(-16px);
+    transition:
+      clip-path var(--duration-slow) var(--ease-snap),
+      opacity 0s;
+  }
+
+  [data-film-chrome-away] .film-title,
+  [data-film-chrome-away] .film-bar:not(:focus-within),
+  [data-film-ticks-away] .film-chapters:not(:focus-within) {
+    opacity: 0;
+    transition:
+      clip-path var(--duration-slow) var(--ease-snap),
+      opacity 0s var(--duration-slow);
+  }
+
+  [data-film-chrome-away] .film-title {
+    clip-path: inset(-16px -16px calc(100% + 16px) -16px);
+  }
+
+  [data-film-chrome-away] .film-bar:not(:focus-within) {
+    clip-path: inset(calc(100% + 16px) -16px -16px -16px);
+  }
+
+  .film-chapters {
+    clip-path: inset(-200px -24px -24px -24px);
+    transition:
+      clip-path var(--duration-slow) var(--ease-snap),
+      opacity 0s;
+  }
+
+  [data-film-ticks-away] .film-chapters:not(:focus-within) {
+    clip-path: inset(-200px calc(100% + 24px) -24px -24px);
+  }
+
+  /*
+   * Before FilmMotion builds the pin (no JS yet, or the first frames of a
+   * deep link): the pin's length is already reserved and the scene already
+   * holds at the top, so building the pin moves nothing below or on screen.
+   * GSAP marks our spacer .pin-spacer when it adopts it and owns its size from
+   * then on (refreshes revert to these styles with the class still on).
+   * A jump to #film lands where FilmMotion's inline scroll-margin-top lands
+   * it (on the settled card): 0.55 viewports of lead, then 0.79 of the
+   * 1.35-viewport reveal.
+   */
+  .film:has(.film-pin-spacer:not(.pin-spacer)) {
+    scroll-margin-top: calc((0.55 - 1.35 * 0.79) * 100vh);
+  }
+
+  .film-pin-spacer:not(.pin-spacer) > .film-scene {
+    position: sticky;
+    top: 0;
+  }
+
+  /* In the content box, not padding: a sticky box only travels inside its parent's content box. */
+  .film-pin-spacer:not(.pin-spacer)::after {
+    content: "";
+    display: block;
+    height: 80vh;
+  }
+}
