@@ -1,0 +1,1002 @@
+/*
+ * S6 receipt (WP-15). Section layout, the slip's paper faces, the static slip
+ * and the what-if sample. Colours are the record and morning tokens of spec
+ * 4.1 only: paper #F5F4EE, ink #101010, greys, deep green #0C483E, weak green
+ * rgb(12 72 62 / 0.12), mint #F2FFE8 for the guidance card. No red anywhere.
+ *
+ * The slip is a size container (slip). Its geometry mirrors slip-geometry.ts:
+ * from 420px wide the stub (120px) stands on the right of the body, below
+ * that the stub (96px) runs under the body. Change both together.
+ */
+
+/* ---------- Layout ---------- */
+
+#receipt {
+  overflow-anchor: none;
+}
+
+.receipt-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  overflow-anchor: none;
+}
+
+.receipt-slip-cell,
+.receipt-whatif-cell {
+  width: 100%;
+  max-width: 560px;
+}
+
+.receipt-slip-cell {
+  margin-top: 40px;
+  /*
+   * The auto-tear plays on screen now, so the falling stub can cross the
+   * section's bottom edge: keep it above the next section's ground. Below the
+   * fixed chrome (nav, record rail, record pill).
+   */
+  position: relative;
+  z-index: 1;
+}
+
+.receipt-whatif-cell {
+  container: whatif / inline-size;
+}
+
+/*
+ * Phone-width slip (under about 474px): it auto-tears as its bottom reaches
+ * 60% of the viewport (ReceiptProvider). 120px more room under it keeps the
+ * section's bottom below the centre line for about 290px of scroll after the
+ * tear, so the 08:49 beat holds before roles takes it. Static, so no shift.
+ */
+@media (max-width: 479.98px) {
+  .receipt-grid {
+    padding-bottom: 120px;
+  }
+}
+
+.receipt-tilt {
+  transform-origin: 50% 100%;
+}
+
+/*
+ * A pulled stub stays in the reader's hand until it tears, so it may cross
+ * the copy column (ReceiptTear). The copy, or the open sample beside a wide
+ * slip, steps aside to 12% while the stub is near it (data-stub-over), and
+ * from the first pull from 1024px up, where the gutter is only about 50px.
+ * The slip's cell (z-index 1) paints the stub above it. It comes back once
+ * the stub is home or gone, after a short wait. These rules come before the
+ * open sample's, which wins a tie and keeps the copy at 0 while it is open.
+ */
+.receipt-copy,
+.receipt-whatif-cell {
+  transition: opacity 400ms var(--ease-out-expo) 280ms;
+}
+
+.receipt-grid:has(.slip-tear[data-stub-over]) :is(.receipt-copy, .receipt-whatif-cell) {
+  opacity: 0.12;
+  transition:
+    opacity 160ms linear,
+    translate 700ms var(--ease-snap) 240ms;
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .receipt-grid:has(.slip-ticket[data-grabbing]) :is(.receipt-copy, .receipt-whatif-cell) {
+    opacity: 0.12;
+    transition:
+      opacity 160ms linear,
+      translate 700ms var(--ease-snap) 240ms;
+  }
+}
+
+@media (min-width: 1024px) {
+  .receipt-grid {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    column-gap: 24px;
+  }
+
+  .receipt-slip-cell {
+    grid-column: 1 / span 5;
+    grid-row: 1;
+    align-self: start;
+    margin-top: 0;
+  }
+
+  .receipt-copy {
+    grid-column: 6 / span 4;
+    grid-row: 1;
+    align-self: center;
+    padding-left: clamp(0px, 2.2vw, 40px);
+  }
+
+  /*
+   * The what-if sample takes the copy column's place beside the slip, so it
+   * opens in view next to the row that opened it. The copy steps aside while
+   * it is open. Top-aligned with the slip, not centred: the difference block
+   * opens and closes under the stepper as the count changes, so the sheet only
+   * grows and shrinks from its bottom and the stepper never moves under the
+   * pointer. Opened one short, the sheet is taller than the slip anyway.
+   */
+  .receipt-whatif-cell {
+    grid-column: 6 / span 4;
+    grid-row: 1;
+    align-self: start;
+    padding-left: clamp(0px, 2.2vw, 40px);
+  }
+
+  .receipt-copy {
+    transition:
+      opacity 400ms var(--ease-out-expo) 280ms;
+  }
+
+  /* Only once the sheet is there (its lazy chunk may still be loading on a first click). */
+  [data-whatif-open] .receipt-grid:has(.whatif) .receipt-copy {
+    opacity: 0;
+    transition:
+      opacity 200ms var(--ease-out-expo);
+    pointer-events: none;
+  }
+}
+
+@media (min-width: 1024px) and (prefers-reduced-motion: reduce) {
+  .receipt-copy,
+  [data-whatif-open] .receipt-grid:has(.whatif) .receipt-copy {
+    transition: none;
+  }
+}
+
+/*
+ * After a reader's tear the slip is 120px narrower (the stub is gone), so the
+ * copy follows and keeps the pair together: it glides left by the stub's width
+ * less its own inset, once the stub has left. A drag reports the tear when its
+ * stub is already gone; the button's contained drop (below) takes 820ms in
+ * the stub's own column, which the copy moves into, so it waits for it. On an
+ * auto-tear the copy holds still: the reader is scrolling through it, often
+ * mid-line. A transform only, so nothing reflows. Reduced motion keeps the
+ * copy in place.
+ */
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  .receipt-copy {
+    transition:
+      opacity 400ms var(--ease-out-expo) 280ms,
+      translate 700ms var(--ease-snap);
+  }
+
+  [data-receipt-torn="drag"] .receipt-copy,
+  [data-receipt-torn="button"] .receipt-copy {
+    translate: calc(-120px + clamp(0px, 2.2vw, 40px)) 0;
+    transition:
+      opacity 400ms var(--ease-out-expo) 280ms,
+      translate 700ms var(--ease-snap) 240ms;
+  }
+
+  [data-receipt-torn="button"] .receipt-copy {
+    transition:
+      opacity 400ms var(--ease-out-expo) 280ms,
+      translate 700ms var(--ease-snap) 820ms;
+  }
+}
+
+/* ---------- The slip ---------- */
+
+.receipt-slip {
+  position: relative;
+  container: slip / inline-size;
+}
+
+/* The TearTicket leaf lays itself out invisibly until the static slip hands over. */
+.slip-tear[data-hidden] {
+  position: absolute;
+  inset: 0 0 auto;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/*
+ * TearTicket's stub layer (ReceiptTear STUB_LAYER: it holds the clipped stub
+ * surface, which holds the stub face).
+ *
+ * Contained drop (a slip torn by its button, Enter or the scroll; ReceiptTear
+ * sets data-stub-drop to the slip's orientation). The animation outranks the
+ * inline transform and opacity TearTicket writes every frame, and fades the
+ * stub out before TearTicket hides it (about 890ms).
+ * - Wide slip (horizontal): the top of the stub peels off the cut around the
+ *   perforation's bottom end (--slip-hinge, in ticket px), about 23px at its
+ *   top right corner, which stays inside the 46px or more between the slip
+ *   and the copy column. Then the stub falls inside its own column, drifting
+ *   left (never right), and is gone within 740ms, before it reaches the next
+ *   section.
+ * - Phone-width slip (vertical, stub under the body): the stub's left end
+ *   peels down around the cut's right end (--slip-hinge), about 9px, then it
+ *   falls straight with a small turn and is gone by 70% (575ms), its lowest
+ *   corner about 100px down. Its last, invisible frame is 140px down (about
+ *   165px at that corner), inside the 280px (120px + 80px + 80px) above the
+ *   next section's h2. The drop moves with the page, so a reader scrolling on
+ *   carries it along.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .slip-tear[data-stub-drop] div:has(> div > div > .slip-stub) {
+    /* The next section's h2 starts 160px below the slip (80px + 80px), 256px from 1024px (128px + 128px). */
+    --slip-drop: 140px;
+    transform-origin: var(--slip-hinge) !important;
+    animation: slip-stub-drop 820ms both;
+  }
+
+  @media (min-width: 1024px) {
+    .slip-tear[data-stub-drop] div:has(> div > div > .slip-stub) {
+      --slip-drop: 240px;
+    }
+  }
+
+  /* After the wide rules: the same specificity, so this wins at any width. */
+  .slip-tear[data-stub-drop="vertical"] div:has(> div > div > .slip-stub) {
+    --slip-drop: 140px;
+    animation-name: slip-stub-fall;
+  }
+}
+
+/*
+ * A dragged or swiped stub let go (TearTicket's own drop): ReceiptTear fades
+ * it by how far it has fallen, so it is gone within about 110px of fall. On
+ * the layer's children, so TearTicket's own fade (on the layer) multiplies in.
+ */
+.slip-tear div:has(> div > div > .slip-stub) > * {
+  opacity: var(--slip-stub-fling, 1);
+}
+
+@keyframes slip-stub-drop {
+  0% {
+    transform: none;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.75, 0.4);
+  }
+
+  24% {
+    transform: translateY(3px) rotate(2.5deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.5, 0, 0.85, 0.5);
+  }
+
+  40% {
+    opacity: 1;
+    animation-timing-function: linear;
+  }
+
+  /* Gone before it has fallen 85% of the way, so it never reaches the next section's h2. */
+  90%,
+  100% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-16px, var(--slip-drop)) rotate(-3deg);
+  }
+}
+
+/* Phone-width stub: peel at the left end, then a straight fall, gone by 70%. */
+@keyframes slip-stub-fall {
+  0% {
+    transform: none;
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.75, 0.4);
+  }
+
+  22% {
+    transform: translateY(2px) rotate(-1.5deg);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.3, 0, 0.7, 0.75);
+  }
+
+  38% {
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.45, 0, 0.9, 0.6);
+  }
+
+  70%,
+  100% {
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(var(--slip-drop)) rotate(-4deg);
+  }
+}
+
+/* Static slip (server HTML, no JS, before the leaf loads). Same faces, CSS perforation. */
+.slip-static {
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0 1px 1px rgb(7 35 28 / 0.08)) drop-shadow(0 18px 28px rgb(7 35 28 / 0.17));
+}
+
+.slip-static-body,
+.slip-static-stub {
+  background: #f5f4ee;
+  border: 1px solid #d7d7d7;
+}
+
+.slip-static-body {
+  border-bottom: 0;
+  border-radius: 24px 24px 0 0;
+  mask: radial-gradient(circle 2.5px at 50% 100%, #0000 98%, #000) 0 0 / 12px 100% repeat-x;
+}
+
+.slip-static-stub {
+  height: 96px;
+  border-top: 0;
+  border-radius: 0 0 24px 24px;
+  mask: radial-gradient(circle 2.5px at 50% 0, #0000 98%, #000) 0 0 / 12px 100% repeat-x;
+}
+
+.slip-static[data-torn] .slip-static-stub {
+  visibility: hidden;
+}
+
+@container slip (min-width: 420px) {
+  .slip-static {
+    flex-direction: row;
+  }
+
+  .slip-static-body {
+    flex: 1;
+    min-width: 0;
+    border-bottom: 1px solid #d7d7d7;
+    border-right: 0;
+    border-radius: 24px 0 0 24px;
+    mask: radial-gradient(circle 2.5px at 100% 50%, #0000 98%, #000) 0 0 / 100% 12px repeat-y;
+  }
+
+  .slip-static-stub {
+    flex: none;
+    width: 120px;
+    height: auto;
+    min-height: 320px;
+    border-top: 1px solid #d7d7d7;
+    border-left: 0;
+    border-radius: 0 24px 24px 0;
+    mask: radial-gradient(circle 2.5px at 0 50%, #0000 98%, #000) 0 0 / 100% 12px repeat-y;
+  }
+}
+
+/* ---------- Body face ---------- */
+
+.slip-body {
+  --slip-pad: 20px;
+  padding: 22px var(--slip-pad) 20px;
+  color: #101010;
+  /* Spec S6 mobile: the slip scrolls the page vertically; the stub takes sideways swipes. */
+  touch-action: pan-y pinch-zoom;
+}
+
+@container slip (min-width: 420px) {
+  .slip-body {
+    --slip-pad: 26px;
+    padding-top: 26px;
+    padding-bottom: 24px;
+  }
+}
+
+.slip-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: -6px -8px;
+  min-height: 28px;
+  padding: 6px 8px;
+  border-radius: 12px;
+}
+
+.slip-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #484848;
+}
+
+/* 수령 확인 badge: weak green, pops in on the tear (scale 0.8 to 1, 400ms, overshoot). */
+.slip-badge {
+  flex: none;
+  border-radius: 9999px;
+  background: rgb(12 72 62 / 0.12);
+  color: #0c483e;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 3px 10px;
+  opacity: 0;
+  transform: scale(0.8);
+  visibility: hidden;
+  transition:
+    opacity 200ms var(--ease-out-expo),
+    transform 400ms var(--ease-overshoot),
+    visibility 0s linear 400ms;
+}
+
+.slip-badge[data-on] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 200ms var(--ease-out-expo),
+    transform 400ms var(--ease-overshoot),
+    visibility 0s;
+}
+
+.slip-heading {
+  margin-top: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+@container slip (min-width: 420px) {
+  .slip-heading {
+    font-size: 24px;
+  }
+}
+
+/* Receipt sections, cut by dashed rules like a printed slip. */
+.slip-block {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed #d7d7d7;
+}
+
+.slip-party {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.slip-meta {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #636363;
+}
+
+.slip-label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #484848;
+}
+
+.slip-ledger {
+  margin-top: 8px;
+}
+
+.slip-batch,
+.slip-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.slip-batch {
+  padding-bottom: 10px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid #e4e3da;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.slip-batch dt {
+  color: #2d2d2d;
+}
+
+.slip-batch dd {
+  flex: none;
+  font-weight: 700;
+}
+
+/* 이번 확인 and 수령 확인됨 stacked in one cell (as wide as the longer); on the tear one fades out, then the other in. */
+.slip-batch-qty {
+  display: grid;
+  justify-items: end;
+}
+
+.slip-batch-qty > span {
+  grid-area: 1 / 1;
+  transition:
+    opacity 320ms var(--ease-out-expo) 160ms,
+    visibility 0s linear 160ms;
+}
+
+.slip-batch-qty > span:not([data-on]) {
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 160ms var(--ease-out-expo),
+    visibility 0s linear 160ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slip-batch-qty > span,
+  .slip-batch-qty > span:not([data-on]) {
+    transition: none;
+  }
+}
+
+.slip-row {
+  padding-block: 3px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.slip-row dt {
+  color: #484848;
+}
+
+.slip-row dd {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+/* Tinted guidance card (mint, as in the app). */
+.slip-mint {
+  margin-top: 18px;
+  border-radius: 24px;
+  background: #f2ffe8;
+  padding: 16px 18px;
+}
+
+.slip-mint-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.slip-mint-body {
+  margin-top: 2px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #484848;
+}
+
+.slip-issue {
+  margin-top: 12px;
+  display: flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #d7d7d7;
+  border-radius: 9999px;
+  padding: 0 16px 0 20px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d2d2d;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 240ms var(--ease-out-expo),
+    border-color 240ms var(--ease-out-expo),
+    transform 160ms var(--ease-out-expo);
+}
+
+.slip-issue:hover {
+  background-color: rgb(16 16 16 / 0.04);
+  border-color: #bfbfbf;
+}
+
+.slip-issue:active {
+  transform: scale(0.98);
+}
+
+.slip-issue[aria-expanded="true"] {
+  border-color: #0c483e;
+  color: #0c483e;
+}
+
+/* After the tear: the app's own refusal, in the row's box (two lines at most, so the slip keeps its height). */
+.slip-issue-closed {
+  border-style: dashed;
+  padding: 4px 20px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #636363;
+  cursor: default;
+  text-wrap: pretty;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slip-issue-closed {
+    animation: slip-issue-closed-in 400ms var(--ease-out-expo) both;
+  }
+}
+
+@keyframes slip-issue-closed-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Focus scrolls (Tab, the keyboard tear) clear the 72px nav and the mobile record pill. */
+.slip-head,
+.slip-issue,
+.slip-stub-button,
+.whatif-step,
+.whatif-back {
+  scroll-margin-block: 96px 88px;
+}
+
+.slip-issue-chevron {
+  flex: none;
+  color: #808080;
+  transition: transform 700ms var(--ease-snap);
+}
+
+.slip-issue[aria-expanded="true"] .slip-issue-chevron {
+  color: #0c483e;
+  transform: rotate(90deg);
+}
+
+/* ---------- Stub face ---------- */
+
+.slip-stub {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  padding: 0 20px 0 46px;
+  /* Vertical page scroll stays native; a sideways swipe tears (TearTicket stubTouchAction). */
+  touch-action: pan-y pinch-zoom;
+}
+
+/*
+ * The ink dot: the grip at the perforation's end, tucked against the cut just
+ * past the end notch (the stub is clipped at the cut, so the dot sits beside
+ * it rather than on it). Narrow slip: the left end of the horizontal cut.
+ */
+.slip-grip {
+  position: absolute;
+  top: 9px;
+  left: 13px;
+}
+
+.slip-stub-button {
+  display: inline-flex;
+  flex: 1;
+  height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  border-radius: 9999px;
+  background: #0c483e;
+  color: #f5f4ee;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+  transition:
+    background-color 240ms var(--ease-out-expo),
+    transform 160ms var(--ease-out-expo);
+}
+
+.slip-stub-button:hover {
+  background: #093a32;
+}
+
+.slip-stub-button:active {
+  transform: scale(0.98);
+}
+
+.slip-stub-count {
+  font-variant-numeric: tabular-nums;
+}
+
+@container slip (min-width: 420px) {
+  .slip-stub {
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 0 28px;
+  }
+
+  .slip-grip {
+    top: 13px;
+    left: 9px;
+  }
+
+  .slip-stub-button {
+    flex: none;
+    width: 76px;
+    height: auto;
+    min-height: 176px;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 0;
+  }
+
+  .slip-stub-count {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  .slip-stub-action {
+    font-size: 14px;
+    line-height: 1.35;
+    text-align: center;
+  }
+}
+
+/* ---------- What-if sample ---------- */
+
+.whatif {
+  overflow: hidden;
+  overflow-anchor: none;
+}
+
+/* Below 1024px the sample opens under the slip; under a wide slip it lines up with the body. */
+@media (max-width: 1023.98px) {
+  .whatif-sheet {
+    margin-top: 20px;
+  }
+
+  @container whatif (min-width: 420px) {
+    .whatif {
+      margin-right: 120px;
+    }
+  }
+}
+
+/* A sample surface, not a record: dashed edge, no shadow. */
+.whatif-sheet {
+  container: whatif-sheet / inline-size;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px dashed #a3a3a3;
+  border-radius: 24px;
+  background: rgb(245 244 238 / 0.6);
+  padding: 20px;
+  color: #101010;
+}
+
+@container whatif (min-width: 420px) {
+  .whatif-sheet {
+    padding: 24px 26px;
+  }
+}
+
+.whatif-label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #0c483e;
+}
+
+.whatif-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 16px;
+}
+
+.whatif-field-label {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.whatif-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border-radius: 9999px;
+  background: #e4e3da;
+  padding: 4px;
+}
+
+.whatif-step {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 9999px;
+  background: #f5f4ee;
+  color: #101010;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 240ms var(--ease-out-expo),
+    transform 160ms var(--ease-out-expo);
+}
+
+.whatif-step:hover {
+  background: #ffffff;
+}
+
+.whatif-step:active {
+  transform: scale(0.96);
+}
+
+.whatif-step[aria-disabled="true"] {
+  background: transparent;
+  color: #a3a3a3;
+  cursor: default;
+  transform: none;
+}
+
+.whatif-value {
+  display: inline-flex;
+  min-width: 56px;
+  align-items: baseline;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.whatif-digit {
+  position: relative;
+  height: 1.3em;
+  overflow: hidden;
+}
+
+.whatif-digit-face {
+  display: block;
+}
+
+.whatif-unit {
+  margin-left: 2px;
+  font-size: 0.55em;
+  font-weight: 400;
+  color: #636363;
+}
+
+/* The app's 수량 차이 설명 field as a sample outline: label above, an empty input shape. */
+.whatif-reason {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.whatif-input {
+  height: 44px;
+  border: 1px dashed #a3a3a3;
+  border-radius: 16px;
+}
+
+.whatif-gap {
+  overflow: hidden;
+}
+
+.whatif-gap-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.whatif-helper {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #484848;
+}
+
+/* The required reason with a difference: the form's error style (spec 10), ink and a deep-green rule. */
+.whatif-required {
+  border-left: 2px solid #0c483e;
+  padding-left: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #101010;
+}
+
+/* The record this would write: a dashed ghost of a record card. */
+.whatif-ghost {
+  border: 1px dashed #808080;
+  border-radius: 24px;
+  background: #f5f4ee;
+  padding: 14px 16px;
+}
+
+.whatif-ghost-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #636363;
+}
+
+.whatif-chip {
+  border: 1px solid #bfbfbf;
+  border-radius: 9999px;
+  padding: 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.7;
+  color: #484848;
+}
+
+.whatif-ghost-title {
+  margin-top: 4px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/*
+ * 문제 확인 중 → 조치 완료 · 해결 확인 대기 → 해결 확인: outlined ink pills in
+ * one running line, as the app reads it. Each arrow trails its pill, so a
+ * wrap breaks after an arrow and a line never starts with one (a list-like
+ * gutter of arrows read as bullets).
+ */
+.whatif-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.whatif-step-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.whatif-arrow {
+  width: 14px;
+  font-size: 14px;
+  text-align: center;
+  color: #636363;
+}
+
+.whatif-pill {
+  border: 1px solid #101010;
+  border-radius: 9999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.5;
+  white-space: nowrap;
+}
+
+.whatif-resolver {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #2d2d2d;
+}
+
+/* Site-built status: ink with a 2px deep-green rule. */
+.whatif-note {
+  border-left: 2px solid #0c483e;
+  padding-left: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.whatif-back {
+  align-self: flex-start;
+  min-height: 44px;
+  border-radius: 9999px;
+  background: rgb(12 72 62 / 0.12);
+  padding: 0 20px;
+  color: #0c483e;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 240ms var(--ease-out-expo),
+    transform 160ms var(--ease-out-expo);
+}
+
+.whatif-back:hover {
+  background: rgb(12 72 62 / 0.18);
+}
+
+.whatif-back:active {
+  transform: scale(0.98);
+}
