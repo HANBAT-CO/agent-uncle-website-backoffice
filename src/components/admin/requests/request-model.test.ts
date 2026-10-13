@@ -51,6 +51,14 @@ describe("requestTabs (screens 10.9 tabs with counts from the labels facet)", ()
     expect(requestTabs(LABELS, "").some((tab) => tab.key === "attention")).toBe(false);
     expect(requestTabs(LABELS, "attention").at(-1)).toEqual({ key: "attention", label: "확인 필요", count: 10 });
   });
+
+  it("shows the dashboard's full in-flight count only for the active view and preserves the narrower progress tab", () => {
+    expect(requestTabs(LABELS, "").some((tab) => tab.key === "active")).toBe(false);
+    const tabs = requestTabs(LABELS, "active");
+    expect(tabs.at(-1)).toEqual({ key: "active", label: "진행 중 전체", count: 30 });
+    expect(tabs.find((tab) => tab.key === "progress")?.count).toBe(11);
+    expect(requestTabs({}, "active").at(-1)?.count).toBe(0);
+  });
 });
 
 describe("조건 (single select) → p_attention", () => {

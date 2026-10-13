@@ -1,5 +1,5 @@
 import { isKstDay, qty } from "@/lib/admin/format";
-import { REQUEST_TABS } from "@/lib/admin/labels";
+import { ACTIVE_REQUEST_LABELS, REQUEST_TABS } from "@/lib/admin/labels";
 import type { RequestAttention } from "@/lib/admin/rpc/enums";
 
 /*
@@ -12,6 +12,7 @@ export type RequestTab = { key: string; label: string; count: number };
 
 /** The dashboard tile 확인이 필요한 요청 opens this view (`view=attention`): 답변 필요 + 문제 확인 중. */
 export const ATTENTION_VIEW = { key: "attention", label: "확인 필요", labels: ["답변 필요", "문제 확인 중"] } as const;
+export const ACTIVE_VIEW = { key: "active", label: "진행 중 전체", labels: ACTIVE_REQUEST_LABELS } as const;
 
 function sum(facet: Record<string, number>, labels: readonly string[]): number {
   return labels.reduce((total, label) => total + (facet[label] ?? 0), 0);
@@ -19,13 +20,14 @@ function sum(facet: Record<string, number>, labels: readonly string[]): number {
 
 /**
  * Tabs with counts from the RPC's `labels` facet (every label of the rows
- * matching the other filters). 전체 is every label; `attention` shows as an
- * extra tab only while it is the selected view.
+ * matching the other filters). 전체 is every label; aggregate dashboard
+ * views (`attention`, `active`) appear only while selected.
  */
 export function requestTabs(facet: Record<string, number>, view: string | null | undefined): RequestTab[] {
   const all = Object.values(facet).reduce((total, n) => total + n, 0);
   const tabs = REQUEST_TABS.map((tab) => ({ key: tab.key, label: tab.label, count: tab.labels ? sum(facet, tab.labels) : all }));
   if (view === ATTENTION_VIEW.key) tabs.push({ key: ATTENTION_VIEW.key, label: ATTENTION_VIEW.label, count: sum(facet, ATTENTION_VIEW.labels) });
+  if (view === ACTIVE_VIEW.key) tabs.push({ key: ACTIVE_VIEW.key, label: ACTIVE_VIEW.label, count: sum(facet, ACTIVE_VIEW.labels) });
   return tabs;
 }
 

@@ -1,4 +1,4 @@
-import type { RequestLabel } from "@/lib/admin/labels";
+import { ACTIVE_REQUEST_LABELS, type RequestLabel } from "@/lib/admin/labels";
 
 /*
  * 요청 단계 (screens 10.5): the twelve request labels folded into four
@@ -11,7 +11,7 @@ export type StageKey = (typeof STAGE_KEYS)[number];
 
 export const STAGE_MEMBERS: Record<StageKey, readonly RequestLabel[]> = {
   "확인 대기": ["확인 대기"],
-  "진행 중": ["진행 중", "픽업 완료", "미송 대기", "미송 재확인", "답변 필요", "변경·취소 협의 중", "문제 확인 중"],
+  "진행 중": ACTIVE_REQUEST_LABELS,
   "수령 대기": ["수령 대기"],
   완료: ["완료"],
 };

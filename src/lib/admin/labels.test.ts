@@ -79,6 +79,12 @@ describe("request labels", () => {
     expect(requestLabelsForView("unknown-view")).toBeNull();
     expect(requestLabelsForView("progress")).toEqual(["진행 중", "픽업 완료", "미송 대기"]);
   });
+
+  it("view=active includes every in-flight request from the dashboard without pending, receipt, or closed requests", () => {
+    expect(requestLabelsForView("active")).toEqual([
+      "진행 중", "픽업 완료", "미송 대기", "미송 재확인", "답변 필요", "변경·취소 협의 중", "문제 확인 중",
+    ]);
+  });
 });
 
 describe("violation labels", () => {

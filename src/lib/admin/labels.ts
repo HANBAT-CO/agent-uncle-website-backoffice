@@ -78,10 +78,16 @@ export const REQUEST_TABS: { key: string; label: string; labels: RequestLabel[] 
   { key: "closed", label: "종료", labels: ["거절", "취소 종료"] },
 ];
 
-/** `view=attention` (dashboard tile 확인이 필요한 요청) maps to 답변 필요 + 문제 확인 중. */
+/** All in-flight labels shown together in the dashboard's 진행 중 stage. */
+export const ACTIVE_REQUEST_LABELS: RequestLabel[] = [
+  "진행 중", "픽업 완료", "미송 대기", "미송 재확인", "답변 필요", "변경·취소 협의 중", "문제 확인 중",
+];
+
+/** Aggregate dashboard views are additional to the mutually exclusive list tabs. */
 const REQUEST_VIEWS: Record<string, RequestLabel[] | null> = {
   ...Object.fromEntries(REQUEST_TABS.map((tab) => [tab.key, tab.labels])),
   attention: ["답변 필요", "문제 확인 중"],
+  active: ACTIVE_REQUEST_LABELS,
 };
 
 /** `p_labels` for a request view key; null means every label. */
