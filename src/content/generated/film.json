@@ -1,0 +1,123 @@
+{
+  "ready": true,
+  "duration": 51.8,
+  "chapters": [
+    {
+      "label": "연결",
+      "start": 0
+    },
+    {
+      "label": "요청",
+      "start": 6.8
+    },
+    {
+      "label": "수락",
+      "start": 13.3
+    },
+    {
+      "label": "확보",
+      "start": 17.3
+    },
+    {
+      "label": "미송",
+      "start": 22.2
+    },
+    {
+      "label": "전달",
+      "start": 31.8
+    },
+    {
+      "label": "수령",
+      "start": 37.3
+    },
+    {
+      "label": "기록",
+      "start": 42.3
+    }
+  ],
+  "files": {
+    "master1080": "/media/film/promo-16x9-1080.mp4",
+    "master720": "/media/film/promo-16x9-720.mp4",
+    "social720": "/media/film/promo-9x16-720.mp4",
+    "loop720": "/media/film/loop-720.mp4",
+    "loop1080": "/media/film/loop-1080.mp4",
+    "posterEnd": {
+      "alt": "사입삼춘 홍보 영상의 마지막 장면",
+      "variants": [
+        {
+          "width": 800,
+          "height": 450,
+          "avif": "/media/film/poster-end-800.avif",
+          "webp": "/media/film/poster-end-800.webp"
+        },
+        {
+          "width": 1600,
+          "height": 900,
+          "avif": "/media/film/poster-end-1600.avif",
+          "webp": "/media/film/poster-end-1600.webp"
+        }
+      ]
+    },
+    "posterSocialEnd": {
+      "alt": "사입삼춘 홍보 영상의 마지막 장면",
+      "variants": [
+        {
+          "width": 540,
+          "height": 960,
+          "avif": "/media/film/poster-9x16-end-540.avif",
+          "webp": "/media/film/poster-9x16-end-540.webp"
+        },
+        {
+          "width": 1080,
+          "height": 1920,
+          "avif": "/media/film/poster-9x16-end-1080.avif",
+          "webp": "/media/film/poster-9x16-end-1080.webp"
+        }
+      ]
+    },
+    "posterLoop": {
+      "alt": "깊은 초록 격자 배경 위에 요청 10 · 확보 0 · 전달 0 · 수령 0 숫자가 놓인 장면",
+      "variants": [
+        {
+          "width": 800,
+          "height": 450,
+          "avif": "/media/film/poster-loop-800.avif",
+          "webp": "/media/film/poster-loop-800.webp"
+        },
+        {
+          "width": 1600,
+          "height": 900,
+          "avif": "/media/film/poster-loop-1600.avif",
+          "webp": "/media/film/poster-loop-1600.webp"
+        }
+      ]
+    },
+    "posterLoopSocial": {
+      "alt": "깊은 초록 격자 배경 위에 요청 10 · 확보 0 · 전달 0 · 수령 0 숫자가 세로 화면에 맞게 잘린 장면",
+      "variants": [
+        {
+          "width": 540,
+          "height": 960,
+          "avif": "/media/film/poster-9x16-loop-540.avif",
+          "webp": "/media/film/poster-9x16-loop-540.webp"
+        },
+        {
+          "width": 1080,
+          "height": 1920,
+          "avif": "/media/film/poster-9x16-loop-1080.avif",
+          "webp": "/media/film/poster-9x16-loop-1080.webp"
+        }
+      ]
+    },
+    "chapterStills": [
+      "/media/film/chapter-0-480.avif",
+      "/media/film/chapter-1-480.avif",
+      "/media/film/chapter-2-480.avif",
+      "/media/film/chapter-3-480.avif",
+      "/media/film/chapter-4-480.avif",
+      "/media/film/chapter-5-480.avif",
+      "/media/film/chapter-6-480.avif",
+      "/media/film/chapter-7-480.avif"
+    ]
+  }
+}
