@@ -1,14 +1,15 @@
 /**
- * Site-wide constants. Strings here are verbatim from the app
- * (.context/brief/product.md section 1); do not paraphrase them.
+ * Brand names and one-liner are verbatim from the app brief, section 1.
+ * Search copy describes the verified product without changing that one-liner.
  */
 
 export const site = {
   name: "사입삼춘",
   englishName: "Agent Uncle",
-  /** Official one-liner: web manifest + <meta description> in the app. */
+  /** Official app one-liner. */
   oneLiner: "사입 요청부터 상품 수령까지 함께 기록해요.",
-  title: "사입삼춘 | 사입 요청부터 상품 수령까지 함께 기록해요",
+  title: "사입삼춘 | 소매업자와 사입삼촌을 위한 사입·미송 관리 앱",
+  description: "사입삼춘은 소매업자와 사입삼촌이 사입 요청, 확보, 미송, 전달, 수령을 함께 기록하는 사입 관리 앱입니다. 거래처와 같은 수량을 확인하고, 미송 재확인일과 회차별 전달 기록을 관리하세요.",
   locale: "ko_KR",
   themeColor: "#0C483E",
 } as const;

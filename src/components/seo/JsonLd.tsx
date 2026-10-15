@@ -6,16 +6,23 @@ import { getSiteUrl, site } from "@/lib/site";
  * SoftwareApplication offers or ratings.
  */
 export function JsonLd() {
+  const origin = getSiteUrl();
   const data = {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: site.name,
     alternateName: site.englishName,
-    url: new URL("/", getSiteUrl()).href,
+    "@id": new URL("/#website", origin).href,
+    url: new URL("/", origin).href,
     inLanguage: "ko-KR",
-    description: site.oneLiner,
+    description: site.description,
   };
 
+  return <StructuredData data={data} />;
+}
+
+/** Server-rendered JSON-LD, shared by the home and guide pages. */
+export function StructuredData({ data }: { data: Record<string, unknown> }) {
   return (
     <script
       type="application/ld+json"

@@ -57,7 +57,7 @@ export const hero = {
   h1: ["사입 요청부터 상품 수령까지", "함께 기록해요."],
   /** Below 768px: 3 lines at 30px. */
   h1Mobile: ["사입 요청부터", "상품 수령까지", "함께 기록해요."],
-  sub: "밤사이 오간 요청, 확보, 미송, 전달을 소매업자와 사입삼촌이 같은 숫자로 확인해요.",
+  sub: "사입삼춘은 소매업자와 사입삼촌이 요청, 확보, 미송, 전달, 수령을 함께 기록하는 사입 관리 앱이에요.",
   ctaPrimary: { label: "사전 신청", href: "#signup" },
   ctaSecondary: { label: "영상 보기", href: "#film" },
   uncle: { name: "동대문 박삼촌", chip: "업무 중 · 요청 마감 23:30" },

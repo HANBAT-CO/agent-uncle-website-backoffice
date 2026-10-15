@@ -15,19 +15,19 @@ export const metadata: Metadata = {
     default: site.title,
     template: `%s | ${site.name}`,
   },
-  description: site.oneLiner,
+  description: site.description,
   applicationName: site.name,
   openGraph: {
     type: "website",
     locale: site.locale,
     siteName: site.name,
     title: site.title,
-    description: site.oneLiner,
+    description: site.description,
   },
   twitter: {
     card: "summary_large_image",
     title: site.title,
-    description: site.oneLiner,
+    description: site.description,
   },
   // App copy contains numbers like 01012345678; keep iOS from auto-linking them.
   formatDetection: { telephone: false, email: false, address: false },

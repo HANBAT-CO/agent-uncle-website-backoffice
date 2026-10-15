@@ -15,12 +15,20 @@ import { TrustSection } from "@/components/sections/trust";
 import { WordsSection } from "@/components/sections/words";
 import { JsonLd } from "@/components/seo/JsonLd";
 import { SECTION_ORDER, type SectionId } from "@/content/story";
-import { MAIN_CONTENT_ID } from "@/lib/site";
+import { MAIN_CONTENT_ID, site } from "@/lib/site";
 
 // The root layout sets no canonical (metadata merges down to every route);
 // the home page owns "/". Indexable: no robots override.
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: site.locale,
+    siteName: site.name,
+    title: site.title,
+    description: site.description,
+    url: "/",
+  },
 };
 
 const MAIN_SECTIONS: Record<Exclude<SectionId, "footer">, ComponentType> = {
