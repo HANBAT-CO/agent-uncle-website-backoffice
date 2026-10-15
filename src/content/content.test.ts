@@ -10,6 +10,7 @@ import * as copy from "./copy";
 import { DISPLAY_800, DISPLAY_900 } from "./copy";
 import filmJson from "./generated/film.json";
 import * as glossary from "./glossary";
+import * as guide from "./guide";
 import * as legal from "./legal";
 import * as media from "./media";
 import { APP_CLIPS, APP_STILLS, FILM } from "./media";
@@ -32,6 +33,7 @@ const CONTENT: Array<[string, unknown]> = [
   ["copy", copy],
   ["story", storyModule],
   ["glossary", glossary],
+  ["guide", guide],
   ["legal", legal],
   ["media", media],
   ["film.json", filmJson],
