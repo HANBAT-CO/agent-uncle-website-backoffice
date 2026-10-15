@@ -34,8 +34,6 @@ export async function LegalDocument({ kind }: { kind: LegalDocumentKind }) {
       <h3 id={document.headings.find((heading) => heading.line === node?.position?.start.line)?.id}>{children}</h3>
     ),
     a: ({ href, children }) => {
-      // README is the author's internal checklist, not a supplied public page.
-      if (href === "README.md") return <span>{children}<small className="legal-internal-note"> (내부 검토 문서)</small></span>;
       const resolved = href === "privacy-policy.md" ? "/privacy" : href === "terms-of-service.md" ? "/terms" : href;
       return <a href={resolved}>{children}</a>;
     },
@@ -72,12 +70,12 @@ export async function LegalDocument({ kind }: { kind: LegalDocumentKind }) {
               <h1 id="legal-title">{document.label}</h1>
               <p className="legal-introduction">{document.introduction}</p>
             </div>
-            <div className="legal-edition"><span>게시 준비용</span><strong>1.0</strong><span>초안 · 시행 전</span></div>
+            <div className="legal-edition"><span>시행본</span><strong>1.0</strong><span>2026. 10. 19. 시행</span></div>
           </div>
           <dl className="legal-metadata">
-            <div><dt>작성·법령 확인 기준일</dt><dd><time dateTime="2026-10-11">2026. 10. 11.</time></dd></div>
-            <div><dt>공고일</dt><dd>미정</dd></div>
-            <div><dt>시행일</dt><dd>미정</dd></div>
+            <div><dt>문서 수정일</dt><dd><time dateTime="2026-10-15">2026. 10. 15.</time></dd></div>
+            <div><dt>공고일</dt><dd><time dateTime="2026-10-19">2026. 10. 19.</time></dd></div>
+            <div><dt>시행일</dt><dd><time dateTime="2026-10-19">2026. 10. 19.</time></dd></div>
           </dl>
         </section>
 

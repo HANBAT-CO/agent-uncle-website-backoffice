@@ -29,7 +29,7 @@ export const COMPANY = {
   line: "© 2026 HANBAT & CO.",
 } as const;
 
-/** Application documents. Draft status is displayed on each document page. */
+/** Application documents. Version and effective date are displayed on each page. */
 export const PRIVACY_PAGE = {
   exists: true,
   href: "/privacy",

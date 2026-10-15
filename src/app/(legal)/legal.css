@@ -78,7 +78,6 @@ html[data-legal] {
 .legal-prose blockquote { margin-bottom: 32px; border-left: 3px solid var(--color-green-800); background: var(--color-green-100); padding: 22px 28px; font-size: 13px; line-height: 1.85; color: var(--color-green-900); }
 .legal-prose blockquote p { margin: 0; }
 .legal-prose blockquote strong:first-child { display: inline-block; margin-bottom: 8px; font-size: 15px; }
-.legal-internal-note { font-size: 0.9em; }
 .legal-table-scroll { max-width: 100%; overflow-x: auto; overscroll-behavior-x: contain; margin-block: 24px; border: 1px solid #0c483e26; border-radius: 4px; background: var(--color-surface); }
 .legal-prose table { width: 100%; min-width: 560px; border-collapse: collapse; font-size: 13px; line-height: 1.85; }
 .legal-prose table:has(th:nth-child(4)) { min-width: 720px; }
