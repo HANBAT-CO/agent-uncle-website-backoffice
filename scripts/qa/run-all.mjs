@@ -15,7 +15,7 @@
 // bundle-size reports the initial JS against the 85 KB budget but only
 // fails the run with --strict-bundle (see docs/qa/2026-10-landing.md).
 // Release gates (warnings unless --release): no open LEGAL_BLOCKERS,
-// NEXT_PUBLIC_SITE_URL set to a public origin, LEAD_DRY_RUN unset.
+// resolved site URL is a public HTTPS origin, LEAD_DRY_RUN unset.
 //
 // Concurrent Playwright runs must not share an output folder (they delete
 // each other's artifacts), so the e2e step writes to test-results/qa-e2e.
@@ -24,6 +24,7 @@ import { spawn, spawnSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { getSiteUrl } from "../../src/lib/site.ts";
 import { DEFAULT_QA_URL, ROOT } from "./lib.mjs";
 
 const args = process.argv.slice(2);
@@ -161,12 +162,12 @@ if (!skip.has("release")) {
     blockers.length === 0 ? "no open legal blockers" : `open client blockers: ${blockers.map((b) => `${b.item} (${b.question})`).join("; ")}`,
     { fatal: release },
   );
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "";
-  const publicOrigin = /^https:\/\//.test(siteUrl) && !/localhost|127\.0\.0\.1/.test(siteUrl);
+  const siteUrl = getSiteUrl();
+  const publicOrigin = siteUrl.protocol === "https:" && !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(siteUrl.hostname);
   note(
     "release:site-url",
-    publicOrigin || Boolean(process.env.VERCEL_PROJECT_PRODUCTION_URL),
-    publicOrigin ? `NEXT_PUBLIC_SITE_URL=${siteUrl}` : "NEXT_PUBLIC_SITE_URL is not a public https origin: canonical, sitemap, robots and JSON-LD would point at localhost",
+    publicOrigin,
+    publicOrigin ? `public site origin=${siteUrl.origin}` : "Site origin must use public HTTPS for canonical, sitemap, robots and JSON-LD URLs",
     { fatal: release },
   );
   note("release:lead-dry-run", process.env.LEAD_DRY_RUN !== "1", "LEAD_DRY_RUN must be unset in production (the QA server sets it for itself only)", { fatal: release });
