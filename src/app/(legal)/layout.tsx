@@ -9,7 +9,7 @@ import "./legal.css";
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
   title: { default: site.name, template: `%s | ${site.name}` },
-  // These supplied documents are drafts, with announcement/effective dates TBD.
+  // Keep out of search until the operational items in docs/legal-release-checklist.md are resolved.
   robots: { index: false, follow: true },
   formatDetection: { telephone: false, email: false, address: false },
 };
