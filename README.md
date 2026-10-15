@@ -1,6 +1,6 @@
 # Agent Uncle Website Backoffice
 
-사입삼춘 랜딩(`/`)과 운영 화면(`/admin`)이 함께 있는 Next.js App Router, TypeScript,
+사입삼춘 랜딩(`/`), 이용 안내(`/guide`), 법률 문서와 운영 화면(`/admin`)이 함께 있는 Next.js App Router, TypeScript,
 Tailwind CSS 프로젝트입니다. 개발 서버와 프로덕션 빌드는 Next.js 기본 번들러인
 Turbopack을 사용합니다.
 
@@ -14,12 +14,15 @@ npm run dev
 ```
 
 [http://localhost:3000](http://localhost:3000)에서 확인할 수 있습니다.
-루트 레이아웃은 두 개입니다.
+루트 레이아웃은 네 개입니다.
 
 - 랜딩: `src/app/(site)/` (`layout.tsx`, `page.tsx`, `globals.css`)
 - 운영 화면: `src/app/(admin)/` (`layout.tsx`, `admin.css`, 화면은 `admin/(console)/`)
+- 이용 안내: `src/app/(info)/` (`layout.tsx`, `guide.css`, 화면은 `guide/`)
+- 법률 문서: `src/app/(legal)/` (`/privacy`, `/terms`)
 
-둘은 CSS, 폰트, provider를 나누지 않고, `/`와 `/admin` 사이 이동은 전체 페이지 로드예요.
+각 그룹은 별도 루트 레이아웃을 사용하며, 그룹 사이 이동은 전체 페이지 로드예요.
+이용 안내는 랜딩의 기본 스타일과 폰트를 재사용하고 애니메이션 provider 없이 본문을 렌더링해요.
 어떤 경로에도 맞지 않는 주소는 `src/app/global-not-found.tsx`가 보여 줘요.
 `@/*` 경로 별칭은 `src/*`를 가리킵니다.
 
@@ -38,6 +41,17 @@ npm run qa             # 랜딩 QA 전체 (빌드, 색, 대시, e2e, Lighthouse)
 
 Tailwind CSS는 `next.config.ts`의 `@tailwindcss/turbopack` 로더로 연결되어 있어요.
 랜딩은 `src/app/(site)/globals.css`, 운영 화면은 `src/app/(admin)/admin.css`가 진입점이에요.
+
+## 검색과 공유 링크
+
+검색용 대표 주소와 공유 이미지의 기본 도메인은 `https://www.the-saena.ai`예요.
+`NEXT_PUBLIC_SITE_URL`로 변경할 수 있으며, 메타데이터에 반영하려면 해당 값으로 다시 빌드해야 해요.
+Vercel 배포 주소나 프리뷰 주소는 기본 도메인을 대체하지 않아요.
+로컬 주소를 지정하는 것은 메타데이터 검증용이며, 운영 빌드에는 공개 HTTPS 주소를 사용해요.
+
+`/guide`에는 역할별 사용법, 6단계 이용 흐름, 업무 용어와 FAQ 8개가 있어요.
+사이트맵은 `/`와 `/guide`를 포함하며, 법률 문서와 운영 화면은 검색 제외를 유지해요.
+도메인의 현재 연결 상태, 검색 도구 등록과 검증 결과는 [SEO·AEO·GEO 작업 기록](docs/seo-aeo-geo.md)을 참고하세요.
 
 ## 운영 화면 (`/admin`)
 
