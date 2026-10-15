@@ -35,6 +35,7 @@ export const nav = {
     { label: "역할", href: "#roles" },
     { label: "신뢰", href: "#trust" },
     { label: "영상", href: "#film" },
+    { label: "이용 안내", href: "/guide" },
   ],
   cta: { label: "사전 신청", href: "#signup" },
 } as const;
@@ -535,6 +536,7 @@ export const footer = {
     { label: "신뢰", href: "#trust" },
     { label: "영상", href: "#film" },
     { label: "사전 신청", href: "#signup" },
+    { label: "이용 안내", href: "/guide" },
   ],
 } as const;
 
