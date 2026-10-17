@@ -2,6 +2,7 @@ import { AccountLink } from "@/components/admin/common/AccountLink";
 import { KstTime } from "@/components/admin/common/KstTime";
 import { RequestLink } from "@/components/admin/common/RequestLink";
 import { StatusChip } from "@/components/admin/common/StatusChip";
+import { requestUnit } from "@/lib/admin/format";
 import { REQUEST_LABELS } from "@/lib/admin/labels";
 import type { AccountDossier } from "@/lib/admin/rpc/schemas";
 
@@ -48,7 +49,7 @@ export function RequestHistoryTab({
                 <th scope="col" className="h-10 border-b px-3 font-medium">상품 · 옵션</th>
                 <th scope="col" className="h-10 border-b px-3 font-medium">상태</th>
                 <th scope="col" className="h-10 border-b px-3 font-medium">거래처</th>
-                <th scope="col" className="h-10 border-b px-3 text-right font-medium">요청 · 확보 · 전달 · 수령 (장)</th>
+                <th scope="col" className="h-10 border-b px-3 text-right font-medium">요청 · 확보 · 전달 · 수령</th>
                 <th scope="col" className="h-10 border-b px-3 font-medium">요청 시각</th>
                 <th scope="col" className="h-10 border-b px-3 font-medium">최근 처리</th>
               </tr>
@@ -58,7 +59,7 @@ export function RequestHistoryTab({
                 <tr key={request.id} className="h-12">
                   <td className="max-w-80 border-b px-3">
                     <RequestLink id={request.id} className="block truncate">
-                      {[request.product, request.option].filter(Boolean).join(" · ") || "상품 정보 없음"}
+                      {[(request.title || request.product), request.option].filter(Boolean).join(" · ") || "상품 정보 없음"}
                     </RequestLink>
                   </td>
                   <td className="border-b px-3">
@@ -68,7 +69,7 @@ export function RequestHistoryTab({
                     <AccountLink account={request.partner} />
                   </td>
                   <td className="num border-b px-3 text-right whitespace-nowrap">
-                    {[request.ledger.quantity, request.ledger.acquired, request.ledger.delivered, request.ledger.received].join(" · ")}
+                    {[request.ledger.quantity, request.ledger.acquired, request.ledger.delivered, request.ledger.received].join(" · ")} {requestUnit(request.requestType)}
                   </td>
                   <td className="border-b px-3 text-muted-foreground">
                     <KstTime iso={request.createdAt} />

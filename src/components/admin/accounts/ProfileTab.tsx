@@ -1,3 +1,5 @@
+import { randomUUID } from "node:crypto";
+import { RevealForm } from "../workflows/WorkflowForms";
 import { EyeSlashIcon, ListChecksIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { DefinitionList, type DefinitionItem } from "@/components/admin/common/DefinitionList";
@@ -28,6 +30,11 @@ export function ProfileTab({ dossier, masked }: { dossier: AccountDossier; maske
   const missing = account?.complete ? [] : dossier.signup.missing;
 
   const common: DefinitionItem[] = [
+    { term: "닉네임", value: account?.nickname },
+    { term: "공개 코드", value: account?.publicCode },
+    { term: "사입 수수료", value: account?.fee },
+    { term: "정산 계좌", value: account?.bankRegistered ? "등록됨" : "미등록" },
+    { term: "탈퇴 상태", value: account?.deletionPending ? "탈퇴 처리 중" : "해당 없음" },
     { term: "역할", value: account ? roleKindLabel(role) : "앱 계정 없음" },
     { term: "가입 단계", value: <StatusChip label={progress.label} />, hint: stageHint(dossier.signup.stage, progress.label) },
     { term: MISSING_FIELD_LABEL.name, value: account?.name },
@@ -80,6 +87,7 @@ export function ProfileTab({ dossier, masked }: { dossier: AccountDossier; maske
           <span>입력이 남은 항목: {missingLabels(missing)}</span>
         </p>
       ) : null}
+      {!masked && account ? <RevealForm kind="bank" id={account.id} operationId={randomUUID()} /> : null}
       <div className="rounded-xl border bg-card p-5">
         <DefinitionList items={items} columns={2} />
       </div>
