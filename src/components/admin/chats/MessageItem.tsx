@@ -28,11 +28,12 @@ export function MessageItem({ entry, senderName, reason }: { entry: MessageEntry
         <div className="flex w-full max-w-xl items-center gap-3 rounded-2xl border border-border/70 bg-card px-4 py-3">
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <p className="num text-xs text-muted-foreground">
-              {CHAT_COPY.systemLabel} · {entry.time} · {senderName}
+              {CHAT_COPY.systemLabel} · {entry.time}{message.editedAt && !message.deleted ? " · 수정됨" : ""} · {senderName}
             </p>
             <p className="text-sm font-semibold break-words whitespace-pre-wrap text-foreground">{message.body || "-"}</p>
           </div>
-          {message.requestId ? (
+          {message.invoiceId && !message.deleted ? <Link className="text-xs text-primary underline" href={`/admin/billing/${encodeURIComponent(message.invoiceId)}`}>관련 청구서 열기</Link> : null}
+      {message.requestId ? (
             <Link
               href={`/admin/requests/${encodeURIComponent(message.requestId)}`}
               scroll={false}
@@ -48,7 +49,7 @@ export function MessageItem({ entry, senderName, reason }: { entry: MessageEntry
   }
 
   const end = entry.side === "end";
-  const attachments = (message.attachments ?? []).filter(Boolean);
+  const attachments = message.deleted ? [] : (message.attachments ?? []).filter(Boolean);
   return (
     <li data-kind="message" className={cn("flex flex-col gap-1", end ? "items-end" : "items-start")}>
       {entry.showSender ? <span className="px-1 text-xs font-medium text-muted-foreground">{senderName}</span> : null}
@@ -58,12 +59,13 @@ export function MessageItem({ entry, senderName, reason }: { entry: MessageEntry
           end ? "rounded-br-md bg-primary text-primary-foreground" : "rounded-bl-md bg-muted text-foreground",
         )}
       >
-        {message.body ? message.body : attachments.length > 0 ? "사진" : "-"}
+        {message.deleted ? "삭제된 메시지" : message.body ? message.body : attachments.length > 0 ? "사진" : "-"}
       </div>
       {attachments.length > 0 ? <ChatAttachments ids={attachments} reason={reason} alignEnd={end} /> : null}
       <span className="num px-1 text-[0.6875rem] text-muted-foreground">
-        {entry.time} · {message.read ? "읽음" : "안 읽음"}
+        {entry.time}{message.editedAt && !message.deleted ? " · 수정됨" : ""} · {message.read ? "읽음" : "안 읽음"}
       </span>
+      {message.invoiceId && !message.deleted ? <Link className="text-xs text-primary underline" href={`/admin/billing/${encodeURIComponent(message.invoiceId)}`}>관련 청구서 열기</Link> : null}
       {message.requestId ? (
         <Link
           href={`/admin/requests/${encodeURIComponent(message.requestId)}`}

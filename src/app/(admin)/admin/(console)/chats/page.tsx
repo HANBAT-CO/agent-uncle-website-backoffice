@@ -89,7 +89,7 @@ export default async function ChatsPage({ searchParams }: { searchParams: Search
           withAttachments: row.withAttachments,
         }
       : null,
-    requests: pairRequests.map((request) => ({ id: request.id, product: request.product, option: request.option, label: request.label })),
+    requests: pairRequests.map((request) => ({ id: request.id, product: request.title || request.product, option: request.option, label: request.label })),
     requestTotal: pairRequests.length,
   };
   const key = pairKey(pair.a, pair.b);
