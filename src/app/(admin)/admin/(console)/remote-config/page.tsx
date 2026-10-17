@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { AuthNotice } from "@/components/admin/auth/AuthNotice";
 import { PageHeader } from "@/components/admin/common/PageHeader";
 import { RemoteConfigScreen } from "@/components/admin/remote-config/RemoteConfigScreen";
+import { AppReleaseList } from "@/components/admin/remote-config/AppReleaseList";
+import type { WorkflowParams } from "@/components/admin/workflows/WorkflowExplorer";
 import { ErrorState, LIST_ERROR_MESSAGE } from "@/components/admin/states/ErrorState";
 import { verifyAdmin } from "@/lib/admin/dal";
 import { newOperationId } from "@/lib/admin/operation-id";
@@ -19,7 +21,7 @@ const HISTORY_LIMIT = 100;
  * every key. 변경 기록 comes from list_audit (operator+). Postgres checks
  * the write role and the version again on every save.
  */
-export default async function RemoteConfigPage() {
+export default async function RemoteConfigPage({ searchParams }: { searchParams: Promise<WorkflowParams> }) {
   const session = await verifyAdmin();
   const canSeeHistory = hasRole(session.role, "operator");
   const [config, history] = await Promise.all([
@@ -34,7 +36,7 @@ export default async function RemoteConfigPage() {
         description="점검 모드, 최소 지원 버전, 기능 스위치, 고객센터 안내를 바꿔요."
         meta={hasRole(session.role, "operator") ? null : <span>열람자 권한에서는 설정을 볼 수만 있어요.</span>}
       />
-      <AuthNotice>앱이 이 설정을 읽도록 업데이트된 뒤부터 반영돼요. 단, 쓰기 차단과 이용 제한은 서버에서 바로 적용돼요.</AuthNotice>
+      <AuthNotice>원격 설정은 앱이 해당 항목을 읽을 때 반영돼요. 쓰기 차단과 이용 제한은 서버에서 바로 적용되며, 업데이트 안내는 아래 앱 릴리스에서 별도로 확인해요.</AuthNotice>
       {config.ok ? (
         <RemoteConfigScreen
           rows={config.data}
@@ -46,6 +48,7 @@ export default async function RemoteConfigPage() {
       ) : (
         <ErrorState message={config.error.kind === "forbidden" ? config.error.message : LIST_ERROR_MESSAGE} />
       )}
+      <AppReleaseList params={await searchParams} />
     </div>
   );
 }

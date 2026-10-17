@@ -76,7 +76,7 @@ test.describe.serial("원격 설정", () => {
     const page = await asRole("operator");
     await page.goto("/admin/remote-config");
     await expect(page.getByRole("heading", { name: "원격 설정", level: 1 })).toBeVisible();
-    await expect(page.getByText("앱이 이 설정을 읽도록 업데이트된 뒤부터 반영돼요. 단, 쓰기 차단과 이용 제한은 서버에서 바로 적용돼요.")).toBeVisible();
+    await expect(page.getByText("원격 설정은 앱이 해당 항목을 읽을 때 반영돼요. 쓰기 차단과 이용 제한은 서버에서 바로 적용되며, 업데이트 안내는 아래 앱 릴리스에서 별도로 확인해요.")).toBeVisible();
 
     await expect(page.getByTestId("config-locked-maintenance")).toHaveText("관리자만 변경할 수 있어요");
     await expect(page.getByTestId("config-locked-min_app_version")).toHaveText("관리자만 변경할 수 있어요");
