@@ -289,7 +289,7 @@ export function CommandPalette({ role }: { role: AdminRole }) {
           {requests.length > 0 ? (
             <CommandGroup heading="요청" className={groupClass}>
               {requests.map((request) => {
-                const label = joinDot([request.product, request.option]) || "상품명 없음";
+                const label = joinDot([(request.title || request.product), request.option]) || "상품명 없음";
                 return (
                   <CommandItem
                     key={`request:${request.id}`}

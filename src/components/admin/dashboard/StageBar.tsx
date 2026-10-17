@@ -11,7 +11,7 @@ const DETAILS: Record<StageKey, { title: string; description: string; view: stri
   "확인 대기": { title: "첫 확인을 기다리고 있어요", description: "새로운 사입 요청을 확인하고, 사입삼촌과의 다음 연결을 준비하세요.", view: "pending" },
   "진행 중": { title: "사입이 이어지고 있어요", description: "상품 확보부터 미송·문제 확인까지, 진행 중인 모든 요청을 살펴보세요.", view: "active" },
   "수령 대기": { title: "마지막 확인이 남았어요", description: "전달된 상품이 매장에 잘 도착했는지, 수령 확인을 기다리는 요청이에요.", view: "receipt" },
-  완료: { title: "매장까지 잘 도착했어요", description: "사입부터 수령까지 마무리된 요청과 완료 기록을 확인하세요.", view: "done" },
+  완료: { title: "매장까지 잘 도착했어요", description: "수령 완료 요청의 입금 전·입금 완료 상태를 함께 확인하세요.", view: "received" },
 };
 
 /** Four keyboard-accessible views of the real request pipeline. */

@@ -13,7 +13,7 @@ export const STAGE_MEMBERS: Record<StageKey, readonly RequestLabel[]> = {
   "확인 대기": ["확인 대기"],
   "진행 중": ACTIVE_REQUEST_LABELS,
   "수령 대기": ["수령 대기"],
-  완료: ["완료"],
+  완료: ["완료", "수령(입금 전)", "입금 완료"],
 };
 
 export const ENDED_MEMBERS: readonly RequestLabel[] = ["거절", "취소 종료"];

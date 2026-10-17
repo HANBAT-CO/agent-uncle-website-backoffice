@@ -127,7 +127,7 @@ export function SearchResults({
               key={request.id}
               href={entityHref({ kind: "request", id: request.id })}
               icon={PackageIcon}
-              title={joinDot([request.product, request.option]) || "상품명 없음"}
+              title={joinDot([(request.title || request.product), request.option]) || "상품명 없음"}
               sub={joinDot([request.retailer, request.uncle ? `${request.uncle}에게` : null, `요청 ID ${request.id.slice(0, 8)}`])}
               query={query}
               aside={<StatusChip label={request.label} />}

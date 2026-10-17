@@ -77,7 +77,7 @@ export function NoticeHistoryTable({
         return (
           <span className="flex min-w-0 items-center gap-2">
             <RequestLink id={request.id} className="truncate">
-              {request.product?.trim() || "상품명 없음"}
+              {(request.title || request.product)?.trim() || "상품명 없음"}
               {request.option ? <span className="font-normal text-muted-foreground"> · {request.option}</span> : null}
             </RequestLink>
             <StatusChip label={request.label} />
