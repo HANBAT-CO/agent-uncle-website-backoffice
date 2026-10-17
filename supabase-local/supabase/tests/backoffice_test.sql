@@ -38,7 +38,7 @@ select ok(not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p.p
     and (has_function_privilege('authenticated', p.oid, 'EXECUTE') or has_function_privilege('anon', p.oid, 'EXECUTE'))),
   'backoffice_private not executable by clients');
 select ok(not has_schema_privilege('authenticated', 'backoffice_private', 'USAGE'), 'backoffice_private schema closed');
-select is((select count(*) from pg_policy where polrelid = 'public.saip_records'::regclass), 1::bigint, 'saip_records still has exactly one policy');
+select is((select array_agg(polname::text order by polname) from pg_policy where polrelid = 'public.saip_records'::regclass and polcmd = 'r'), array['participant_read','release_projection_only'], 'app participant and release policies preserved');
 select ok(not has_table_privilege('authenticated', 'public.saip_records', 'INSERT')
           and not has_table_privilege('authenticated', 'public.saip_records', 'UPDATE'), 'saip_records still read-only for authenticated');
 select is((select count(*) from pg_publication_tables where pubname = 'supabase_realtime'), 1::bigint, 'realtime publication unchanged');
@@ -68,7 +68,7 @@ select is(public.saip_command('bootstrap', '{}', 'bo-r-init'), bo_test.id('retai
 select lives_ok($$select public.saip_command('chooseRole', '{"role":"retailer"}', 'bo-r-role')$$, 'fixture: retailer role');
 select lives_ok($$select public.saip_command('registerAttachment', '{"id":"bo-doc-r","name":"사업자등록증.pdf"}', 'bo-r-doc')$$, 'fixture: retailer document');
 select lives_ok($$select public.saip_command('registerAttachment', '{"id":"bo-photo-r","name":"상품.png"}', 'bo-r-photo')$$, 'fixture: request photo');
-select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"백오피스 테스트 소매","contact":"김담당","phone":"010-9381-7264","businessName":"테스트 상점","businessNumber":"1234567890","documentId":"bo-doc-r","address":"서울 마포구 망원로 1","addressDetail":"1층","deliveryNote":"문 앞 보관은 하지 말아 주세요.","salesChannel":"온라인","terms":true,"privacy":true}}', 'bo-r-profile')$$,
+select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"백오피스 테스트 소매","contact":"김담당","phone":"010-9381-7264","businessName":"테스트 상점","businessNumber":"1234567890","documentId":"bo-doc-r","address":"서울 마포구 망원로 1","addressDetail":"1층","deliveryNote":"문 앞 보관은 하지 말아 주세요.","salesChannel":"온라인","bankName":"테스트 은행","bankAccount":"000123456789","bankHolder":"테스트","terms":true,"privacy":true}}', 'bo-r-profile')$$,
   'fixture: retailer signup complete');
 insert into bo_test.v select 'code', public.saip_snapshot() -> 'accounts' -> bo_test.id('retailer') ->> 'code';
 
@@ -76,7 +76,7 @@ select bo_test.as_user(bo_test.id('uncle'));
 select lives_ok($$select public.saip_command('bootstrap', '{}', 'bo-u-init')$$, 'fixture: uncle bootstrap');
 select lives_ok($$select public.saip_command('chooseRole', '{"role":"uncle"}', 'bo-u-role')$$, 'fixture: uncle role');
 select lives_ok($$select public.saip_command('registerAttachment', '{"id":"bo-doc-u","name":"사업자등록증.pdf"}', 'bo-u-doc')$$, 'fixture: uncle document');
-select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"박삼촌","contact":"박삼촌","phone":"01055556666","businessName":"동대문 사입","businessNumber":"1234567890","documentId":"bo-doc-u","pickupArea":"동대문","deliveryArea":"서울","deadline":"23:00","terms":true,"privacy":true}}', 'bo-u-profile')$$,
+select lives_ok($$select public.saip_command('saveProfile', '{"complete":true,"values":{"name":"박삼촌","contact":"박삼촌","phone":"01055556666","businessName":"동대문 사입","businessNumber":"1234567890","documentId":"bo-doc-u","pickupArea":"동대문","deliveryArea":"서울","deadline":"23:00","bankName":"테스트 은행","bankAccount":"000123456789","bankHolder":"테스트","terms":true,"privacy":true}}', 'bo-u-profile')$$,
   'fixture: uncle signup complete');
 insert into bo_test.v select 'connection', public.saip_command('connect',
   jsonb_build_object('peerId', bo_test.id('retailer'), 'code', bo_test.id('code')), 'bo-u-connect');
@@ -315,12 +315,9 @@ reset role;
 select bo_test.as_postgres();
 select is((select tgname::text from pg_trigger where tgrelid = 'public.saip_records'::regclass and not tgisinternal order by tgname limit 1),
   'backoffice_guard_app_writes', 'guard is the first saip_records trigger');
-select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '1 day')), '수령',
-  'completed within 7 days reads 수령');
-select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '8 days', 'updatedAt', now())), '완료',
-  'completed 7+ days ago reads 완료');
-select is(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'updatedAt', now() - interval '10 days')), '완료',
-  'older rows fall back to updatedAt');
+select is(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2}'), '수령(입금 전)', 'received without payment remains unpaid');
+select is(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2,"receivedAt":"2020-01-01"}'), '수령(입금 전)', 'age never implies payment');
+select is(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2,"paymentReported":true}'), '입금 완료', 'receipt plus reported payment completes the request');
 select is(backoffice_private.request_title('{"requestType":"wholesaler","product":"","wholesalers":[{"wholesaler":"A","location":"1층"},{"wholesaler":"B","location":"2층"}]}'),
   'A 외 1곳', 'request title of a wholesaler request mirrors the app');
 select is(backoffice_private.request_title('{"product":"셔츠","wholesaler":"A"}'), '셔츠', 'request title of a product request is the product');

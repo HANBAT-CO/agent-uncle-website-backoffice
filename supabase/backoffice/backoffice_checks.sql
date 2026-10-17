@@ -33,7 +33,7 @@ select t.ok(not exists (select 1 from pg_proc p join pg_namespace n on n.oid = p
   where n.nspname = 'backoffice_private' and (has_function_privilege('authenticated', p.oid, 'EXECUTE') or has_function_privilege('anon', p.oid, 'EXECUTE'))),
   'backoffice_private not executable by clients');
 select t.ok(not has_schema_privilege('authenticated', 'backoffice_private', 'USAGE'), 'backoffice_private schema closed');
-select t.ok((select count(*) from pg_policy where polrelid = 'public.saip_records'::regclass) = 1, 'saip_records still has exactly one policy');
+select t.ok((select array_agg(polname::text order by polname) from pg_policy where polrelid = 'public.saip_records'::regclass and polcmd = 'r') = array['participant_read','release_projection_only'], 'app participant and release policies preserved');
 select t.ok(not has_table_privilege('authenticated', 'public.saip_records', 'INSERT') and not has_table_privilege('authenticated', 'public.saip_records', 'UPDATE'),
   'saip_records still read-only for authenticated');
 select t.ok((select count(*) from pg_publication_tables where pubname = 'supabase_realtime') = 1, 'realtime publication unchanged');
@@ -88,8 +88,8 @@ select t.ok((public.backoffice_list_accounts(p_search => '5678') ->> 'total')::i
 select t.ok((public.backoffice_list_accounts(p_state => 'awaiting_review', p_include_demo => true) ->> 'total')::int >= 1, 'awaiting review filter');
 select t.ok(public.backoffice_get_account(t.id('retailer')::uuid) -> 'account' ->> 'masked' = 'true', 'viewer dossier masked');
 select t.ok(not (public.backoffice_get_account(t.id('retailer')::uuid) -> 'account' ? 'code'), 'invite code never returned');
-select t.ok((public.backoffice_list_requests(p_labels => array['완료']) ->> 'total')::int
-            = (public.backoffice_list_requests() -> 'labels' ->> '완료')::int, 'label tab counts match');
+select t.ok((public.backoffice_list_requests(p_labels => array['수령(입금 전)']) ->> 'total')::int
+            = (public.backoffice_list_requests() -> 'labels' ->> '수령(입금 전)')::int, 'label tab counts match');
 select t.ok((public.backoffice_list_requests(p_attention => 'backorder') ->> 'total')::int >= 1, 'backorder filter');
 select t.ok(public.backoffice_get_request(t.id('req')) -> 'request' ->> 'masked' = 'true', 'viewer request masked');
 select t.ok(jsonb_array_length(public.backoffice_get_request(t.id('req')) -> 'checks' -> 'violations') = 0, 'seeded request has no violations');
@@ -226,9 +226,9 @@ grant execute on function t.expect_message(text, text, text) to public;
 insert into t.v select 'deliveryNote', data ->> 'deliveryNote' from public.saip_records where collection = 'accounts' and id = t.id('retailer');
 select t.ok((select tgname from pg_trigger where tgrelid = 'public.saip_records'::regclass and not tgisinternal order by tgname limit 1)
   = 'backoffice_guard_app_writes', 'guard is the first saip_records trigger');
-select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '1 day')) = '수령', 'completed within 7 days reads 수령');
-select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'receivedAt', now() - interval '8 days', 'updatedAt', now())) = '완료', 'completed 7+ days ago reads 완료');
-select t.ok(backoffice_private.request_label(jsonb_build_object('status', 'completed', 'updatedAt', now() - interval '10 days')) = '완료', 'older rows fall back to updatedAt');
+select t.ok(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2}') = '수령(입금 전)', 'received without payment remains unpaid');
+select t.ok(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2,"receivedAt":"2020-01-01"}') = '수령(입금 전)', 'age never implies payment');
+select t.ok(backoffice_private.request_label('{"status":"completed","quantity":2,"acquired":2,"delivered":2,"received":2,"paymentReported":true}') = '입금 완료', 'receipt plus reported payment completes the request');
 select t.ok(backoffice_private.request_title('{"requestType":"wholesaler","product":"","wholesalers":[{"wholesaler":"A","location":"1층"},{"wholesaler":"B","location":"2층"}]}') = 'A 외 1곳'
   and backoffice_private.request_title('{"product":"셔츠","wholesaler":"A"}') = '셔츠', 'request title mirrors the app');
 set role authenticated;
