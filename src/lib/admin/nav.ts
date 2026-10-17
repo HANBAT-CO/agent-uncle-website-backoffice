@@ -69,12 +69,15 @@ export const NAV_GROUPS: NavGroup[] = [
         badge: (o) => o.accounts.awaitingReview,
         detail: "계정 상세",
       },
+      { key: "lifecycle", label: "탈퇴·개인 설정", href: "/admin/lifecycle", icon: "UserGear", minRole: "viewer" },
       { key: "connections", label: "거래처 연결", href: "/admin/connections", icon: "Handshake", minRole: "viewer" },
     ],
   },
   {
     label: "거래 흐름",
     items: [
+      { key: "billing", label: "청구·정산", href: "/admin/billing", icon: "ListMagnifyingGlass", minRole: "viewer", detail: "청구서 상세" },
+      { key: "team-work", label: "팀·동료 업무", href: "/admin/team-work", icon: "UsersThree", minRole: "viewer" },
       {
         key: "requests",
         label: "사입 요청",
@@ -114,6 +117,7 @@ export const NAV_GROUPS: NavGroup[] = [
     label: "소통",
     items: [
       { key: "chats", label: "채팅 열람", href: "/admin/chats", icon: "ChatsCircle", minRole: "viewer" },
+      { key: "push", label: "푸시 전송 상태", href: "/admin/push", icon: "Pulse", minRole: "viewer" },
       { key: "notices", label: "알림·공지", href: "/admin/notices", icon: "Megaphone", minRole: "viewer" },
     ],
   },

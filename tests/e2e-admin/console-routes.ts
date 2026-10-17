@@ -40,6 +40,10 @@ export function consoleRoutes(): ConsoleRoute[] {
   return [
     { path: "/admin", h1: "대시보드", min: "viewer" },
     { path: "/admin/checks", h1: "운영 점검", min: "viewer" },
+    { path: "/admin/billing", h1: "청구·정산", min: "viewer" },
+    { path: "/admin/team-work", h1: "팀·동료 업무", min: "viewer" },
+    { path: "/admin/lifecycle", h1: "탈퇴·개인 설정", min: "viewer" },
+    { path: "/admin/push", h1: "푸시 전송 상태", min: "viewer" },
     { path: "/admin/accounts", h1: "계정·가입", min: "viewer" },
     { path: `/admin/accounts/${newestId("accounts")}`, h1: null, min: "viewer" },
     { path: "/admin/connections", h1: "거래처 연결", min: "viewer" },

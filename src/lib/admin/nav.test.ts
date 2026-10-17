@@ -30,17 +30,19 @@ describe("NAV_GROUPS (screens appendix 9, sidebar)", () => {
   it("has exactly the spec items in order", () => {
     expect(NAV_GROUPS.map((group) => [group.label, group.items.map((item) => [item.label, item.href, item.minRole])])).toEqual([
       ["운영 현황", [["대시보드", "/admin", "viewer"], ["운영 점검", "/admin/checks", "viewer"]]],
-      ["계정·관계", [["계정·가입", "/admin/accounts", "viewer"], ["거래처 연결", "/admin/connections", "viewer"]]],
+      ["계정·관계", [["계정·가입", "/admin/accounts", "viewer"], ["탈퇴·개인 설정", "/admin/lifecycle", "viewer"], ["거래처 연결", "/admin/connections", "viewer"]]],
       [
         "거래 흐름",
         [
+          ["청구·정산", "/admin/billing", "viewer"],
+          ["팀·동료 업무", "/admin/team-work", "viewer"],
           ["사입 요청", "/admin/requests", "viewer"],
           ["전달·수령", "/admin/deliveries", "viewer"],
           ["미송 재확인", "/admin/backorders", "viewer"],
           ["문제·정정", "/admin/issues", "viewer"],
         ],
       ],
-      ["소통", [["채팅 열람", "/admin/chats", "viewer"], ["알림·공지", "/admin/notices", "viewer"]]],
+      ["소통", [["채팅 열람", "/admin/chats", "viewer"], ["푸시 전송 상태", "/admin/push", "viewer"], ["알림·공지", "/admin/notices", "viewer"]]],
       ["앱 제어", [["원격 설정", "/admin/remote-config", "viewer"]]],
       ["웹사이트", [["랜딩 문의", "/admin/leads", "viewer"]]],
       ["관리", [["감사 로그", "/admin/audit", "operator"], ["운영 계정", "/admin/admins", "owner"]]],

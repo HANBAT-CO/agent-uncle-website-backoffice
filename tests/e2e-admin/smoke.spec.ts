@@ -15,9 +15,9 @@ import { expect, test } from "./fixtures";
 /** Sidebar groups per spec 9, in order. Items above the role are hidden. */
 const NAV: [group: string, items: [label: string, min: ConsoleRole][]][] = [
   ["운영 현황", [["대시보드", "viewer"], ["운영 점검", "viewer"]]],
-  ["계정·관계", [["계정·가입", "viewer"], ["거래처 연결", "viewer"]]],
-  ["거래 흐름", [["사입 요청", "viewer"], ["전달·수령", "viewer"], ["미송 재확인", "viewer"], ["문제·정정", "viewer"]]],
-  ["소통", [["채팅 열람", "viewer"], ["알림·공지", "viewer"]]],
+  ["계정·관계", [["계정·가입", "viewer"], ["탈퇴·개인 설정", "viewer"], ["거래처 연결", "viewer"]]],
+  ["거래 흐름", [["청구·정산", "viewer"], ["팀·동료 업무", "viewer"], ["사입 요청", "viewer"], ["전달·수령", "viewer"], ["미송 재확인", "viewer"], ["문제·정정", "viewer"]]],
+  ["소통", [["채팅 열람", "viewer"], ["푸시 전송 상태", "viewer"], ["알림·공지", "viewer"]]],
   ["앱 제어", [["원격 설정", "viewer"]]],
   ["웹사이트", [["랜딩 문의", "viewer"]]],
   ["관리", [["감사 로그", "operator"], ["운영 계정", "owner"]]],
