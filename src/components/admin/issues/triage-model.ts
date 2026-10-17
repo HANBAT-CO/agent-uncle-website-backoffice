@@ -1,4 +1,4 @@
-import { formatSince } from "@/lib/admin/format";
+import { formatSince, requestUnit } from "@/lib/admin/format";
 import type { RecordFilter } from "@/lib/admin/rpc/enums";
 
 /*
@@ -82,13 +82,13 @@ const PROPOSAL_FIELDS: readonly { key: string; term: string; unit?: "장" }[] = 
   { key: "recheck", term: "미송 재확인일" },
 ];
 
-export function proposalValueItems(values: Record<string, unknown> | null | undefined): { term: string; value: string }[] {
+export function proposalValueItems(values: Record<string, unknown> | null | undefined, requestType?: string | null): { term: string; value: string }[] {
   if (!values) return [];
   const items: { term: string; value: string }[] = [];
   for (const field of PROPOSAL_FIELDS) {
     const value = values[field.key];
     if (value === undefined || value === null || value === "") continue;
-    items.push({ term: field.term, value: field.unit && typeof value === "number" ? `${value}${field.unit}` : String(value) });
+    items.push({ term: field.term, value: field.unit && typeof value === "number" ? `${value}${requestUnit(requestType)}` : String(value) });
   }
   return items;
 }

@@ -38,7 +38,8 @@ describe("requestTabs (screens 10.9 tabs with counts from the labels facet)", ()
       ["수령 대기", 6],
       ["문제 확인 중", 5],
       ["변경·취소 협의 중", 5],
-      ["완료", 11],
+      ["수령(입금 전)", 0],
+      ["입금 완료", 11],
       ["종료", 8],
     ]);
   });
@@ -62,8 +63,11 @@ describe("requestTabs (screens 10.9 tabs with counts from the labels facet)", ()
 });
 
 describe("조건 (single select) → p_attention", () => {
-  it("has the seven conditions in spec order", () => {
+  it("has the ten conditions in spec order", () => {
     expect(REQUEST_CONDITIONS.map((condition) => condition.label)).toEqual([
+      "상대 완료 확인 대기",
+      "수령 후 입금 대기",
+      "도매처 묶음 요청",
       "열린 문제 있음",
       "협의 진행 중",
       "수령 대기",
@@ -119,6 +123,29 @@ describe("issueParts (문제 유형 from the first line of reason)", () => {
 });
 
 describe("proposalSummary (변경·취소·정정 values)", () => {
+  it("uses request-type units even when a correction contains only counters", () => {
+    expect(proposalSummary({ quantity: 3, cancelled: 1 }, undefined, "wholesaler")).toBe("요청 3건 · 취소 1건");
+    expect(proposalSummary({ requestType: "wholesaler", quantity: 2 })).toBe("요청 2건");
+  });
+  it("uses the saved wholesaler snapshot for a cancellation", () => {
+    expect(proposalSummary({ wholesalerIndexes: [1], reason: "방문 취소" }, {
+      wholesalers: [{ wholesaler: "예전 매장", location: "2층", paymentMode: "advance" }],
+      wholesalerNames: ["예전 매장"],
+    })).toBe("예전 매장 / 2층 / 대납");
+  });
+
+  it("shows changed wholesaler rows and translates payment modes", () => {
+    expect(proposalSummary({ wholesalers: [
+      { wholesaler: "새 매장", location: "1층", paymentMode: "direct" },
+      { wholesaler: "다른 매장", location: "3층", paymentMode: "review" },
+    ] })).toBe("새 매장 / 1층 / 직접 결제 · 다른 매장 / 3층 / 확인 필요");
+  });
+
+  it("falls back to historical names or selected count without inventing names", () => {
+    expect(proposalSummary({ wholesalerIndexes: [0, 2] }, { wholesalerNames: ["가", "나"] })).toBe("가 · 나");
+    expect(proposalSummary({ wholesalerIndexes: [0, 2] })).toBe("선택 도매처 2곳");
+  });
+
   it("lists the proposed counters that are present, number first", () => {
     expect(proposalSummary({ quantity: 4, acquired: 0, received: 0, acquiredCancelled: 0, reason: "품절" })).toBe("요청 4장 · 확보 0장 · 수령 0장 · 확보 취소 0장");
   });
@@ -133,6 +160,22 @@ describe("proposalSummary (변경·취소·정정 values)", () => {
 });
 
 describe("footerText (screens 10.9 footer totals)", () => {
+  it("keeps product and wholesaler totals in their own units", () => {
+    expect(footerText(4, {
+      quantity: 573, acquired: 330, delivered: 249, received: 213, backorder: 66,
+      byType: {
+        product: { quantity: 570, acquired: 328, delivered: 248, received: 212, backorder: 65 },
+        wholesaler: { quantity: 3, acquired: 2, delivered: 1, received: 1, backorder: 1 },
+      },
+    })).toBe("4건 · 요청 570장 + 3건 · 확보 328장 + 2건 · 전달 248장 + 1건 · 수령 212장 + 1건 · 남은 미송 65장 + 1건");
+  });
+
+  it("does not introduce product units in a wholesaler-only result", () => {
+    const totals = { quantity: 3, acquired: 2, delivered: 1, received: 1, backorder: 1 };
+    expect(footerText(1, { ...totals, byType: { wholesaler: totals } })).toBe(
+      "1건 · 요청 3건 · 확보 2건 · 전달 1건 · 수령 1건 · 남은 미송 1건",
+    );
+  });
   it("reads the totals with units", () => {
     expect(footerText(61, { quantity: 570, acquired: 328, delivered: 248, received: 212, backorder: 65 })).toBe(
       "61건 · 요청 570장 · 확보 328장 · 전달 248장 · 수령 212장 · 남은 미송 65장",

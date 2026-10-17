@@ -7,11 +7,12 @@ import { DdayChip } from "@/components/admin/common/DdayChip";
 import { StatusChip } from "@/components/admin/common/StatusChip";
 import { DataTable, type DataTableSort } from "@/components/admin/data-table/DataTable";
 import { TwoLineCell } from "@/components/admin/data-table/TwoLineCell";
-import { formatKst } from "@/lib/admin/format";
+import { formatKst, requestUnit } from "@/lib/admin/format";
 
 /** One list row, shaped on the server (relative times are computed there, so hydration never differs). */
 export type RequestListRow = {
   id: string;
+  requestType?: string | null;
   createdAt: string | null;
   label: string;
   retailer: string | null;
@@ -78,7 +79,7 @@ const columns: ColumnDef<RequestListRow>[] = [
     header: () => (
       <span className="inline-flex flex-col items-end leading-tight">
         <span>요청 · 확보 · 전달 · 수령</span>
-        <span>(장)</span>
+        <span>상품 장 · 도매처 건</span>
       </span>
     ),
     meta: { align: "right" },
@@ -86,7 +87,7 @@ const columns: ColumnDef<RequestListRow>[] = [
       const r = row.original;
       return (
         <span data-testid="row-counts">
-          {r.quantity} · {r.acquired} · {r.delivered} · {r.received}
+          {r.quantity} · {r.acquired} · {r.delivered} · {r.received} {requestUnit(r.requestType)}
         </span>
       );
     },
@@ -95,7 +96,7 @@ const columns: ColumnDef<RequestListRow>[] = [
     id: "backorder",
     header: "남은 미송",
     meta: { align: "right" },
-    cell: ({ row }) => (row.original.backorder > 0 ? `${row.original.backorder.toLocaleString("ko-KR")}장` : <span className="text-muted-foreground">0장</span>),
+    cell: ({ row }) => (row.original.backorder > 0 ? `${row.original.backorder.toLocaleString("ko-KR")}${requestUnit(row.original.requestType)}` : <span className="text-muted-foreground">0{requestUnit(row.original.requestType)}</span>),
   },
   {
     id: "recheck",

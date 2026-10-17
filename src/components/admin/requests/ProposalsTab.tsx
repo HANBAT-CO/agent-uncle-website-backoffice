@@ -34,7 +34,7 @@ export function ProposalsTab({ data }: { data: RequestDossier }) {
             {proposal.values?.reason || "-"}
           </span>,
           <span key="values" className="num text-xs">
-            {proposalSummary(proposal.values)}
+            {proposalSummary(proposal.values, proposal, data.request.requestType)}
           </span>,
           <KstTime key="at" iso={proposal.createdAt} />,
         ],

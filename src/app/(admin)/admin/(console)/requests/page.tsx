@@ -42,14 +42,15 @@ function listHref(params: Record<string, string | string[] | undefined>, drop: r
 function toRow(row: RequestRow, now: Date): RequestListRow {
   return {
     id: row.id,
+    requestType: row.requestType,
     createdAt: row.createdAt,
     label: row.label,
     retailer: row.retailer.name,
     uncle: row.uncle.name,
-    wholesaler: row.wholesaler,
+    wholesaler: row.wholesalers?.map((w) => w.wholesaler).filter(Boolean).join(", ") || row.wholesaler,
     location: row.location,
-    product: row.product,
-    option: row.option,
+    product: row.title || row.product,
+    option: row.requestType === "wholesaler" ? "도매처 묶음 요청" : row.option,
     quantity: row.ledger.quantity,
     acquired: row.ledger.acquired,
     delivered: row.ledger.delivered,

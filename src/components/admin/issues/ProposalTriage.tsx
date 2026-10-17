@@ -1,5 +1,6 @@
 "use client";
 
+import { requestUnit } from "@/lib/admin/format";
 import { AccountLink } from "@/components/admin/common/AccountLink";
 import { DefinitionList, type DefinitionItem } from "@/components/admin/common/DefinitionList";
 import { KstTime } from "@/components/admin/common/KstTime";
@@ -12,11 +13,12 @@ import type { TriageProperties } from "./PropertiesPanel";
 import { TriageList, type TriageColumn } from "./TriageList";
 import { TriageMemo, type TriageMemoData } from "./TriageMemo";
 import { TriagePanes } from "./TriagePanes";
+import { proposalSummary } from "../requests/request-model";
 import { openSpan, proposalValueItems } from "./triage-model";
 
 export type ProposalRow = RecordRow<"proposals">;
 
-const productLine = (row: ProposalRow) => [row.request?.product, row.request?.option].filter(Boolean).join(" · ");
+const productLine = (row: ProposalRow) => [row.request?.title || row.request?.product, row.request?.option].filter(Boolean).join(" · ");
 const party = (row: ProposalRow, id: string | null | undefined) => row.parties.find((p) => p.id === id) ?? null;
 const kindLabel = (row: ProposalRow) => PROPOSAL_KIND_LABEL[row.kind ?? ""] ?? "정정";
 
@@ -39,7 +41,7 @@ function columns(now: Date, ledgers: Record<string, Ledger>): TriageColumn<Propo
     },
     {
       id: "ledger",
-      header: "수량 (장)",
+      header: "수량",
       cell: (row) => {
         const ledger = row.requestId ? ledgers[row.requestId] : undefined;
         if (!ledger) return <span className="text-muted-foreground">-</span>;
@@ -51,7 +53,7 @@ function columns(now: Date, ledgers: Record<string, Ledger>): TriageColumn<Propo
             </span>
             <span className="sr-only"> · </span>
             <span className="mt-0.5 text-muted-foreground">
-              수령 {ledger.received} · 취소 {ledger.cancelled}
+              수령 {ledger.received} · 취소 {ledger.cancelled} ({requestUnit(row.request?.requestType)})
             </span>
           </span>
         );
@@ -67,10 +69,12 @@ function columns(now: Date, ledgers: Record<string, Ledger>): TriageColumn<Propo
 }
 
 function ProposalDetail({ row }: { row: ProposalRow }) {
+  const wholesalers = proposalSummary(row.values ? { wholesalers: row.values.wholesalers, wholesalerIndexes: row.values.wholesalerIndexes } : null, row);
   const items: DefinitionItem[] = [
     { term: "사유", value: row.values?.reason ? <span className="whitespace-pre-wrap">{row.values.reason}</span> : null },
     { term: "제안자", value: <AccountLink account={party(row, row.proposerId)} /> },
-    ...proposalValueItems(row.values).map((item) => ({ term: item.term, value: item.value })),
+    ...(wholesalers !== "-" ? [{ term: "도매처 변경", value: wholesalers }] : []),
+    ...proposalValueItems(row.values, row.request?.requestType).map((item) => ({ term: item.term, value: item.value })),
     { term: "제안 시각", value: <KstTime iso={row.createdAt} /> },
   ];
   if (row.status !== "pending" && row.resolvedBy) {

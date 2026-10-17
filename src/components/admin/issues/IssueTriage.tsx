@@ -1,5 +1,6 @@
 "use client";
 
+import { requestUnit } from "@/lib/admin/format";
 import { AccountLink } from "@/components/admin/common/AccountLink";
 import { DefinitionList } from "@/components/admin/common/DefinitionList";
 import { KstTime } from "@/components/admin/common/KstTime";
@@ -16,7 +17,7 @@ import { openSpan } from "./triage-model";
 
 export type IssueRow = RecordRow<"issues">;
 
-const productLine = (row: IssueRow) => [row.request?.product, row.request?.option].filter(Boolean).join(" · ");
+const productLine = (row: IssueRow) => [row.request?.title || row.request?.product, row.request?.option].filter(Boolean).join(" · ");
 const partyName = (row: IssueRow, id: string | null | undefined) => row.parties.find((party) => party.id === id) ?? null;
 const issueEnd = (row: IssueRow) => (row.status === "resolved" ? row.updatedAt : null);
 
@@ -67,7 +68,7 @@ function IssueDetail({ row }: { row: IssueRow }) {
           { term: "설명", value: <span className="whitespace-pre-wrap">{issueDescription(row.reason)}</span> },
           { term: "보고자", value: <AccountLink account={partyName(row, row.reporterId)} /> },
           { term: "조치", value: row.action ? <span className="whitespace-pre-wrap">{row.action}</span> : null },
-          ...(hasActual ? [{ term: "실제 받은 수량", value: `${row.actual}장` }] : []),
+          ...(hasActual ? [{ term: "실제 받은 수량", value: `${row.actual}${requestUnit(row.request?.requestType)}` }] : []),
           { term: "보고 시각", value: <KstTime iso={row.createdAt} /> },
         ]}
       />

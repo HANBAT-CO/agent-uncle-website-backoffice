@@ -8,7 +8,7 @@ import { DetailTable } from "./DetailTable";
 const n = (value: number | null | undefined, unit = "장") => (typeof value === "number" ? `${value.toLocaleString("ko-KR")}${unit}` : null);
 
 /** 전달 회차 (screens 10.9): {n}차, 전달 일시, 이번 전달, 확인한 수량, 실제 받은 수량, 상태, 정정됨. */
-export function DeliveriesTab({ deliveries }: { deliveries: RequestDossier["deliveries"] }) {
+export function DeliveriesTab({ deliveries, unit = "장" }: { deliveries: RequestDossier["deliveries"]; unit?: "장" | "건" }) {
   return (
     <DetailTable
       caption="전달 회차"
@@ -30,9 +30,9 @@ export function DeliveriesTab({ deliveries }: { deliveries: RequestDossier["deli
             {delivery.round}차
           </span>,
           <KstTime key="at" iso={delivery.createdAt} />,
-          n(delivery.quantity),
-          delivery.receiptRecorded ? n(delivery.received) : null,
-          delivery.receiptRecorded ? n(delivery.actual) : null,
+          n(delivery.quantity, unit),
+          delivery.receiptRecorded ? n(delivery.received, unit) : null,
+          delivery.receiptRecorded ? n(delivery.actual, unit) : null,
           <StatusChip key="state" label={deliveryState(delivery)} />,
           delivery.correctedAt ? (
             <span key="corrected" className="inline-flex flex-col">

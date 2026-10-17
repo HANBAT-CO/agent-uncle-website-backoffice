@@ -15,7 +15,7 @@ import { psql, staffRpc } from "./helpers/rest";
  */
 
 type Ledger = { quantity: number; acquired: number; delivered: number; received: number; backorder: number };
-type ListResult = { total: number; rows: { id: string; label: string; product: string | null; ledger: Ledger; retailer: { id: string; name: string | null }; uncle: { id: string; name: string | null } }[] };
+type ListResult = { total: number; rows: { id: string; label: string; product: string | null; requestType: string; ledger: Ledger; retailer: { id: string; name: string | null }; uncle: { id: string; name: string | null } }[] };
 
 /**
  * A seeded request with an issue whose timeline has quantity changes. Looked
@@ -35,9 +35,12 @@ function richRequest(): string {
 
 const n = (value: number) => value.toLocaleString("ko-KR");
 
-function footerFor(total: number, rows: { ledger: Ledger }[]): string {
-  const sum = (key: keyof Ledger) => rows.reduce((acc, row) => acc + row.ledger[key], 0);
-  return `${n(total)}건 · 요청 ${n(sum("quantity"))}장 · 확보 ${n(sum("acquired"))}장 · 전달 ${n(sum("delivered"))}장 · 수령 ${n(sum("received"))}장 · 남은 미송 ${n(sum("backorder"))}장`;
+function footerFor(total: number, rows: { ledger: Ledger; requestType: string }[]): string {
+  const amount = (key: keyof Ledger) => ["product", "wholesaler"]
+    .filter(type => rows.some(row => row.requestType === type))
+    .map(type => `${n(rows.filter(row => row.requestType === type).reduce((sum, row) => sum + row.ledger[key], 0))}${type === "wholesaler" ? "건" : "장"}`)
+    .join(" + ");
+  return `${n(total)}건 · 요청 ${amount("quantity")} · 확보 ${amount("acquired")} · 전달 ${amount("delivered")} · 수령 ${amount("received")} · 남은 미송 ${amount("backorder")}`;
 }
 
 async function listAs(role: "owner" | "viewer", args: Record<string, unknown> = {}): Promise<ListResult> {
@@ -89,7 +92,7 @@ test.describe("list", () => {
     const page = await asRole("owner");
     await page.goto("/admin/requests");
     const all = await tabs(page);
-    expect(all.map((tab) => tab.label)).toEqual(["전체", "확인 대기", "진행 중", "답변 필요", "미송 재확인", "수령 대기", "문제 확인 중", "변경·취소 협의 중", "완료", "종료"]);
+    expect(all.map((tab) => tab.label)).toEqual(["전체", "확인 대기", "진행 중", "답변 필요", "미송 재확인", "수령 대기", "문제 확인 중", "변경·취소 협의 중", "수령(입금 전)", "입금 완료", "종료"]);
     expect(all[0].current).toBe(true);
 
     for (const tab of all) {
@@ -241,7 +244,7 @@ test.describe("detail", () => {
 
   test("an operator adds two different notes in a row from the same open Sheet", async ({ asRole }) => {
     const page = await asRole("operator");
-    await page.goto("/admin/requests?view=done");
+    await page.goto("/admin/requests?view=received");
     await page.locator("tbody tr").first().locator("a").first().click();
     const sheet = page.getByTestId("request-sheet");
     await expect(sheet).toBeVisible();

@@ -1,4 +1,4 @@
-import { isKstDay, qty } from "@/lib/admin/format";
+import { isKstDay, qty, requestUnit } from "@/lib/admin/format";
 import { ACTIVE_REQUEST_LABELS, REQUEST_TABS } from "@/lib/admin/labels";
 import type { RequestAttention } from "@/lib/admin/rpc/enums";
 
@@ -33,6 +33,9 @@ export function requestTabs(facet: Record<string, number>, view: string | null |
 
 /** 조건 (single select), in spec order; each key is the RPC's p_attention value. */
 export const REQUEST_CONDITIONS = [
+  { key: "completion_pending", label: "상대 완료 확인 대기" },
+  { key: "payment_pending", label: "수령 후 입금 대기" },
+  { key: "wholesaler", label: "도매처 묶음 요청" },
   { key: "open_issue", label: "열린 문제 있음" },
   { key: "proposal", label: "협의 진행 중" },
   { key: "receipt_pending", label: "수령 대기" },
@@ -53,18 +56,22 @@ export function conditionLabel(value: string | null | undefined): string | null 
   return REQUEST_CONDITIONS.find((condition) => condition.key === value)?.label ?? null;
 }
 
-/** "{total}건 · 요청 {q}장 · 확보 {a}장 · 전달 {d}장 · 수령 {r}장 · 남은 미송 {b}장" */
+/** Keep product (장) and wholesaler (건) quantities separate in list totals. */
 export function footerText(
   total: number,
-  totals: { quantity: number; acquired: number; delivered: number; received: number; backorder: number },
+  totals: { quantity: number; acquired: number; delivered: number; received: number; backorder: number; byType?: Record<string, { quantity: number; acquired: number; delivered: number; received: number; backorder: number }> },
 ): string {
+  const amount = (key: "quantity" | "acquired" | "delivered" | "received" | "backorder") => {
+    if (!totals.byType || !Object.keys(totals.byType).length) return qty(totals[key], "장");
+    return ["product", "wholesaler"].filter((type) => totals.byType?.[type]).map((type) => qty(totals.byType![type][key], requestUnit(type))).join(" + ");
+  };
   return [
     qty(total, "건"),
-    `요청 ${qty(totals.quantity, "장")}`,
-    `확보 ${qty(totals.acquired, "장")}`,
-    `전달 ${qty(totals.delivered, "장")}`,
-    `수령 ${qty(totals.received, "장")}`,
-    `남은 미송 ${qty(totals.backorder, "장")}`,
+    `요청 ${amount("quantity")}`,
+    `확보 ${amount("acquired")}`,
+    `전달 ${amount("delivered")}`,
+    `수령 ${amount("received")}`,
+    `남은 미송 ${amount("backorder")}`,
   ].join(" · ");
 }
 
@@ -111,9 +118,25 @@ const PROPOSAL_COUNTERS: readonly [field: string, label: string][] = [
 ];
 
 /** The proposed values of a 변경·취소·정정: changed text first, then the counters present. */
-export function proposalSummary(values: { [field: string]: unknown } | null | undefined): string {
-  if (!values) return "-";
+export function proposalSummary(
+  values: { [field: string]: unknown } | null | undefined,
+  snapshot?: { wholesalers?: unknown; wholesalerNames?: string[] | null },
+  requestType?: string | null,
+): string {
+  // Cancellation indexes refer to the request at proposal time. Always use
+  // the saved proposal rows, never resolve them against today's request.
   const parts: string[] = [];
+  const rows = snapshot?.wholesalers ?? values?.wholesalers;
+  if (Array.isArray(rows)) {
+    for (const row of rows) {
+      if (!row || typeof row !== "object" || typeof row.wholesaler !== "string") continue;
+      const mode = row.paymentMode === "advance" ? "대납" : row.paymentMode === "direct" ? "직접 결제" : "확인 필요";
+      parts.push([row.wholesaler, row.location, mode].filter((v) => typeof v === "string" && v.trim()).join(" / "));
+    }
+  }
+  if (!parts.length && snapshot?.wholesalerNames) parts.push(...snapshot.wholesalerNames.filter((name) => name.trim()));
+  if (!parts.length && Array.isArray(values?.wholesalerIndexes)) parts.push(`선택 도매처 ${values.wholesalerIndexes.length}곳`);
+  if (!values) return parts.join(" · ") || "-";
   for (const [field, label] of [
     ["product", "상품"],
     ["option", "옵션"],
@@ -123,7 +146,7 @@ export function proposalSummary(values: { [field: string]: unknown } | null | un
   }
   for (const [field, label] of PROPOSAL_COUNTERS) {
     const value = values[field];
-    if (typeof value === "number" && Number.isFinite(value)) parts.push(`${label} ${qty(value, "장")}`);
+    if (typeof value === "number" && Number.isFinite(value)) parts.push(`${label} ${qty(value, requestUnit(requestType ?? (typeof values.requestType === "string" ? values.requestType : undefined)))}`);
   }
   return parts.length > 0 ? parts.join(" · ") : "-";
 }

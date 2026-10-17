@@ -10,6 +10,7 @@ import { StatusChip } from "@/components/admin/common/StatusChip";
 import { DataTable } from "@/components/admin/data-table/DataTable";
 import { TwoLineCell } from "@/components/admin/data-table/TwoLineCell";
 import { EmptyState } from "@/components/admin/states/EmptyState";
+import { requestUnit } from "@/lib/admin/format";
 import { deliveryState } from "@/lib/admin/labels";
 import type { RecordRow } from "@/lib/admin/rpc/schemas";
 
@@ -50,26 +51,26 @@ function columns(now: Date): ColumnDef<DeliveryRow>[] {
       id: "product",
       header: "상품 · 옵션",
       cell: ({ row }) => (
-        <TwoLineCell primary={row.original.product || "-"} secondary={row.original.option || undefined} className="max-w-44" />
+        <TwoLineCell primary={row.original.request?.title || row.original.product || "-"} secondary={row.original.option || undefined} className="max-w-44" />
       ),
     },
     {
       id: "quantity",
       header: "이번 전달",
       meta: { align: "right" },
-      cell: ({ row }) => <Qty n={row.original.quantity} unit="장" />,
+      cell: ({ row }) => <Qty n={row.original.quantity} unit={requestUnit(row.original.request?.requestType)} />,
     },
     {
       id: "received",
       header: "확인한 수량",
       meta: { align: "right" },
-      cell: ({ row }) => <Qty n={row.original.receiptRecorded ? row.original.received : null} unit="장" />,
+      cell: ({ row }) => <Qty n={row.original.receiptRecorded ? row.original.received : null} unit={requestUnit(row.original.request?.requestType)} />,
     },
     {
       id: "actual",
       header: "실제 받은 수량",
       meta: { align: "right" },
-      cell: ({ row }) => <Qty n={row.original.receiptRecorded ? (row.original.actual ?? null) : null} unit="장" />,
+      cell: ({ row }) => <Qty n={row.original.receiptRecorded ? (row.original.actual ?? null) : null} unit={requestUnit(row.original.request?.requestType)} />,
     },
     {
       id: "state",

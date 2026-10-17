@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { InfoIcon } from "@phosphor-icons/react/dist/ssr";
 
 import { AccountLink } from "@/components/admin/common/AccountLink";
@@ -8,7 +9,7 @@ import { StatusChip } from "@/components/admin/common/StatusChip";
 import { CasePanel, type CaseAssignee } from "@/components/admin/panels/CasePanel";
 import { NotesPanel } from "@/components/admin/panels/NotesPanel";
 import type { AdminSession } from "@/lib/admin/dal";
-import { formatKst, kstToday } from "@/lib/admin/format";
+import { formatKst, kstToday, requestUnit } from "@/lib/admin/format";
 import { hasRole } from "@/lib/admin/roles";
 import { OPEN_CASE_STATUSES } from "@/lib/admin/rpc/enums";
 import type { AdminRow, RequestDossier } from "@/lib/admin/rpc/schemas";
@@ -30,7 +31,8 @@ export const TWO_PARTY_NOTE = "기록을 고치려면 두 거래처가 앱에서
 export type RequestOperationIds = { note: string; case: string };
 
 /** "{상품} · {옵션}" (screens 10.9 header). */
-export function requestTitle(request: { product?: string | null; option?: string | null }): string {
+export function requestTitle(request: { title?: string | null; requestType?: string | null; product?: string | null; option?: string | null }): string {
+  if (request.title?.trim()) return request.title.trim();
   return [request.product?.trim() || "상품 정보 없음", request.option?.trim()].filter(Boolean).join(" · ");
 }
 
@@ -77,7 +79,7 @@ export function RequestDetail({
       key: "deliveries",
       label: "전달 회차",
       count: data.deliveries.length,
-      content: <DeliveriesTab deliveries={data.deliveries} />,
+      content: <DeliveriesTab deliveries={data.deliveries} unit={requestUnit(request.requestType)} />,
     },
     {
       key: "proposals",
@@ -160,14 +162,29 @@ export function RequestDetail({
         summary={
           <div className="request-summary flex flex-col gap-5">
             <ViolationBanner codes={data.checks.violations} />
-            <LedgerTiles ledger={request.ledger} />
+            <LedgerTiles ledger={request.ledger} unit={requestUnit(request.requestType)} />
             <DefinitionList
               columns={variant === "page" ? 3 : 2}
               items={[
+                { term: "요청 유형", value: request.requestType === "wholesaler" ? "도매처 묶음 요청" : "상품 요청" },
+                { term: "사입 완료 확인", value: <KstTime iso={request.purchaseCompletedAt} /> },
+                { term: "소매처 완료 확인", value: <KstTime iso={request.receiptConfirmedAt} />, hint: request.awaitingCompletionConfirmation ? "상대방의 완료 확인을 기다려요." : undefined },
+                { term: "입금 상태", value: request.paymentConfirmed ? "입금 확인됨" : request.paymentReported ? "입금 신고됨" : "입금 신고 전" },
+                { term: "삼촌 지급", value: request.platformPayoutComplete ? "지급 기록 완료" : "지급 기록 전" },
+                { term: "연결 청구서", value: request.paymentInvoiceIds?.map((id) => <Link className="block text-primary underline" key={id} href={`/admin/billing/${encodeURIComponent(id)}`}>{id}</Link>) },
+                { term: "팀 업무", value: <Link className="text-primary underline" href={`/admin/team-work?collection=teamJobs&related=${encodeURIComponent(request.id)}`}>관련 팀 업무 보기</Link> },
                 {
                   term: "도매처",
-                  value: request.wholesaler,
-                  hint: request.location,
+                  value: request.wholesalers?.map((w) => [w.wholesaler, w.location, w.paymentMode === "advance" ? "대납" : w.paymentMode === "direct" ? "직접 결제" : "결제 방식 확인 필요"].filter(Boolean).join(" · ")).join(" / ") || request.wholesaler,
+                  hint: request.wholesalers?.length ? undefined : request.location,
+                },
+                {
+                  term: "취소된 도매처",
+                  value: request.cancelledWholesalers?.length ? <ul className="space-y-2">{request.cancelledWholesalers.map((w, index) => <li key={`${w.proposalId}-${w.originalIndex}-${index}`}>
+                    <span>{[w.wholesaler, w.location, w.paymentMode === "advance" ? "대납" : w.paymentMode === "direct" ? "직접 결제" : "결제 방식 확인 필요"].filter(Boolean).join(" · ")}</span>
+                    {w.reason ? <p className="whitespace-pre-wrap text-muted-foreground">{w.reason}</p> : null}
+                    <KstTime iso={w.cancelledAt} className="text-xs text-muted-foreground" />
+                  </li>)}</ul> : null,
                 },
                 {
                   term: "재확인일",

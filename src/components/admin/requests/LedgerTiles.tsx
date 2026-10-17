@@ -6,9 +6,9 @@ type Tile = { label: string; value: number; attention?: boolean };
 /**
  * The request ledger laid out like the app (screens 10.9): 누적 확보 /
  * 전달 대기 / 누적 전달 / 남은 미송, then 요청 / 수령 / 취소 / 처리 보류,
- * all in 장.
+ * in 장 for products and 건 for wholesaler requests.
  */
-export function LedgerTiles({ ledger }: { ledger: Ledger }) {
+export function LedgerTiles({ ledger, unit = "장" }: { ledger: Ledger; unit?: "장" | "건" }) {
   const main: Tile[] = [
     { label: "누적 확보", value: ledger.acquired },
     { label: "전달 대기", value: ledger.available },
@@ -30,7 +30,7 @@ export function LedgerTiles({ ledger }: { ledger: Ledger }) {
             <dt className="text-xs text-muted-foreground">{tile.label}</dt>
             <dd className={cn("num text-[2rem] leading-none font-medium tracking-[-0.06em]", tile.attention && "text-primary")}>
               {tile.value.toLocaleString("ko-KR")}
-              <span className="ml-1 text-xs font-normal text-muted-foreground">장</span>
+              <span className="ml-1 text-xs font-normal text-muted-foreground">{unit}</span>
             </dd>
           </div>
         ))}
@@ -41,7 +41,7 @@ export function LedgerTiles({ ledger }: { ledger: Ledger }) {
             <dt className="text-xs text-muted-foreground">{tile.label}</dt>
             <dd className="num text-sm font-semibold">
               {tile.value.toLocaleString("ko-KR")}
-              <span className="ml-0.5 text-xs font-medium text-muted-foreground">장</span>
+              <span className="ml-0.5 text-xs font-medium text-muted-foreground">{unit}</span>
             </dd>
           </div>
         ))}
