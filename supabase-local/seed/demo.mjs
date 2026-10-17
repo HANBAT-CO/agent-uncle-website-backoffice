@@ -247,7 +247,7 @@ async function signup(user, role, profile) {
   }
   // Seed-only keys (slug, provider, docAsPng) are not profile fields.
   const fields = Object.fromEntries(Object.entries(profile).filter(([k]) => !["slug", "provider", "docAsPng"].includes(k)));
-  const values = { ...fields, terms: true, privacy: true, documentId, photoId: "" };
+  const values = { ...fields, bankName: "로컬 테스트 은행", bankAccount: "000123456789", bankHolder: profile.contact || profile.name, terms: true, privacy: true, documentId, photoId: "" };
   if (role === "uncle") values.name = profile.contact; // the app always sends name = 담당자명 for 사입삼촌
   if (role === "retailer") Object.assign(values, { pickupArea: "", deliveryArea: "", deadline: "" });
   values.notificationSettings = rand() < 0.25 ? { connection: true, request: true, delivery: true, chat: false } : {};
