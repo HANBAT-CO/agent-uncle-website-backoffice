@@ -11,6 +11,8 @@ export const REQUEST_LABELS = [
   "거절",
   "취소 종료",
   "완료",
+  "수령(입금 전)",
+  "입금 완료",
   "문제 확인 중",
   "변경·취소 협의 중",
   "확인 대기",
@@ -39,6 +41,7 @@ define("normal", "Clock", [
   "진행 중",
   "픽업 완료",
   "수령 대기",
+  "수령(입금 전)",
   "미송 대기",
   "미송 재확인",
   "변경·취소 협의 중",
@@ -48,7 +51,7 @@ define("normal", "Clock", [
   "제출됨 · 검증 전",
 ]);
 define("done", "CheckCircle", ["수령 확인", "연결 완료", "확인함", "확정", "이용 중"]);
-define("ended", "CheckCircle", ["완료", "해결 확인"]);
+define("ended", "CheckCircle", ["완료", "입금 완료", "해결 확인"]);
 define("ended", "XCircle", ["거절", "취소 종료", "철회", "미등록", "해당 없음"]);
 // Chips the appendix uses without listing a tone: same rules (open work is
 // normal, finished is done or ended, never colour alone).
@@ -74,7 +77,8 @@ export const REQUEST_TABS: { key: string; label: string; labels: RequestLabel[] 
   { key: "receipt", label: "수령 대기", labels: ["수령 대기"] },
   { key: "issue", label: "문제 확인 중", labels: ["문제 확인 중"] },
   { key: "proposal", label: "변경·취소 협의 중", labels: ["변경·취소 협의 중"] },
-  { key: "done", label: "완료", labels: ["완료"] },
+  { key: "unpaid", label: "수령(입금 전)", labels: ["수령(입금 전)"] },
+  { key: "done", label: "입금 완료", labels: ["입금 완료", "완료"] },
   { key: "closed", label: "종료", labels: ["거절", "취소 종료"] },
 ];
 
@@ -88,6 +92,7 @@ const REQUEST_VIEWS: Record<string, RequestLabel[] | null> = {
   ...Object.fromEntries(REQUEST_TABS.map((tab) => [tab.key, tab.labels])),
   attention: ["답변 필요", "문제 확인 중"],
   active: ACTIVE_REQUEST_LABELS,
+  received: ["수령(입금 전)", "입금 완료", "완료"],
 };
 
 /** `p_labels` for a request view key; null means every label. */
@@ -150,6 +155,7 @@ export const ANOMALY_SEVERITY_LABEL: Record<string, string> = {
 
 /** Missing signup fields (screens 10.7). */
 export const MISSING_FIELD_LABEL: Record<string, string> = {
+  bankName: "은행명", bankAccount: "계좌번호", bankHolder: "예금주", "bankAccount:format": "계좌번호 형식",
   name: "매장명",
   contact: "담당자명",
   phone: "연락처",
@@ -175,11 +181,14 @@ export function missingFieldLabel(key: string): string {
   return MISSING_FIELD_LABEL[key] ?? key;
 }
 
-/** Required signup fields per role (retailer 9 fields + 2 consents, uncle 5 + 2). */
-export const REQUIRED_FIELD_TOTAL = { retailer: 11, uncle: 7 } as const;
+/** Required signup fields per role (retailer 12 fields + 2 consents, uncle 8 + 2). */
+export const REQUIRED_FIELD_TOTAL = { retailer: 14, uncle: 10 } as const;
 
 /** 감사 로그 actions (screens 10.17). */
 export const AUDIT_ACTION_LABEL: Record<string, string> = {
+  "payment.confirm_receipt": "플랫폼 입금 확인", "payment.reject_receipt": "플랫폼 입금 반려",
+  "payment.pay_uncle": "삼촌 지급 기록", "bank.view": "정산 계좌 열람",
+  "team_chat.view": "팀·동료 대화 열람", "workflow.view": "업무 내용 열람",
   "account.view": "계정 열람",
   "conversation.view": "대화 열람",
   "attachment.view": "파일 열람",

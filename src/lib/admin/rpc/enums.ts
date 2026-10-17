@@ -28,6 +28,7 @@ export const ACCOUNT_ROLE_FILTERS = ["retailer", "uncle", "none"] as const;
 export type AccountRoleFilter = (typeof ACCOUNT_ROLE_FILTERS)[number];
 
 export const REQUEST_ATTENTIONS = [
+  "completion_pending", "payment_pending", "wholesaler",
   "needs_reply",
   "open_issue",
   "proposal",

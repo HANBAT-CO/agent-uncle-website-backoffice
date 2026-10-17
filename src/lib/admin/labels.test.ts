@@ -17,9 +17,9 @@ import {
 } from "./labels";
 
 describe("request labels", () => {
-  it("are the 12 RequestRecord.statusLabel values", () => {
-    expect(REQUEST_LABELS).toHaveLength(12);
-    expect(new Set(REQUEST_LABELS).size).toBe(12);
+  it("are the 14 current and legacy RequestRecord.statusLabel values", () => {
+    expect(REQUEST_LABELS).toHaveLength(14);
+    expect(new Set(REQUEST_LABELS).size).toBe(14);
   });
 
   it("every request label has a tone and icon", () => {
@@ -49,10 +49,10 @@ describe("request labels", () => {
     expect(statusTone("제출됨 · 검증 전")).toEqual({ tone: "normal", icon: "Clock" });
   });
 
-  it("REQUEST_TABS cover all 12 labels exactly once besides 전체", () => {
+  it("REQUEST_TABS cover all 14 labels exactly once besides 전체", () => {
     expect(REQUEST_TABS[0]).toMatchObject({ label: "전체", labels: null });
     const covered = REQUEST_TABS.slice(1).flatMap((tab) => tab.labels ?? []);
-    expect(covered).toHaveLength(12);
+    expect(covered).toHaveLength(14);
     expect(new Set(covered)).toEqual(new Set(REQUEST_LABELS));
   });
 
@@ -66,7 +66,8 @@ describe("request labels", () => {
       "수령 대기",
       "문제 확인 중",
       "변경·취소 협의 중",
-      "완료",
+      "수령(입금 전)",
+      "입금 완료",
       "종료",
     ]);
     expect(REQUEST_TABS.find((tab) => tab.label === "진행 중")?.labels).toEqual(["진행 중", "픽업 완료", "미송 대기"]);
@@ -109,14 +110,14 @@ describe("other maps", () => {
   });
 
   it("has every missing-field label", () => {
-    expect(Object.keys(MISSING_FIELD_LABEL)).toHaveLength(19);
+    expect(Object.keys(MISSING_FIELD_LABEL)).toHaveLength(23);
     expect(missingFieldLabel("documentId")).toBe("사업자등록증");
     expect(missingFieldLabel("phone:format")).toBe("연락처 형식");
     expect(missingFieldLabel("brandNew")).toBe("brandNew");
   });
 
   it("required field totals", () => {
-    expect(REQUIRED_FIELD_TOTAL).toEqual({ retailer: 11, uncle: 7 });
+    expect(REQUIRED_FIELD_TOTAL).toEqual({ retailer: 14, uncle: 10 });
   });
 
   it("audit action labels", () => {

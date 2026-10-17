@@ -9,6 +9,9 @@ import { TZDate } from "@date-fns/tz";
 
 export const KST = "Asia/Seoul";
 
+/** Wholesaler batches count jobs, product requests count garments. */
+export const requestUnit = (type: string | null | undefined): "건" | "장" => type === "wholesaler" ? "건" : "장";
+
 const DAY = /^(\d{4})-(\d{2})-(\d{2})$/;
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;

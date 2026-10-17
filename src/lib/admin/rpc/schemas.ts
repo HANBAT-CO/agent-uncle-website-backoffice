@@ -71,8 +71,23 @@ function listOf<T extends z.ZodType>(row: T) {
   return z.object({ total: num, limit: num, offset: num, rows: z.array(row) });
 }
 
+const wholesalerShape = { wholesaler: text, location: text, paymentMode: text };
+const wholesalerRows = z.array(z.object(wholesalerShape)).nullish();
+
 /** Request fields of saip_records.data (requests), all optional. Also used for event snapshots. */
 const requestDataShape = {
+  title: text,
+  requestType: text,
+  wholesalers: wholesalerRows,
+  cancelledWholesalers: z.array(z.object({ ...wholesalerShape, originalIndex: count, reason: text, cancelledAt: text, cancelledBy: text, proposalId: text })).nullish(),
+  paymentInvoiceIds: z.array(z.string()).nullish(),
+  paymentReported: z.boolean().nullish(),
+  paymentConfirmed: z.boolean().nullish(),
+  platformPayoutComplete: z.boolean().nullish(),
+  purchaseCompletedAt: text,
+  receiptConfirmedAt: text,
+  awaitingCompletionConfirmation: z.boolean().nullish(),
+
   status: text,
   retailerId: text,
   uncleId: text,
@@ -309,6 +324,11 @@ export type AccountList = z.infer<typeof accountListSchema>;
 
 /** backoffice_private.account_json: masked contact fields plus `masked: true` for viewers. */
 export const accountProfileSchema = z.object({
+  nickname: text,
+  publicCode: text,
+  fee: count,
+  deletionPending: z.boolean().nullish(),
+  bankRegistered: z.boolean().nullish(),
   id: str,
   verification: str,
   masked: z.boolean().optional(),
@@ -391,6 +411,8 @@ export const accountDossierSchema = z.object({
   recentRequests: z.array(
     z.object({
       id: str,
+      title: text,
+      requestType: text,
       product: z.string().nullable(),
       option: z.string().nullable(),
       label: str,
@@ -412,6 +434,18 @@ export const accountDossierSchema = z.object({
 export type AccountDossier = z.infer<typeof accountDossierSchema>;
 
 export const requestRowSchema = z.object({
+  title: text,
+  requestType: text,
+  wholesalers: wholesalerRows,
+  cancelledWholesalers: z.array(z.object({ ...wholesalerShape, originalIndex: count, reason: text, cancelledAt: text, cancelledBy: text, proposalId: text })).nullish(),
+  paymentInvoiceIds: z.array(z.string()).nullish(),
+  paymentReported: z.boolean().nullish(),
+  paymentConfirmed: z.boolean().nullish(),
+  platformPayoutComplete: z.boolean().nullish(),
+  purchaseCompletedAt: text,
+  receiptConfirmedAt: text,
+  awaitingCompletionConfirmation: z.boolean().nullish(),
+
   id: str,
   status: z.string().nullable(),
   label: str,
@@ -437,9 +471,11 @@ export const requestRowSchema = z.object({
 });
 export type RequestRow = z.infer<typeof requestRowSchema>;
 
+const requestTotalsSchema = z.object({ quantity: num, acquired: num, delivered: num, received: num, backorder: num });
+
 export const requestListSchema = listOf(requestRowSchema).extend({
   labels: z.record(z.string(), num),
-  totals: z.object({ quantity: num, acquired: num, delivered: num, received: num, backorder: num }),
+  totals: requestTotalsSchema.extend({ byType: z.record(z.string(), requestTotalsSchema).optional() }),
 });
 export type RequestList = z.infer<typeof requestListSchema>;
 
@@ -481,7 +517,9 @@ const proposalDataShape = {
   proposerId: text,
   resolvedBy: text,
   held: count,
-  values: requestSnapshotSchema.extend({ reason: text }).nullish(),
+  values: requestSnapshotSchema.extend({ reason: text, wholesalerIndexes: z.array(z.number().int().nonnegative()).nullish() }).nullish(),
+  wholesalers: wholesalerRows,
+  wholesalerNames: z.array(z.string()).nullish(),
   version: count,
   createdAt: text,
 };
@@ -556,7 +594,7 @@ const recordCommon = {
   updatedAt: str,
   participants: z.array(z.string()),
   parties: z.array(accountBriefSchema),
-  request: z.object({ id: str, product: text, option: text, status: text, label: str }).nullable(),
+  request: z.object({ id: str, title: text, requestType: text, product: text, option: text, status: text, label: str }).nullable(),
   round: z.number().nullable(),
 };
 
@@ -640,6 +678,9 @@ export const conversationListSchema = listOf(conversationRowSchema);
 export type ConversationList = z.infer<typeof conversationListSchema>;
 
 export const chatMessageSchema = z.object({
+  editedAt: text,
+  deleted: z.boolean().nullish(),
+  invoiceId: text,
   id: str,
   body: z.string().nullable(),
   senderId: text,
@@ -686,6 +727,8 @@ export const searchResultSchema = z.object({
   requests: z.array(
     z.object({
       id: str,
+      title: text,
+      requestType: text,
       product: z.string().nullable(),
       option: z.string().nullable(),
       label: str,

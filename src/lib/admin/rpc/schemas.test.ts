@@ -4,7 +4,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import { RECORD_COLLECTIONS } from "./enums";
-import { RPC_RESULT_SCHEMAS, recordListSchemas, type RpcName } from "./schemas";
+import { RPC_RESULT_SCHEMAS, recordListSchemas, recordRowSchemas, type RpcName } from "./schemas";
 
 /*
  * Every fixture captured from the local stack (scripts/admin/capture-rpc-fixtures.mjs)
@@ -13,6 +13,21 @@ import { RPC_RESULT_SCHEMAS, recordListSchemas, type RpcName } from "./schemas";
  */
 
 const DIR = path.join(__dirname, "__fixtures__");
+
+describe("wholesaler proposal snapshots", () => {
+  it.each(["cancel", "change"])("preserves %s proposal rows, names and selected indexes", (kind) => {
+    const wholesalers = [{ wholesaler: "제안 당시 도매처", location: "상가 2층", paymentMode: "advance" }];
+    const row = recordRowSchemas.proposals.parse({
+      id: "batch-proposal", updatedAt: "2026-10-17T00:00:00Z",
+      participants: [], parties: [], request: null, round: null,
+      kind, status: "pending", wholesalers, wholesalerNames: ["제안 당시 도매처"],
+      values: { requestType: "wholesaler", wholesalers, wholesalerIndexes: [1], reason: "매장 변경" },
+    });
+    expect(row.wholesalerNames).toEqual(["제안 당시 도매처"]);
+    expect(row.wholesalers).toEqual(wholesalers);
+    expect(row.values).toMatchObject({ wholesalers, wholesalerIndexes: [1], reason: "매장 변경" });
+  });
+});
 const files = readdirSync(DIR).filter((file) => file.endsWith(".json"));
 
 type Fixture = { file: string; rpc: string; variant: string | null; role: string; data: unknown };
@@ -103,6 +118,18 @@ describe("RPC fixtures", () => {
 
   it("has a schema for every RPC of spec 8", () => {
     for (const name of SPEC_RPCS) expect(RPC_RESULT_SCHEMAS[name], name).toBeDefined();
+  });
+});
+
+describe("cancelled wholesaler snapshots", () => {
+  it("preserves the cancelled rows and their original payment modes in the dossier", () => {
+    const fixture = fixtures.find((item) => item.rpc === "get_request" && item.role === "owner")!;
+    const data = structuredClone(fixture.data) as { request: Record<string, unknown> };
+    const cancelledWholesalers = [{ wholesaler: "이전 매장", location: "2층", paymentMode: "direct", originalIndex: 1,
+      reason: "방문 취소", cancelledAt: "2026-10-17T00:00:00Z", cancelledBy: "retailer-id", proposalId: "proposal-id" }];
+    data.request.cancelledWholesalers = cancelledWholesalers;
+    const parsed = RPC_RESULT_SCHEMAS.backoffice_get_request.parse(data);
+    expect(parsed.request.cancelledWholesalers).toEqual(cancelledWholesalers);
   });
 });
 
