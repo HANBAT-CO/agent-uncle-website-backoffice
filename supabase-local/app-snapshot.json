@@ -1,0 +1,40 @@
+{
+  "sourceCommit": "8e40220",
+  "sourceState": "working tree including uncommitted migrations; source provenance only",
+  "capturedOn": "2026-10-17",
+  "hostedVerification": {
+    "verifiedOn": "2026-10-17",
+    "report": "../docs/app-compatibility-2026-10-17.md",
+    "scope": "282 app/backoffice functions and execution permissions match the local reference; three rollout source hashes match hosted history; not a byte-level verification of every historical migration"
+  },
+  "files": {
+    "202610110001_workspace.sql": "4ec618aed23013f886a874857cc9375c918656b2b72bb420d62d4dad415255c3",
+    "202610110002_commands.sql": "3b90ea086310220ad9ea918870dc9b6d4a1d48fd371dee5610b9f81d423ada3e",
+    "202610110003_snapshot_integrity.sql": "d1c518addcf75771bcdb3cca62e4e2d83484d0f97a4241b4ab911f6a44b27511",
+    "202610110004_profile_validation_messages.sql": "e404696e405af28a1ce08d5ee8464d8ceebf632314f7ae347f0148c101e6e2ab",
+    "202610110005_optional_profile_details.sql": "7a2c75c91922fa165b9fb88ad08bc2b7777c8117590979e2165a2dd2f97d592e",
+    "202610110006_signup_role_profile_validation.sql": "89edfe18798c47dcf6bf283f461a0444bf811dd82b855b1f5035819b66e84fcb",
+    "202610120001_signup_phone_availability.sql": "f8fe4da73a8a939fc628edb4229ce1b27be6f3ed05b73999c6f79a14bb5a345e",
+    "202610130000_chat_message_actions_hotfix.sql": "71c8fea38dbf09fd830774baaec62cb1a43a4e394ddc1bd84dcf4b52d3664684",
+    "202610130001_partner_directory.sql": "7c1059832be944901465c9737ff98ea5e4d90a62b8704d70e1965530ff87749a",
+    "202610130002_chat_message_actions.sql": "db2fc783b0949b4e8697067c0214d6387badb9ab40cc44b3f617afbe9c10d485",
+    "202610130003_chat_content_filter.sql": "18f8117b3e775e30c0b1cf534821e0886f18e497559c33b37273665898e50a1e",
+    "202610130004_wholesaler_requests.sql": "2a0c0766529bd7bd196806a8c5694b9628abc91d9db392824f2331d059088ad2",
+    "202610140001_account_deletion.sql": "8965a16f2417f2d0a4e769ccb89f48cdf07906273c49b70d8a4b7f7faf57aa6a",
+    "202610140002_chat_user_blocks.sql": "0802c1c3e0921158902604e8ac5755e8a5891aca08a21c3dfaaa3dcc9207c057",
+    "202610150001_workflow_access.sql": "6e54cda2a4fd29941075b3302c28ecc4d35cec1b15587cb5bf383a1a060e52a5",
+    "202610150002_billing.sql": "606ba94bbc6b604d4e52b85cc718667172999827411bf32192dac78c5b186a4d",
+    "202610150003_team_work.sql": "7b553637c6b48fcc4806951a13577aaa89570fd8d7ffeb116a6cf14022a8efe1",
+    "202610150004_convenience.sql": "f50b82637c9bcd117273d0deecc643a9ca6740d88bbda55c3407330656286b4e",
+    "202610150005_workflow_projection.sql": "bbe920db932b2e5c4b9af3cc012ce6e32a72e0b30a9e745b7ebaf164e30dc8ad",
+    "202610150006_push_notifications.sql": "feac93a1ac6d16d04bf983bbe03f400441d2cf1fb45fe5f5d91000c509edee62",
+    "202610150007_workflow_participants.sql": "eea8fbbc0058df7c4a8a9aecebb1e60dcccfa077bf7469aa7ab7c19a60c947a9",
+    "202610150008_release_visibility.sql": "3e7a5fcfb99399c7c9bec509b1c3a95a727e20818d08b62267b3361c13ee7ff0",
+    "202610160001_order_payment.sql": "f52a69a99d657334a2ad14b6def4387987b26852ed0a50b4885870314d34ac45",
+    "202610160002_private_function_permissions.sql": "2c98f9c3e7043c9c8c7cee4b8f28485274c6865290799594aac654acb394e923",
+    "202610160003_order_flow.sql": "ea26ae8c875122b50f7fc384dd384124eecb904b1e2304f38d08a93803b2767f",
+    "202610160004_invoice_final_amount.sql": "21dedfbb53a14a21a8952cafe8ae6b1377c79e842200716e5b779fef1f7b436e",
+    "202610160005_wholesaler_batch_proposals.sql": "01d30ec1ce33d889bcf18d4b433fb95d80000cb11cbe0069cd76601b3a0c4236",
+    "202610160006_order_completion_confirmation.sql": "a6a20b611202119f3cebdb66f09b4c45660d9560597c7dc75da84c4317cdebe6"
+  }
+}
